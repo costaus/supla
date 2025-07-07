@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,338 +13,452 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" xintegrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Favicon -->
+    <link rel="icon" href="https://iili.io/FlyBJF1.png" type="image/png">
 
-    <style>
-        /* Define a fonte padrão para todo o corpo do documento */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Efeito de transição suave para a barra de navegação */
-        .navbar-transition {
-            transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        }
-        /* Animação de fade-in para elementos que aparecem na tela */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .fade-in-element {
-            animation: fadeIn 0.8s ease-out forwards;
-        }
-    </style>
-
+    <!-- Custom Tailwind Config -->
     <script>
-        // Configuração customizada do Tailwind para incluir a nova paleta de cores da marca
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
                     colors: {
-                        'brand-primary': '#4b833c', // Verde principal para botões e CTAs
-                        'brand-dark': '#5a9547',   // Verde mais saturado para hover
-                        'brand-text': '#0b451f',   // Verde bem escuro para títulos e textos importantes
-                        'brand-accent': '#abca8c', // Verde claro para acentos
-                        'brand-light-bg': '#f7faf6', // Fundo levemente esverdeado
+                        'brand-primary': '#4b833c',
+                        'brand-secondary': '#5a9547',
+                        'brand-light': '#abca8c',
+                        'brand-dark': '#0b451f',
+                        'brand-bg': '#f7fafc',
                     }
                 }
             }
         }
     </script>
+    
+    <!-- Custom CSS for animations and particle background -->
+    <style>
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Particle background container */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-color: #f7fafc; /* Same as brand-bg */
+            z-index: -1; /* Place it behind all content */
+        }
+
+        /* Simple fade-in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .counter-value {
+            transition: all 2.5s ease-out;
+        }
+        
+        /* Ensure content is above the particle background */
+        header, main, footer {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
 </head>
-<body class="bg-brand-light-bg text-gray-800">
 
-    <!-- ========== HEADER / NAVBAR ========== -->
-    <header id="navbar" class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 navbar-transition shadow-sm">
-        <div class="container mx-auto px-6 py-2 flex justify-between items-center">
-            <!-- Logo -->
-            <a href="#inicio" class="flex items-center">
-                <img src="https://iili.io/FlyBJF1.png" alt="Logo Supla Brazil" class="h-14 w-auto">
+<body class="bg-transparent text-brand-dark font-sans">
+
+    <!-- Particle.js Background Container -->
+    <div id="particles-js"></div>
+
+    <!-- Header -->
+    <header id="header" class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-md">
+        <div class="container mx-auto px-6 h-20 flex justify-between items-center relative">
+            <!-- Logo - Larger and positioned higher -->
+            <a href="#" class="absolute left-1/2 -translate-x-1/2 md:left-6 md:translate-x-0 top-0 -mt-2 z-10">
+                <img src="https://iili.io/FlyBJF1.png" alt="Logo Supla Brazil" class="h-28 w-auto drop-shadow-lg">
             </a>
-            
-            <!-- Navegação para Desktop -->
-            <nav class="hidden md:flex items-center space-x-8">
-                <a href="#inicio" class="text-gray-600 hover:text-brand-primary font-medium transition duration-300">Início</a>
-                <a href="#comofunciona" class="text-gray-600 hover:text-brand-primary font-medium transition duration-300">Como Funciona</a>
-                <a href="#sobre" class="text-gray-600 hover:text-brand-primary font-medium transition duration-300">Sobre Nós</a>
-                <a href="#contato" class="text-gray-600 hover:text-brand-primary font-medium transition duration-300">Contato</a>
+            <!-- Desktop Navigation -->
+            <nav class="hidden md:flex space-x-8 w-full justify-center items-center">
+                <a href="#como-funciona" class="text-brand-dark hover:text-brand-primary transition duration-300">Como Funciona</a>
+                <a href="#beneficios" class="text-brand-dark hover:text-brand-primary transition duration-300">Benefícios</a>
+                <a href="#faq" class="text-brand-dark hover:text-brand-primary transition duration-300">FAQ</a>
             </nav>
-
-            <!-- Botão de Ação -->
-            <a href="#contato" class="hidden md:block bg-brand-primary text-white font-bold px-6 py-3 rounded-lg hover:bg-brand-dark shadow-md transition-transform transform hover:scale-105">
-                Comece a Ganhar
+            <!-- CTA Button -->
+            <a href="#cta" class="hidden md:block bg-brand-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-brand-secondary transition duration-300 shadow-lg absolute right-6 top-1/2 -translate-y-1/2">
+                Comece Agora
             </a>
-
-            <!-- Botão do Menu Mobile -->
-            <button id="mobile-menu-button" class="md:hidden text-2xl text-brand-text">
-                <i class="fas fa-bars"></i>
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-button" class="md:hidden text-brand-dark focus:outline-none absolute right-6 top-1/2 -translate-y-1/2">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
         </div>
-        <!-- Menu Mobile -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
-            <a href="#inicio" class="block py-3 px-6 text-gray-700 hover:bg-gray-100">Início</a>
-            <a href="#comofunciona" class="block py-3 px-6 text-gray-700 hover:bg-gray-100">Como Funciona</a>
-            <a href="#sobre" class="block py-3 px-6 text-gray-700 hover:bg-gray-100">Sobre Nós</a>
-            <a href="#contato" class="block py-3 px-6 text-gray-700 hover:bg-gray-100">Contato</a>
-            <div class="p-4">
-                 <a href="#contato" class="w-full text-center block bg-brand-primary text-white font-semibold px-5 py-3 rounded-lg hover:bg-brand-dark shadow-md">
-                    Comece a Ganhar Agora
-                </a>
-            </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-lg px-6 pt-2 pb-4">
+            <a href="#como-funciona" class="block text-center py-2 text-brand-dark hover:text-brand-primary">Como Funciona</a>
+            <a href="#beneficios" class="block text-center py-2 text-brand-dark hover:text-brand-primary">Benefícios</a>
+            <a href="#faq" class="block text-center py-2 text-brand-dark hover:text-brand-primary">FAQ</a>
+            <a href="#cta" class="block mt-4 bg-brand-primary text-white text-center font-bold py-2 px-6 rounded-lg hover:bg-brand-secondary transition duration-300">Comece Agora</a>
         </div>
     </header>
 
     <main>
-        <!-- ========== HERO SECTION ========== -->
-        <section id="inicio" class="pt-36 pb-20 md:pt-48 md:pb-32 bg-white">
+        <!-- Hero Section -->
+        <section id="hero" class="pt-40 pb-20 bg-transparent">
             <div class="container mx-auto px-6 text-center">
                 <div class="max-w-4xl mx-auto">
-                    <h1 class="text-4xl md:text-6xl font-extrabold text-brand-text leading-tight mb-6">
-                        Transforme Seus Vídeos em <span class="text-brand-primary">Renda Extra</span>
+                    <h1 class="text-4xl md:text-6xl font-extrabold text-brand-dark mb-4 leading-tight">
+                        Transforme suas Redes Sociais em uma <span class="text-brand-primary">Fonte de Renda</span>
                     </h1>
-                    <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto">
-                        Junte-se à Supla Brazil. Poste vídeos para nós nas suas redes sociais e ganhe <span class="font-bold">1 dólar a cada 2 cliques</span> no seu link de parceiro.
+                    <p class="text-lg md:text-xl text-gray-600 mb-8">
+                        Junte-se à Supla Brazil e ganhe <span class="font-bold text-brand-secondary">US$ 1,00 a cada 2 cliques</span> no seu link de divulgação. Promova nossa marca com seus vídeos, sem vender e sem complicação.
                     </p>
-                    <div class="flex justify-center items-center space-x-4">
-                        <a href="#contato" class="bg-brand-primary text-white font-bold py-4 px-10 rounded-lg text-lg hover:bg-brand-dark shadow-xl transition-transform transform hover:scale-105">
-                            Cadastre-se Gratuitamente
-                        </a>
+                    <a href="#cta" class="bg-brand-secondary text-white font-bold py-4 px-10 rounded-lg hover:bg-brand-primary transition duration-300 text-lg shadow-xl inline-block">
+                        Quero ser um Influenciador
+                    </a>
+                </div>
+                <!-- Stats Counter -->
+                <div class="mt-16 fade-in">
+                    <div class="bg-white/80 backdrop-blur-sm inline-block p-8 rounded-2xl shadow-2xl border border-gray-100">
+                        <p class="text-gray-500 text-lg mb-2">Pedidos de parceria na América do Sul</p>
+                        <p id="counter" class="text-6xl font-bold text-brand-primary counter-value">0</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ========== STATS SECTION ========== -->
-        <section id="stats" class="py-16 bg-brand-light-bg">
+        <!-- Como Funciona Section -->
+        <section id="como-funciona" class="py-20 bg-transparent">
             <div class="container mx-auto px-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                    <div class="bg-white p-8 rounded-xl shadow-lg">
-                        <h3 class="text-5xl font-bold text-brand-primary mb-2" data-target="16000">0</h3>
-                        <p class="text-brand-text font-medium text-lg">+ Parceiros na América do Sul</p>
+                <div class="text-center mb-12 fade-in">
+                    <h2 class="text-4xl font-bold text-brand-dark">Como Funciona?</h2>
+                    <p class="text-lg text-gray-600 mt-2">Ganhar dinheiro é simples. Siga estes 3 passos:</p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-10">
+                    <!-- Step 1 -->
+                    <div class="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg text-center fade-in" style="transition-delay: 100ms;">
+                        <div class="bg-brand-light h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-3xl font-bold text-brand-primary">1</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-brand-dark mb-3">Cadastre-se</h3>
+                        <p class="text-gray-600">Preencha um formulário simples e rápido para se tornar um parceiro oficial da Supla Brazil. É 100% gratuito.</p>
                     </div>
-                    <div class="bg-white p-8 rounded-xl shadow-lg">
-                        <h3 class="text-5xl font-bold text-brand-primary mb-2" data-target="98">0</h3>
-                        <p class="text-brand-text font-medium text-lg">% de Parceiros Satisfeitos</p>
+                    <!-- Step 2 -->
+                    <div class="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg text-center fade-in" style="transition-delay: 200ms;">
+                        <div class="bg-brand-light h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-3xl font-bold text-brand-primary">2</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-brand-dark mb-3">Divulgue</h3>
+                        <p class="text-gray-600">Receba seu link exclusivo. Crie e poste vídeos sobre nossa marca nas suas redes sociais (TikTok, Instagram, etc.).</p>
                     </div>
-                    <div class="bg-white p-8 rounded-xl shadow-lg">
-                        <h3 class="text-5xl font-bold text-brand-primary mb-2" data-target="50">0</h3>
-                        <p class="text-brand-text font-medium text-lg">+ Campanhas Disponíveis</p>
+                    <!-- Step 3 -->
+                    <div class="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg text-center fade-in" style="transition-delay: 300ms;">
+                        <div class="bg-brand-light h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <span class="text-3xl font-bold text-brand-primary">3</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-brand-dark mb-3">Ganhe Dinheiro</h3>
+                        <p class="text-gray-600">Você ganha <span class="font-bold">US$ 1,00 a cada 2 cliques</span> que seu link receber. Acompanhe seus ganhos em tempo real.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ========== COMO FUNCIONA SECTION ========== -->
-        <section id="comofunciona" class="py-20 bg-white">
+        <!-- Benefícios Section -->
+        <section id="beneficios" class="py-20 bg-white/80 backdrop-blur-sm">
             <div class="container mx-auto px-6">
-                <div class="text-center mb-16">
-                    <h2 class="text-4xl font-bold text-brand-text">Ganhar Dinheiro em 3 Passos Simples</h2>
-                    <p class="text-lg text-gray-600 mt-2 max-w-2xl mx-auto">Nosso processo é rápido, transparente e feito para você começar a lucrar o quanto antes.</p>
+                <div class="text-center mb-12 fade-in">
+                    <h2 class="text-4xl font-bold text-brand-dark">Seus Benefícios</h2>
+                    <p class="text-lg text-gray-600 mt-2">Veja por que ser um parceiro Supla Brazil vale a pena.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
-                    <!-- Passo 1 -->
-                    <div class="observe-me p-8">
-                        <div class="bg-brand-primary text-white rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-6 shadow-lg">
-                            <i class="fas fa-user-plus text-3xl"></i>
+                <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
+                    <!-- Benefit Item -->
+                    <div class="flex items-start space-x-4 fade-in">
+                        <div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1">✓</div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-brand-dark">Renda Extra Garantida</h3>
+                            <p class="text-gray-600">Uma forma comprovada de monetizar sua presença online sem precisar vender nada.</p>
                         </div>
-                        <h3 class="text-2xl font-bold text-brand-text mb-2">1. Cadastre-se</h3>
-                        <p class="text-gray-600">Preencha nosso formulário de inscrição gratuito. A aprovação é rápida e sem burocracia.</p>
                     </div>
-                    <!-- Passo 2 -->
-                    <div class="observe-me p-8">
-                        <div class="bg-brand-primary text-white rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-6 shadow-lg">
-                            <i class="fas fa-share-alt text-3xl"></i>
+                    <!-- Benefit Item -->
+                    <div class="flex items-start space-x-4 fade-in">
+                        <div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1">✓</div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-brand-dark">Flexibilidade Total</h3>
+                            <p class="text-gray-600">Trabalhe quando e de onde quiser. Você define seus horários e sua rotina de postagens.</p>
                         </div>
-                        <h3 class="text-2xl font-bold text-brand-text mb-2">2. Compartilhe</h3>
-                        <p class="text-gray-600">Escolha os vídeos das nossas campanhas, receba seu link exclusivo e poste nas suas redes sociais.</p>
                     </div>
-                    <!-- Passo 3 -->
-                    <div class="observe-me p-8">
-                        <div class="bg-brand-primary text-white rounded-full h-20 w-20 flex items-center justify-center mx-auto mb-6 shadow-lg">
-                            <i class="fas fa-dollar-sign text-3xl"></i>
+                    <!-- Benefit Item -->
+                    <div class="flex items-start space-x-4 fade-in">
+                        <div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1">✓</div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-brand-dark">Pagamentos Rápidos</h3>
+                            <p class="text-gray-600">Receba seus ganhos de forma segura e pontual, diretamente na sua conta.</p>
                         </div>
-                        <h3 class="text-2xl font-bold text-brand-text mb-2">3. Ganhe</h3>
-                        <p class="text-gray-600">Receba $1 para cada 2 cliques no seu link. Acompanhe seus ganhos em tempo real pelo nosso painel.</p>
+                    </div>
+                    <!-- Benefit Item -->
+                    <div class="flex items-start space-x-4 fade-in">
+                        <div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1">✓</div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-brand-dark">Suporte Dedicado</h3>
+                            <p class="text-gray-600">Nossa equipe está pronta para te ajudar com dicas e materiais para maximizar seus resultados.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ========== SOBRE NÓS SECTION ========== -->
-        <section id="sobre" class="py-20 bg-brand-light-bg">
+        <!-- FAQ Section -->
+        <section id="faq" class="py-20 bg-transparent">
             <div class="container mx-auto px-6">
-                <div class="grid md:grid-cols-2 gap-12 items-center">
-                    <div class="observe-me">
-                        <img src="https://images.unsplash.com/photo-1556740749-887f6717d7e4?q=80&w=2070&auto=format&fit=crop" 
-                             onerror="this.onerror=null;this.src='https://placehold.co/600x400/4b833c/FFFFFF?text=Supla+Brazil';"
-                             alt="Pessoas colaborando em um projeto digital" class="rounded-2xl shadow-2xl w-full h-auto object-cover">
-                    </div>
-                    <div class="observe-me">
-                        <h2 class="text-4xl font-bold text-brand-text mb-4">Nossa Missão é Monetizar sua Influência</h2>
-                        <p class="text-gray-600 mb-6 leading-relaxed">
-                            A Supla Brazil nasceu para criar uma ponte entre grandes marcas e criadores de conteúdo como você. Acreditamos que todos podem monetizar sua presença online, independentemente do número de seguidores. Oferecemos uma plataforma justa, transparente e poderosa para que você transforme sua criatividade em receita.
-                        </p>
-                        <ul class="space-y-4">
-                            <li class="flex items-start">
-                                <i class="fas fa-check-circle text-brand-primary mt-1 mr-3"></i>
-                                <span><strong>Simplicidade e Acesso:</strong> Um sistema fácil de usar que permite que qualquer pessoa comece a ganhar.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-eye text-brand-primary mt-1 mr-3"></i>
-                                <span><strong>Transparência Total:</strong> Acompanhe cada clique e cada centavo ganho em seu painel pessoal.</span>
-                            </li>
-                            <li class="flex items-start">
-                                <i class="fas fa-hand-holding-usd text-brand-primary mt-1 mr-3"></i>
-                                <span><strong>Pagamentos Pontuais:</strong> Compromisso com pagamentos rápidos e seguros para nossos parceiros.</span>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="text-center mb-12 fade-in">
+                    <h2 class="text-4xl font-bold text-brand-dark">Perguntas Frequentes</h2>
                 </div>
-            </div>
-        </section>
-
-        <!-- ========== CONTATO SECTION ========== -->
-        <section id="contato" class="py-20 bg-white">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12">
-                    <h2 class="text-4xl font-bold text-brand-text">Pronto para Começar?</h2>
-                    <p class="text-lg text-gray-600 mt-2 max-w-2xl mx-auto">Preencha o formulário abaixo para se cadastrar. Nossa equipe entrará em contato em breve!</p>
-                </div>
-                <div class="max-w-4xl mx-auto bg-brand-light-bg p-8 rounded-2xl shadow-lg">
-                    <form action="#" method="POST" class="observe-me">
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div class="mb-4">
-                                <label for="name" class="block text-gray-700 font-semibold mb-2">Nome Completo</label>
-                                <input type="text" id="name" name="name" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary" required>
-                            </div>
-                            <div class="mb-4">
-                                <label for="email" class="block text-gray-700 font-semibold mb-2">Seu Melhor Email</label>
-                                <input type="email" id="email" name="email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary" required>
-                            </div>
-                        </div>
-                         <div class="mb-4">
-                            <label for="social" class="block text-gray-700 font-semibold mb-2">Link de uma Rede Social (Ex: Instagram, TikTok)</label>
-                            <input type="url" id="social" name="social" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="message" class="block text-gray-700 font-semibold mb-2">Fale um pouco sobre você e por que quer ser um parceiro</label>
-                            <textarea id="message" name="message" rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary" required></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-brand-primary text-white font-bold py-4 px-6 rounded-lg hover:bg-brand-dark shadow-lg text-lg transition-transform transform hover:scale-105">
-                            Enviar Cadastro
+                <div class="max-w-3xl mx-auto bg-white/80 backdrop-blur-sm p-6 rounded-lg shadow-md">
+                    <!-- FAQ Item -->
+                    <div class="border-b border-brand-light py-4 fade-in">
+                        <button class="w-full text-left flex justify-between items-center focus:outline-none">
+                            <span class="text-xl font-semibold text-brand-dark">Preciso vender algum produto?</span>
+                            <span class="text-2xl text-brand-primary">+</span>
                         </button>
-                    </form>
+                        <div class="mt-2 text-gray-600 hidden">
+                            Não! Sua única função é divulgar a marca Supla Brazil através de vídeos. Nós cuidamos de todo o resto. Você não precisa se preocupar com vendas, estoque ou clientes.
+                        </div>
+                    </div>
+                    <!-- FAQ Item -->
+                    <div class="border-b border-brand-light py-4 fade-in">
+                        <button class="w-full text-left flex justify-between items-center focus:outline-none">
+                            <span class="text-xl font-semibold text-brand-dark">Quanto posso ganhar?</span>
+                            <span class="text-2xl text-brand-primary">+</span>
+                        </button>
+                        <div class="mt-2 text-gray-600 hidden">
+                            Seu potencial de ganho é ilimitado! Depende diretamente do seu engajamento e da sua capacidade de gerar cliques. Um vídeo que viraliza pode render centenas ou até milhares de dólares.
+                        </div>
+                    </div>
+                    <!-- FAQ Item -->
+                    <div class="border-b-0 py-4 fade-in">
+                        <button class="w-full text-left flex justify-between items-center focus:outline-none">
+                            <span class="text-xl font-semibold text-brand-dark">Preciso ter muitos seguidores?</span>
+                            <span class="text-2xl text-brand-primary">+</span>
+                        </button>
+                        <div class="mt-2 text-gray-600 hidden">
+                            Não necessariamente. O mais importante é a criatividade e a qualidade do seu conteúdo. Um bom vídeo pode alcançar muitas pessoas, mesmo em um perfil com poucos seguidores.
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Call to Action (CTA) Section -->
+        <section id="cta" class="py-20 bg-brand-dark text-white">
+            <div class="container mx-auto px-6 text-center fade-in">
+                <h2 class="text-4xl font-bold mb-4">Pronto para Começar a Ganhar?</h2>
+                <p class="text-xl text-brand-light mb-8 max-w-2xl mx-auto">
+                    Não perca mais tempo. Faça parte da nossa comunidade de influenciadores e comece a monetizar seu talento hoje mesmo!
+                </p>
+                <a href="#" class="bg-white text-brand-secondary font-bold py-4 px-10 rounded-lg hover:bg-gray-200 transition duration-300 text-lg shadow-xl inline-block">
+                    Criar meu Cadastro Gratuito
+                </a>
             </div>
         </section>
     </main>
 
-    <!-- ========== FOOTER ========== -->
-    <footer class="bg-brand-text text-white">
-        <div class="container mx-auto px-6 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Sobre -->
-                <div class="md:col-span-1">
-                    <img src="https://iili.io/FlyBJF1.png" alt="Logo Supla Brazil" class="h-14 mb-4">
-                    <p class="text-gray-400">Monetizando a influência digital na América do Sul.</p>
-                </div>
-                <!-- Links -->
-                <div>
-                    <h4 class="font-bold text-lg mb-4 text-white">Navegação</h4>
-                    <ul class="space-y-2">
-                        <li><a href="#comofunciona" class="text-gray-400 hover:text-white">Como Funciona</a></li>
-                        <li><a href="#sobre" class="text-gray-400 hover:text-white">Sobre Nós</a></li>
-                        <li><a href="#contato" class="text-gray-400 hover:text-white">Seja um Parceiro</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white">Termos de Serviço</a></li>
-                    </ul>
-                </div>
-                <!-- Social -->
-                <div>
-                    <h4 class="font-bold text-lg mb-4 text-white">Siga-nos</h4>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-tiktok"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white text-2xl"><i class="fab fa-linkedin"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="mt-10 pt-8 border-t border-gray-600 text-center text-gray-400">
-                <p>&copy; 2024 Supla Brazil. Todos os direitos reservados.</p>
-            </div>
+    <!-- Footer -->
+    <footer class="bg-white/90 backdrop-blur-sm py-8">
+        <div class="container mx-auto px-6 text-center text-gray-600">
+            <img src="https://iili.io/FlyBJF1.png" alt="Logo Supla Brazil" class="h-16 w-auto mx-auto mb-4">
+            <p class="font-bold text-brand-dark text-lg">Supla Brazil</p>
+            <p class="mt-4">&copy; <span id="year"></span> Supla Brazil. Todos os direitos reservados.</p>
+            <p class="text-sm mt-2">Construindo oportunidades na América do Sul.</p>
         </div>
     </footer>
 
 
+    <!-- particles.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    
+    <!-- JavaScript Logic -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- Initialize Particles.js ---
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 60, // Number of particles
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#5a9547" // Particle color
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#abca8c", // Line color
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 2, // Movement speed
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab" // Interaction on hover
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push" // Interaction on click
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+
+
+            // --- Mobile Menu Toggle ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenuButton.addEventListener('click', () => {
                 mobileMenu.classList.toggle('hidden');
             });
 
-            const mobileMenuLinks = mobileMenu.querySelectorAll('a');
-            mobileMenuLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    mobileMenu.classList.add('hidden');
-                });
-            });
-
-            const navbar = document.getElementById('navbar');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('bg-white', 'shadow-md');
-                    navbar.classList.remove('bg-white/80', 'backdrop-blur-lg');
-                } else {
-                    navbar.classList.remove('bg-white', 'shadow-md');
-                    navbar.classList.add('bg-white/80', 'backdrop-blur-lg');
-                }
-            });
-
-            function animateValue(obj, start, end, duration) {
-                let startTimestamp = null;
-                const step = (timestamp) => {
-                    if (!startTimestamp) startTimestamp = timestamp;
-                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                    obj.innerHTML = Math.floor(progress * (end - start) + start).toLocaleString('pt-BR');
+            // --- Animated Counter ---
+            const counterElement = document.getElementById('counter');
+            const targetNumber = 16000;
+            
+            const animateCounter = (target) => {
+                let currentNumber = 0;
+                const duration = 2500; // 2.5 seconds
+                
+                const step = () => {
+                    const progress = Math.min(1, (performance.now() - startTime) / duration);
+                    currentNumber = Math.floor(progress * target);
+                    counterElement.innerText = `+${currentNumber.toLocaleString('pt-BR')}`;
                     if (progress < 1) {
-                        window.requestAnimationFrame(step);
-                    } else {
-                        obj.innerHTML = end.toLocaleString('pt-BR');
+                        requestAnimationFrame(step);
                     }
                 };
-                window.requestAnimationFrame(step);
-            }
+                
+                let startTime = performance.now();
+                requestAnimationFrame(step);
+            };
 
-            const counterObserver = new IntersectionObserver((entries, observer) => {
+            // --- Intersection Observer for animations ---
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observerCallback = (entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        const counter = entry.target;
-                        const targetValue = parseInt(counter.getAttribute('data-target'), 10);
-                        animateValue(counter, 0, targetValue, 2000);
-                        observer.unobserve(counter);
+                        entry.target.classList.add('visible');
+                        
+                        if (entry.target.id === 'counter' && !entry.target.dataset.animated) {
+                             animateCounter(targetNumber);
+                             entry.target.dataset.animated = 'true';
+                        }
                     }
                 });
-            }, { threshold: 0.5 });
+            };
 
-            document.querySelectorAll('[data-target]').forEach(counter => {
-                counterObserver.observe(counter);
-            });
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+            if(counterElement) observer.observe(counterElement);
 
-            const fadeInObserver = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('fade-in-element');
-                        observer.unobserve(entry.target);
-                    }
+
+            // --- FAQ Accordion ---
+            const faqButtons = document.querySelectorAll('#faq button');
+            faqButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    const icon = button.querySelector('span:last-child');
+                    const isHidden = content.classList.contains('hidden');
+
+                    // Close all others
+                    faqButtons.forEach(otherButton => {
+                        if (otherButton !== button) {
+                            otherButton.nextElementSibling.classList.add('hidden');
+                            otherButton.querySelector('span:last-child').textContent = '+';
+                        }
+                    });
+
+                    // Toggle current
+                    content.classList.toggle('hidden');
+                    icon.textContent = isHidden ? '−' : '+';
                 });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.observe-me').forEach(el => {
-                fadeInObserver.observe(el);
             });
+
+            // --- Dynamic Year in Footer ---
+            document.getElementById('year').textContent = new Date().getFullYear();
+
         });
     </script>
+
 </body>
 </html>
