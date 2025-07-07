@@ -38,39 +38,12 @@
     
     <!-- Custom CSS for animations and particle background -->
     <style>
-        /* Smooth scroll behavior */
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* Particle background container */
-        #particles-js {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            background-color: #f7fafc; /* Same as brand-bg */
-            z-index: -1; /* Place it behind all content */
-        }
-
-        /* Simple fade-in animation */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-        }
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .counter-value {
-            transition: all 2.5s ease-out;
-        }
-        
-        /* Ensure content is above the particle background */
-        header, main, footer {
-            position: relative;
-            z-index: 1;
-        }
+        html { scroll-behavior: smooth; }
+        #particles-js { position: fixed; width: 100%; height: 100%; background-color: #f7fafc; z-index: -1; }
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
+        .fade-in.visible { opacity: 1; transform: translateY(0); }
+        .counter-value { transition: all 2.5s ease-out; }
+        header, main, footer { position: relative; z-index: 1; }
     </style>
 </head>
 
@@ -82,31 +55,26 @@
     <!-- Header -->
     <header id="header" class="bg-white/80 backdrop-blur-lg fixed top-0 left-0 right-0 z-50 shadow-md">
         <div class="container mx-auto px-6 h-20 flex justify-between items-center relative">
-            <!-- Logo - Larger and positioned higher -->
             <a href="#" class="absolute left-1/2 -translate-x-1/2 md:left-6 md:translate-x-0 top-0 -mt-2 z-10">
                 <img src="https://iili.io/FlyBJF1.png" alt="Logo Supla Brazil" class="h-28 w-auto drop-shadow-lg">
             </a>
-            <!-- Desktop Navigation -->
             <nav class="hidden md:flex space-x-8 w-full justify-center items-center">
                 <a href="#como-funciona" class="text-brand-dark hover:text-brand-primary transition duration-300">Como Funciona</a>
                 <a href="#beneficios" class="text-brand-dark hover:text-brand-primary transition duration-300">Benefícios</a>
                 <a href="#faq" class="text-brand-dark hover:text-brand-primary transition duration-300">FAQ</a>
             </nav>
-            <!-- CTA Button -->
-            <a href="#cta" class="hidden md:block bg-brand-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-brand-secondary transition duration-300 shadow-lg absolute right-6 top-1/2 -translate-y-1/2">
+            <a href="#cadastro" class="hidden md:block bg-brand-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-brand-secondary transition duration-300 shadow-lg absolute right-6 top-1/2 -translate-y-1/2">
                 Comece Agora
             </a>
-            <!-- Mobile Menu Button -->
             <button id="mobile-menu-button" class="md:hidden text-brand-dark focus:outline-none absolute right-6 top-1/2 -translate-y-1/2">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
         </div>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-lg px-6 pt-2 pb-4">
             <a href="#como-funciona" class="block text-center py-2 text-brand-dark hover:text-brand-primary">Como Funciona</a>
             <a href="#beneficios" class="block text-center py-2 text-brand-dark hover:text-brand-primary">Benefícios</a>
             <a href="#faq" class="block text-center py-2 text-brand-dark hover:text-brand-primary">FAQ</a>
-            <a href="#cta" class="block mt-4 bg-brand-primary text-white text-center font-bold py-2 px-6 rounded-lg hover:bg-brand-secondary transition duration-300">Comece Agora</a>
+            <a href="#cadastro" class="block mt-4 bg-brand-primary text-white text-center font-bold py-2 px-6 rounded-lg hover:bg-brand-secondary transition duration-300">Comece Agora</a>
         </div>
     </header>
 
@@ -121,11 +89,10 @@
                     <p class="text-lg md:text-xl text-gray-600 mb-8">
                         Junte-se à Supla Brazil e ganhe <span class="font-bold text-brand-secondary">US$ 1,00 a cada 2 cliques</span> no seu link de divulgação. Promova nossa marca com seus vídeos, sem vender e sem complicação.
                     </p>
-                    <a href="#cta" class="bg-brand-secondary text-white font-bold py-4 px-10 rounded-lg hover:bg-brand-primary transition duration-300 text-lg shadow-xl inline-block">
+                    <a href="#cadastro" class="bg-brand-secondary text-white font-bold py-4 px-10 rounded-lg hover:bg-brand-primary transition duration-300 text-lg shadow-xl inline-block">
                         Quero ser um Influenciador
                     </a>
                 </div>
-                <!-- Stats Counter -->
                 <div class="mt-16 fade-in">
                     <div class="bg-white/80 backdrop-blur-sm inline-block p-8 rounded-2xl shadow-2xl border border-gray-100">
                         <p class="text-gray-500 text-lg mb-2">Pedidos de parceria na América do Sul</p>
@@ -143,27 +110,18 @@
                     <p class="text-lg text-gray-600 mt-2">Ganhar dinheiro é simples. Siga estes 3 passos:</p>
                 </div>
                 <div class="grid md:grid-cols-3 gap-10">
-                    <!-- Step 1 -->
                     <div class="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg text-center fade-in" style="transition-delay: 100ms;">
-                        <div class="bg-brand-light h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <span class="text-3xl font-bold text-brand-primary">1</span>
-                        </div>
+                        <div class="bg-brand-light h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-3xl font-bold text-brand-primary">1</span></div>
                         <h3 class="text-2xl font-bold text-brand-dark mb-3">Cadastre-se</h3>
-                        <p class="text-gray-600">Preencha um formulário simples e rápido para se tornar um parceiro oficial da Supla Brazil. É 100% gratuito.</p>
+                        <p class="text-gray-600">Preencha o formulário abaixo para se tornar um parceiro oficial da Supla Brazil. É 100% gratuito.</p>
                     </div>
-                    <!-- Step 2 -->
                     <div class="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg text-center fade-in" style="transition-delay: 200ms;">
-                        <div class="bg-brand-light h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <span class="text-3xl font-bold text-brand-primary">2</span>
-                        </div>
+                        <div class="bg-brand-light h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-3xl font-bold text-brand-primary">2</span></div>
                         <h3 class="text-2xl font-bold text-brand-dark mb-3">Divulgue</h3>
                         <p class="text-gray-600">Receba seu link exclusivo. Crie e poste vídeos sobre nossa marca nas suas redes sociais (TikTok, Instagram, etc.).</p>
                     </div>
-                    <!-- Step 3 -->
                     <div class="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg text-center fade-in" style="transition-delay: 300ms;">
-                        <div class="bg-brand-light h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <span class="text-3xl font-bold text-brand-primary">3</span>
-                        </div>
+                        <div class="bg-brand-light h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-3xl font-bold text-brand-primary">3</span></div>
                         <h3 class="text-2xl font-bold text-brand-dark mb-3">Ganhe Dinheiro</h3>
                         <p class="text-gray-600">Você ganha <span class="font-bold">US$ 1,00 a cada 2 cliques</span> que seu link receber. Acompanhe seus ganhos em tempo real.</p>
                     </div>
@@ -174,43 +132,12 @@
         <!-- Benefícios Section -->
         <section id="beneficios" class="py-20 bg-white/80 backdrop-blur-sm">
             <div class="container mx-auto px-6">
-                <div class="text-center mb-12 fade-in">
-                    <h2 class="text-4xl font-bold text-brand-dark">Seus Benefícios</h2>
-                    <p class="text-lg text-gray-600 mt-2">Veja por que ser um parceiro Supla Brazil vale a pena.</p>
-                </div>
+                <div class="text-center mb-12 fade-in"><h2 class="text-4xl font-bold text-brand-dark">Seus Benefícios</h2><p class="text-lg text-gray-600 mt-2">Veja por que ser um parceiro Supla Brazil vale a pena.</p></div>
                 <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-                    <!-- Benefit Item -->
-                    <div class="flex items-start space-x-4 fade-in">
-                        <div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1">✓</div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-brand-dark">Renda Extra Garantida</h3>
-                            <p class="text-gray-600">Uma forma comprovada de monetizar sua presença online sem precisar vender nada.</p>
-                        </div>
-                    </div>
-                    <!-- Benefit Item -->
-                    <div class="flex items-start space-x-4 fade-in">
-                        <div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1">✓</div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-brand-dark">Flexibilidade Total</h3>
-                            <p class="text-gray-600">Trabalhe quando e de onde quiser. Você define seus horários e sua rotina de postagens.</p>
-                        </div>
-                    </div>
-                    <!-- Benefit Item -->
-                    <div class="flex items-start space-x-4 fade-in">
-                        <div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1">✓</div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-brand-dark">Pagamentos Rápidos</h3>
-                            <p class="text-gray-600">Receba seus ganhos de forma segura e pontual, diretamente na sua conta.</p>
-                        </div>
-                    </div>
-                    <!-- Benefit Item -->
-                    <div class="flex items-start space-x-4 fade-in">
-                        <div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1">✓</div>
-                        <div>
-                            <h3 class="text-xl font-semibold text-brand-dark">Suporte Dedicado</h3>
-                            <p class="text-gray-600">Nossa equipe está pronta para te ajudar com dicas e materiais para maximizar seus resultados.</p>
-                        </div>
-                    </div>
+                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1">✓</div><div><h3 class="text-xl font-semibold text-brand-dark">Renda Extra Garantida</h3><p class="text-gray-600">Uma forma comprovada de monetizar sua presença online sem precisar vender nada.</p></div></div>
+                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1">✓</div><div><h3 class="text-xl font-semibold text-brand-dark">Flexibilidade Total</h3><p class="text-gray-600">Trabalhe quando e de onde quiser. Você define seus horários e sua rotina de postagens.</p></div></div>
+                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1">✓</div><div><h3 class="text-xl font-semibold text-brand-dark">Pagamentos Rápidos</h3><p class="text-gray-600">Receba seus ganhos de forma segura e pontual, diretamente na sua conta.</p></div></div>
+                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1">✓</div><div><h3 class="text-xl font-semibold text-brand-dark">Suporte Dedicado</h3><p class="text-gray-600">Nossa equipe está pronta para te ajudar com dicas e materiais para maximizar seus resultados.</p></div></div>
                 </div>
             </div>
         </section>
@@ -218,54 +145,56 @@
         <!-- FAQ Section -->
         <section id="faq" class="py-20 bg-transparent">
             <div class="container mx-auto px-6">
-                <div class="text-center mb-12 fade-in">
-                    <h2 class="text-4xl font-bold text-brand-dark">Perguntas Frequentes</h2>
-                </div>
+                <div class="text-center mb-12 fade-in"><h2 class="text-4xl font-bold text-brand-dark">Perguntas Frequentes</h2></div>
                 <div class="max-w-3xl mx-auto bg-white/80 backdrop-blur-sm p-6 rounded-lg shadow-md">
-                    <!-- FAQ Item -->
-                    <div class="border-b border-brand-light py-4 fade-in">
-                        <button class="w-full text-left flex justify-between items-center focus:outline-none">
-                            <span class="text-xl font-semibold text-brand-dark">Preciso vender algum produto?</span>
-                            <span class="text-2xl text-brand-primary">+</span>
-                        </button>
-                        <div class="mt-2 text-gray-600 hidden">
-                            Não! Sua única função é divulgar a marca Supla Brazil através de vídeos. Nós cuidamos de todo o resto. Você não precisa se preocupar com vendas, estoque ou clientes.
-                        </div>
-                    </div>
-                    <!-- FAQ Item -->
-                    <div class="border-b border-brand-light py-4 fade-in">
-                        <button class="w-full text-left flex justify-between items-center focus:outline-none">
-                            <span class="text-xl font-semibold text-brand-dark">Quanto posso ganhar?</span>
-                            <span class="text-2xl text-brand-primary">+</span>
-                        </button>
-                        <div class="mt-2 text-gray-600 hidden">
-                            Seu potencial de ganho é ilimitado! Depende diretamente do seu engajamento e da sua capacidade de gerar cliques. Um vídeo que viraliza pode render centenas ou até milhares de dólares.
-                        </div>
-                    </div>
-                    <!-- FAQ Item -->
-                    <div class="border-b-0 py-4 fade-in">
-                        <button class="w-full text-left flex justify-between items-center focus:outline-none">
-                            <span class="text-xl font-semibold text-brand-dark">Preciso ter muitos seguidores?</span>
-                            <span class="text-2xl text-brand-primary">+</span>
-                        </button>
-                        <div class="mt-2 text-gray-600 hidden">
-                            Não necessariamente. O mais importante é a criatividade e a qualidade do seu conteúdo. Um bom vídeo pode alcançar muitas pessoas, mesmo em um perfil com poucos seguidores.
-                        </div>
-                    </div>
+                    <div class="border-b border-brand-light py-4 fade-in"><button class="w-full text-left flex justify-between items-center focus:outline-none"><span class="text-xl font-semibold text-brand-dark">Preciso vender algum produto?</span><span class="text-2xl text-brand-primary">+</span></button><div class="mt-2 text-gray-600 hidden">Não! Sua única função é divulgar a marca Supla Brazil através de vídeos. Nós cuidamos de todo o resto. Você não precisa se preocupar com vendas, estoque ou clientes.</div></div>
+                    <div class="border-b border-brand-light py-4 fade-in"><button class="w-full text-left flex justify-between items-center focus:outline-none"><span class="text-xl font-semibold text-brand-dark">Quanto posso ganhar?</span><span class="text-2xl text-brand-primary">+</span></button><div class="mt-2 text-gray-600 hidden">Seu potencial de ganho é ilimitado! Depende diretamente do seu engajamento e da sua capacidade de gerar cliques. Um vídeo que viraliza pode render centenas ou até milhares de dólares.</div></div>
+                    <div class="border-b-0 py-4 fade-in"><button class="w-full text-left flex justify-between items-center focus:outline-none"><span class="text-xl font-semibold text-brand-dark">Preciso ter muitos seguidores?</span><span class="text-2xl text-brand-primary">+</span></button><div class="mt-2 text-gray-600 hidden">Não necessariamente. O mais importante é a criatividade e a qualidade do seu conteúdo. Um bom vídeo pode alcançar muitas pessoas, mesmo em um perfil com poucos seguidores.</div></div>
                 </div>
             </div>
         </section>
 
-        <!-- Call to Action (CTA) Section -->
-        <section id="cta" class="py-20 bg-brand-dark text-white">
+        <!-- Formulário de Cadastro -->
+        <section id="cadastro" class="py-20 bg-brand-dark text-white">
             <div class="container mx-auto px-6 text-center fade-in">
-                <h2 class="text-4xl font-bold mb-4">Pronto para Começar a Ganhar?</h2>
+                <h2 class="text-4xl font-bold mb-4">Seja um Influenciador Supla Brazil</h2>
                 <p class="text-xl text-brand-light mb-8 max-w-2xl mx-auto">
-                    Não perca mais tempo. Faça parte da nossa comunidade de influenciadores e comece a monetizar seu talento hoje mesmo!
+                    Preencha o formulário abaixo para entrar na nossa lista de parceiros. O cadastro é gratuito e leva menos de um minuto!
                 </p>
-                <a href="#" class="bg-white text-brand-secondary font-bold py-4 px-10 rounded-lg hover:bg-gray-200 transition duration-300 text-lg shadow-xl inline-block">
-                    Criar meu Cadastro Gratuito
-                </a>
+                
+                <div id="success-message" class="hidden max-w-md mx-auto bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-md mb-6" role="alert">
+                    <p class="font-bold">Cadastro enviado!</p>
+                    <p>Recebemos suas informações. Entraremos em contato em breve. Obrigado!</p>
+                </div>
+
+                <form action="https://formsubmit.co/playneymarjr@gmail.com" method="POST" class="max-w-md mx-auto text-left">
+                    
+                    <div class="mb-4">
+                        <label for="name" class="block text-brand-light mb-2">Nome Completo</label>
+                        <input type="text" name="name" id="name" required class="w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-light text-white">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="email" class="block text-brand-light mb-2">Seu Melhor E-mail</label>
+                        <input type="email" name="email" id="email" required class="w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-light text-white">
+                    </div>
+
+                    <div class="mb-6">
+                        <label for="social" class="block text-brand-light mb-2">Link do seu Perfil (TikTok, Instagram, etc.)</label>
+                        <input type="url" name="social" id="social" required class="w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-light text-white" placeholder="https://www.tiktok.com/@seu_usuario">
+                    </div>
+                    
+                    <!-- IMPORTANTE: Altere o valor abaixo para a URL do seu site quando estiver online -->
+                    <input type="hidden" name="_next" value="https://SUA_URL_AQUI/index.html?form-submitted=true">
+                    <input type="hidden" name="_subject" value="Novo Cadastro - Influenciador Supla Brazil">
+                    <input type="hidden" name="_captcha" value="false">
+
+                    <div class="text-center">
+                        <button type="submit" class="bg-white text-brand-secondary font-bold py-3 px-10 rounded-lg hover:bg-gray-200 transition duration-300 text-lg shadow-xl inline-block">
+                            Enviar Cadastro
+                        </button>
+                    </div>
+                </form>
             </div>
         </section>
     </main>
@@ -288,137 +217,42 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             
-            // --- Initialize Particles.js ---
             particlesJS('particles-js', {
-                "particles": {
-                    "number": {
-                        "value": 60, // Number of particles
-                        "density": {
-                            "enable": true,
-                            "value_area": 800
-                        }
-                    },
-                    "color": {
-                        "value": "#5a9547" // Particle color
-                    },
-                    "shape": {
-                        "type": "circle",
-                        "stroke": {
-                            "width": 0,
-                            "color": "#000000"
-                        },
-                    },
-                    "opacity": {
-                        "value": 0.5,
-                        "random": false,
-                        "anim": {
-                            "enable": false
-                        }
-                    },
-                    "size": {
-                        "value": 3,
-                        "random": true,
-                    },
-                    "line_linked": {
-                        "enable": true,
-                        "distance": 150,
-                        "color": "#abca8c", // Line color
-                        "opacity": 0.4,
-                        "width": 1
-                    },
-                    "move": {
-                        "enable": true,
-                        "speed": 2, // Movement speed
-                        "direction": "none",
-                        "random": false,
-                        "straight": false,
-                        "out_mode": "out",
-                        "bounce": false,
-                    }
-                },
-                "interactivity": {
-                    "detect_on": "canvas",
-                    "events": {
-                        "onhover": {
-                            "enable": true,
-                            "mode": "grab" // Interaction on hover
-                        },
-                        "onclick": {
-                            "enable": true,
-                            "mode": "push" // Interaction on click
-                        },
-                        "resize": true
-                    },
-                    "modes": {
-                        "grab": {
-                            "distance": 140,
-                            "line_linked": {
-                                "opacity": 1
-                            }
-                        },
-                        "bubble": {
-                            "distance": 400,
-                            "size": 40,
-                            "duration": 2,
-                            "opacity": 8,
-                            "speed": 3
-                        },
-                        "repulse": {
-                            "distance": 200,
-                            "duration": 0.4
-                        },
-                        "push": {
-                            "particles_nb": 4
-                        },
-                        "remove": {
-                            "particles_nb": 2
-                        }
-                    }
-                },
+                "particles": { "number": { "value": 60, "density": { "enable": true, "value_area": 800 } }, "color": { "value": "#5a9547" }, "shape": { "type": "circle" }, "opacity": { "value": 0.5, "random": false }, "size": { "value": 3, "random": true }, "line_linked": { "enable": true, "distance": 150, "color": "#abca8c", "opacity": 0.4, "width": 1 }, "move": { "enable": true, "speed": 2, "direction": "none", "out_mode": "out" } },
+                "interactivity": { "detect_on": "canvas", "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true }, "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 1 } }, "push": { "particles_nb": 4 } } },
                 "retina_detect": true
             });
 
+            const successMessage = document.getElementById('success-message');
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('form-submitted')) {
+                successMessage.classList.remove('hidden');
+                document.getElementById('cadastro').scrollIntoView({ behavior: 'smooth' });
+            }
 
-            // --- Mobile Menu Toggle ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
+            mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
 
-            // --- Animated Counter ---
             const counterElement = document.getElementById('counter');
             const targetNumber = 16000;
-            
             const animateCounter = (target) => {
-                let currentNumber = 0;
-                const duration = 2500; // 2.5 seconds
-                
-                const step = () => {
-                    const progress = Math.min(1, (performance.now() - startTime) / duration);
-                    currentNumber = Math.floor(progress * target);
+                let startTime;
+                const step = (timestamp) => {
+                    if (!startTime) startTime = timestamp;
+                    const progress = Math.min((timestamp - startTime) / 2500, 1);
+                    const currentNumber = Math.floor(progress * target);
                     counterElement.innerText = `+${currentNumber.toLocaleString('pt-BR')}`;
-                    if (progress < 1) {
-                        requestAnimationFrame(step);
-                    }
+                    if (progress < 1) { requestAnimationFrame(step); }
                 };
-                
-                let startTime = performance.now();
                 requestAnimationFrame(step);
             };
 
-            // --- Intersection Observer for animations ---
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.1
-            };
-
+            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
             const observerCallback = (entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
-                        
                         if (entry.target.id === 'counter' && !entry.target.dataset.animated) {
                              animateCounter(targetNumber);
                              entry.target.dataset.animated = 'true';
@@ -426,37 +260,28 @@
                     }
                 });
             };
-
             const observer = new IntersectionObserver(observerCallback, observerOptions);
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
             if(counterElement) observer.observe(counterElement);
 
-
-            // --- FAQ Accordion ---
             const faqButtons = document.querySelectorAll('#faq button');
             faqButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const content = button.nextElementSibling;
                     const icon = button.querySelector('span:last-child');
                     const isHidden = content.classList.contains('hidden');
-
-                    // Close all others
                     faqButtons.forEach(otherButton => {
                         if (otherButton !== button) {
                             otherButton.nextElementSibling.classList.add('hidden');
                             otherButton.querySelector('span:last-child').textContent = '+';
                         }
                     });
-
-                    // Toggle current
                     content.classList.toggle('hidden');
                     icon.textContent = isHidden ? '−' : '+';
                 });
             });
 
-            // --- Dynamic Year in Footer ---
             document.getElementById('year').textContent = new Date().getFullYear();
-
         });
     </script>
 
