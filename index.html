@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,151 +11,144 @@
     
     <link rel="icon" href="https://iili.io/FlyBJF1.png" type="image/png">
 
-
     <style>
-        /*==================================*
- *                                  *
- *   ____    _    _   _             *
- *  |  _ \  / \  | \ | |            *
- *  | | | |/ _ \ |  \| |            *
- *  | |_| / ___ \| |\  |            *
- *  |____/_/   \_\_| \_|            *
- *                                  *
- *                                  *
- *==================================*/
         html { scroll-behavior: smooth; }
-        body { padding-top: 70px; }
-        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #f7fafc; z-index: -1; }
+        body { 
+            padding-top: 70px; 
+            transition: background-color 0.3s, color 0.3s;
+        }
+        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
         .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
         .counter-value { transition: all 2.5s ease-out; }
-        header, main, footer { position: relative; z-index: 1; }
-        .error-message {
-            display: none; color: #f87171; background-color: #fef2f2; border-left: 4px solid #ef4444;
-            padding: 1rem; margin-top: 1rem; border-radius: 0.5rem; text-align: center;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
+        header, main, footer { position: relative; z-index: 1; transition: background-color 0.3s; }
+        
+        /* --- Enhanced Promo Banner Styles --- */
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
         #promo-banner {
             position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
             background-image: linear-gradient(to right, #5a9547, #4b833c);
-            padding: 10px 0;
-            animation: pulse 4s infinite ease-in-out;
+            padding: 10px 0; animation: pulse 4s infinite ease-in-out;
         }
-        .timer-container {
-            display: flex; align-items: center; justify-content: center;
-            gap: 1rem; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
+        .timer-container { display: flex; align-items: center; justify-content: center; gap: 1rem; color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.2); }
         .timer-text { font-weight: 700; font-size: 0.9rem; }
         .timer-block { display: flex; align-items: center; gap: 0.5rem; }
-        .timer-unit {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 8px;
-            padding: 0.5rem 0.75rem;
-            text-align: center;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-        }
+        .timer-unit { background: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 0.5rem 0.75rem; text-align: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
         .timer-unit .number { font-size: 1.75rem; font-weight: 900; line-height: 1; }
         .timer-unit .label { font-size: 0.6rem; text-transform: uppercase; opacity: 0.8; letter-spacing: 0.5px; }
+
+        /* --- Theme Toggle --- */
+        #theme-toggle-button {
+            background: #f1f5f9; border-radius: 9999px; padding: 0.5rem;
+            color: #475569; transition: all 0.3s;
+        }
+        .dark #theme-toggle-button { background: #334155; color: #e2e8f0; }
+
+        /* --- Enhanced Notification Styles --- */
+        #notification-container { position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 100; display: flex; flex-direction: column; gap: 0.75rem; }
+        .notification-popup {
+            display: flex; align-items: center; gap: 0.75rem; background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px); padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+            opacity: 0; transform: translateY(30px); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .dark .notification-popup { background-color: rgba(30, 41, 59, 0.8); border-color: #475569; }
+        .notification-popup.show { opacity: 1; transform: translateY(0); }
+        .notification-popup.hide { opacity: 0; transform: translateY(30px); }
+        .notification-icon { font-size: 1.25rem; }
+        .notification-text { font-size: 0.9rem; color: #2d3748; }
+        .dark .notification-text { color: #cbd5e1; }
+        .notification-text strong { font-weight: 600; color: #0b451f; }
+        .dark .notification-text strong { color: #6ee7b7; }
+
+        /* --- Flash Offer --- */
+        @keyframes gift-pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(75, 131, 60, 0.7); } 70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(75, 131, 60, 0); } }
+        #flash-offer-trigger {
+            position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 100;
+            background-color: #4b833c; color: white;
+            width: 60px; height: 60px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            cursor: pointer; transition: transform 0.3s;
+            animation: gift-pulse 2s infinite;
+        }
+        #flash-offer-trigger:hover { transform: scale(1.1); }
+        #flash-offer-modal-backdrop {
+            position: fixed; inset: 0; background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px); z-index: 110;
+            opacity: 0; transition: opacity 0.3s; pointer-events: none;
+        }
+        #flash-offer-modal-backdrop.visible { opacity: 1; pointer-events: all; }
+        #flash-offer-modal {
+            position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            z-index: 120;
+            width: 90%; max-width: 400px;
+            background-color: white; border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+            opacity: 0; transition: all 0.3s; pointer-events: none;
+        }
+        .dark #flash-offer-modal { background-color: #1e293b; }
+        #flash-offer-modal.visible { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: all; }
+        .flash-timer { background: #f1f5f9; color: #0b451f; }
+        .dark .flash-timer { background: #334155; color: #a3e635; }
+        .flash-button:disabled { background-color: #9ca3af; cursor: not-allowed; }
+        .dark .flash-button:disabled { background-color: #4b5563; }
+
         @media (max-width: 768px) {
+            body { padding-top: 100px; }
+            header { top: 100px !important; }
             .timer-container { flex-direction: column; gap: 0.5rem; }
             .timer-text { font-size: 0.8rem; }
             .timer-unit .number { font-size: 1.25rem; }
-            body { padding-top: 100px; }
-            header { top: 100px !important; }
-        }
-
-        #notification-container {
-            position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 100;
-            display: flex; flex-direction: column; gap: 0.75rem;
-        }
-        .notification-popup {
-            display: flex; align-items: center; gap: 0.75rem;
-            background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px);
-            padding: 1rem 1.25rem;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .notification-popup.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .notification-popup.hide {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        .notification-icon {
-            font-size: 1.25rem;
-        }
-        .notification-text {
-            font-size: 0.9rem;
-            color: #2d3748;
-        }
-        .notification-text strong {
-            font-weight: 600;
-            color: #0b451f;
         }
     </style>
 </head>
 
-<body class="bg-transparent text-brand-dark font-sans">
+<body class="bg-brand-bg dark:bg-slate-900 text-brand-dark dark:text-slate-200">
 
     <div id="promo-banner">
         <div class="timer-container">
             <span class="timer-text hidden md:inline">VAGAS LIMITADAS! A PROMOÇÃO ACABA EM:</span>
             <span class="timer-text md:hidden">PROMOÇÃO ACABA EM:</span>
             <div class="timer-block">
-                <div class="timer-unit">
-                    <div id="days" class="number">00</div>
-                    <div class="label">Dias</div>
-                </div>
-                <div class="timer-unit">
-                    <div id="hours" class="number">00</div>
-                    <div class="label">Horas</div>
-                </div>
-                <div class="timer-unit">
-                    <div id="minutes" class="number">00</div>
-                    <div class="label">Min</div>
-                </div>
-                <div class="timer-unit">
-                    <div id="seconds" class="number">00</div>
-                    <div class="label">Seg</div>
-                </div>
+                <div class="timer-unit"><div id="days" class="number">00</div><div class="label">Dias</div></div>
+                <div class="timer-unit"><div id="hours" class="number">00</div><div class="label">Horas</div></div>
+                <div class="timer-unit"><div id="minutes" class="number">00</div><div class="label">Min</div></div>
+                <div class="timer-unit"><div id="seconds" class="number">00</div><div class="label">Seg</div></div>
             </div>
         </div>
     </div>
 
     <div id="particles-js"></div>
 
-    <header id="header" class="bg-white/80 backdrop-blur-lg fixed top-[70px] left-0 right-0 z-50 shadow-md">
+    <header id="header" class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg fixed top-[70px] left-0 right-0 z-50 shadow-md dark:shadow-slate-700/50">
         <div class="container mx-auto px-6 h-20 flex justify-between items-center relative">
             <a href="#" class="absolute left-1/2 -translate-x-1/2 md:left-6 md:translate-x-0 top-0 -mt-2 z-10" aria-label="Página Inicial Supla Brazil">
                 <img src="https://iili.io/FlyBJF1.png" alt="Logo Supla Brazil" class="h-28 w-auto drop-shadow-lg">
             </a>
             <nav class="hidden md:flex space-x-8 w-full justify-center items-center" aria-label="Navegação Principal">
-                <a href="#como-funciona" class="text-brand-dark hover:text-brand-primary transition duration-300">Como Funciona</a>
-                <a href="#beneficios" class="text-brand-dark hover:text-brand-primary transition duration-300">Benefícios</a>
-                <a href="#faq" class="text-brand-dark hover:text-brand-primary transition duration-300">FAQ</a>
+                <a href="#como-funciona" class="text-brand-dark dark:text-slate-200 hover:text-brand-primary dark:hover:text-green-400 transition duration-300">Como Funciona</a>
+                <a href="#beneficios" class="text-brand-dark dark:text-slate-200 hover:text-brand-primary dark:hover:text-green-400 transition duration-300">Benefícios</a>
+                <a href="#faq" class="text-brand-dark dark:text-slate-200 hover:text-brand-primary dark:hover:text-green-400 transition duration-300">FAQ</a>
             </nav>
-            <a href="#cadastro" class="hidden md:block bg-brand-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-brand-secondary transition duration-300 shadow-lg absolute right-6 top-1/2 -translate-y-1/2">
-                Comece Agora
-            </a>
-            <button id="mobile-menu-button" class="md:hidden text-brand-dark focus:outline-none absolute right-6 top-1/2 -translate-y-1/2" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
+            <div class="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-4">
+                <button id="theme-toggle-button" aria-label="Alternar tema">
+                    <svg id="theme-icon-light" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm-.707 10.607a1 1 0 010-1.414l.707-.707a1 1 0 111.414 1.414l-.707.707a1 1 0 01-1.414 0zM2 11a1 1 0 100-2H1a1 1 0 100 2h1z"></path></svg>
+                    <svg id="theme-icon-dark" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                </button>
+                <a href="#cadastro" class="hidden md:block bg-brand-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-brand-secondary transition duration-300 shadow-lg">
+                    Comece Agora
+                </a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-brand-dark dark:text-slate-200 focus:outline-none" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
                 <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
         </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-lg px-6 pt-2 pb-4">
-            <a href="#como-funciona" class="block text-center py-2 text-brand-dark hover:text-brand-primary">Como Funciona</a>
-            <a href="#beneficios" class="block text-center py-2 text-brand-dark hover:text-brand-primary">Benefícios</a>
-            <a href="#faq" class="block text-center py-2 text-brand-dark hover:text-brand-primary">FAQ</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 dark:bg-slate-800/95 backdrop-blur-lg px-6 pt-2 pb-4">
+            <a href="#como-funciona" class="block text-center py-2 text-brand-dark dark:text-slate-200 hover:text-brand-primary">Como Funciona</a>
+            <a href="#beneficios" class="block text-center py-2 text-brand-dark dark:text-slate-200 hover:text-brand-primary">Benefícios</a>
+            <a href="#faq" class="block text-center py-2 text-brand-dark dark:text-slate-200 hover:text-brand-primary">FAQ</a>
             <a href="#cadastro" class="block mt-4 bg-brand-primary text-white text-center font-bold py-2 px-6 rounded-lg hover:bg-brand-secondary transition duration-300">Comece Agora</a>
         </div>
     </header>
@@ -164,134 +157,113 @@
         <section id="hero" class="pt-40 pb-20 bg-transparent">
             <div class="container mx-auto px-6 text-center">
                 <div class="max-w-4xl mx-auto">
-                    <h1 class="text-4xl md:text-6xl font-extrabold text-brand-dark mb-4 leading-tight">
-                        Transforme suas Redes Sociais em uma <span class="text-brand-primary">Fonte de Renda</span>
+                    <h1 class="text-4xl md:text-6xl font-extrabold text-brand-dark dark:text-white mb-4 leading-tight">
+                        Transforme suas Redes Sociais em uma <span class="text-brand-primary dark:text-green-400">Fonte de Renda</span>
                     </h1>
-                    <p class="text-lg md:text-xl text-gray-600 mb-8">
-                        Junte-se à Supla Brazil e ganhe <span class="font-bold text-brand-secondary">US$ 1,00 a cada 10 cliques</span> no seu link de divulgação. Promova nossa marca com seus vídeos, sem vender e sem complicação.
+                    <p class="text-lg md:text-xl text-gray-600 dark:text-slate-300 mb-8">
+                        Junte-se à Supla Brazil e ganhe <span class="font-bold text-brand-secondary dark:text-green-400">US$ 1,00 a cada 10 cliques</span> no seu link de divulgação. Promova nossa marca com seus vídeos, sem vender e sem complicação.
                     </p>
                     <a href="#cadastro" class="bg-brand-secondary text-white font-bold py-4 px-10 rounded-lg hover:bg-brand-primary transition duration-300 text-lg shadow-xl inline-block">
                         Quero ser um Influenciador
                     </a>
                 </div>
                 <div id="stats-container" class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                    <div class="fade-in bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-100">
-                        <p class="text-gray-500 text-lg mb-2">Pedidos de Parceria</p>
-                        <p id="requests-counter" class="text-5xl md:text-6xl font-bold text-brand-primary counter-value" data-target="16432">0</p>
+                    <div class="fade-in bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-2xl dark:shadow-slate-700/50 border border-gray-100 dark:border-slate-700">
+                        <p class="text-gray-500 dark:text-slate-400 text-lg mb-2">Pedidos de Parceria</p>
+                        <p id="requests-counter" class="text-5xl md:text-6xl font-bold text-brand-primary dark:text-green-400 counter-value" data-target="16432">0</p>
                     </div>
-                    <div class="fade-in bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-100">
-                        <p class="text-gray-500 text-lg mb-2">Influenciadores Ativos</p>
-                        <p id="influencers-counter" class="text-5xl md:text-6xl font-bold text-brand-primary counter-value" data-target="457">0</p>
+                    <div class="fade-in bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-2xl dark:shadow-slate-700/50 border border-gray-100 dark:border-slate-700">
+                        <p class="text-gray-500 dark:text-slate-400 text-lg mb-2">Influenciadores Ativos</p>
+                        <p id="influencers-counter" class="text-5xl md:text-6xl font-bold text-brand-primary dark:text-green-400 counter-value" data-target="457">0</p>
                     </div>
-                    <div class="fade-in bg-white/80 backdrop-blur-sm p-6 rounded-2xl shadow-2xl border border-gray-100">
-                        <p class="text-gray-500 text-lg mb-2">Total Pago (USD)</p>
-                        <p id="payments-counter" class="text-5xl md:text-6xl font-bold text-brand-primary counter-value" data-target="83450" data-currency="true">0</p>
+                    <div class="fade-in bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-2xl dark:shadow-slate-700/50 border border-gray-100 dark:border-slate-700">
+                        <p class="text-gray-500 dark:text-slate-400 text-lg mb-2">Total Pago (USD)</p>
+                        <p id="payments-counter" class="text-5xl md:text-6xl font-bold text-brand-primary dark:text-green-400 counter-value" data-target="83450" data-currency="true">0</p>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- The rest of the content remains the same, with dark mode classes added -->
         <section id="como-funciona" class="py-20 bg-transparent">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12 fade-in">
-                    <h2 class="text-4xl font-bold text-brand-dark">Como Funciona?</h2>
-                    <p class="text-lg text-gray-600 mt-2">Ganhar dinheiro é simples. Siga estes 3 passos:</p>
+                    <h2 class="text-4xl font-bold text-brand-dark dark:text-white">Como Funciona?</h2>
+                    <p class="text-lg text-gray-600 dark:text-slate-300 mt-2">Ganhar dinheiro é simples. Siga estes 3 passos:</p>
                 </div>
                 <div class="grid md:grid-cols-3 gap-10">
-                    <div class="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg text-center fade-in" style="transition-delay: 100ms;">
-                        <div class="bg-brand-light h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-3xl font-bold text-brand-primary">1</span></div>
-                        <h3 class="text-2xl font-bold text-brand-dark mb-3">Cadastre-se</h3>
-                        <p class="text-gray-600">Preencha o formulário abaixo para se tornar um parceiro oficial da Supla Brazil. É 100% gratuito.</p>
+                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-xl shadow-lg dark:shadow-slate-700/50 text-center fade-in" style="transition-delay: 100ms;">
+                        <div class="bg-brand-light dark:bg-green-400/20 h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-3xl font-bold text-brand-primary dark:text-green-400">1</span></div>
+                        <h3 class="text-2xl font-bold text-brand-dark dark:text-white mb-3">Cadastre-se</h3>
+                        <p class="text-gray-600 dark:text-slate-300">Preencha o formulário abaixo para se tornar um parceiro oficial da Supla Brazil. É 100% gratuito.</p>
                     </div>
-                    <div class="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg text-center fade-in" style="transition-delay: 200ms;">
-                        <div class="bg-brand-light h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-3xl font-bold text-brand-primary">2</span></div>
-                        <h3 class="text-2xl font-bold text-brand-dark mb-3">Divulgue</h3>
-                        <p class="text-gray-600">Receba seu link exclusivo. Crie e poste vídeos sobre nossa marca nas suas redes sociais (TikTok, Instagram, etc.).</p>
+                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-xl shadow-lg dark:shadow-slate-700/50 text-center fade-in" style="transition-delay: 200ms;">
+                        <div class="bg-brand-light dark:bg-green-400/20 h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-3xl font-bold text-brand-primary dark:text-green-400">2</span></div>
+                        <h3 class="text-2xl font-bold text-brand-dark dark:text-white mb-3">Divulgue</h3>
+                        <p class="text-gray-600 dark:text-slate-300">Receba seu link exclusivo. Crie e poste vídeos sobre nossa marca nas suas redes sociais (TikTok, Instagram, etc.).</p>
                     </div>
-                    <div class="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg text-center fade-in" style="transition-delay: 300ms;">
-                        <div class="bg-brand-light h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-3xl font-bold text-brand-primary">3</span></div>
-                        <h3 class="text-2xl font-bold text-brand-dark mb-3">Ganhe Dinheiro</h3>
-                        <p class="text-gray-600">Você ganha <span class="font-bold">US$ 1,00 a cada 10 cliques</span> que seu link receber. Acompanhe seus ganhos em tempo real.</p>
+                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-xl shadow-lg dark:shadow-slate-700/50 text-center fade-in" style="transition-delay: 300ms;">
+                        <div class="bg-brand-light dark:bg-green-400/20 h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-3xl font-bold text-brand-primary dark:text-green-400">3</span></div>
+                        <h3 class="text-2xl font-bold text-brand-dark dark:text-white mb-3">Ganhe Dinheiro</h3>
+                        <p class="text-gray-600 dark:text-slate-300">Você ganha <span class="font-bold">US$ 1,00 a cada 10 cliques</span> que seu link receber. Acompanhe seus ganhos em tempo real.</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="beneficios" class="py-20 bg-white/80 backdrop-blur-sm">
+        <section id="beneficios" class="py-20 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
             <div class="container mx-auto px-6">
-                <div class="text-center mb-12 fade-in"><h2 class="text-4xl font-bold text-brand-dark">Seus Benefícios</h2><p class="text-lg text-gray-600 mt-2">Veja por que ser um parceiro Supla Brazil vale a pena.</p></div>
+                <div class="text-center mb-12 fade-in"><h2 class="text-4xl font-bold text-brand-dark dark:text-white">Seus Benefícios</h2><p class="text-lg text-gray-600 dark:text-slate-300 mt-2">Veja por que ser um parceiro Supla Brazil vale a pena.</p></div>
                 <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1" aria-hidden="true">✓</div><div><h3 class="text-xl font-semibold text-brand-dark">Renda Extra Garantida</h3><p class="text-gray-600">Uma forma comprovada de monetizar sua presença online sem precisar vender nada.</p></div></div>
-                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1" aria-hidden="true">✓</div><div><h3 class="text-xl font-semibold text-brand-dark">Flexibilidade Total</h3><p class="text-gray-600">Trabalhe quando e de onde quiser. Você define seus horários e sua rotina de postagens.</p></div></div>
-                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1" aria-hidden="true">✓</div><div><h3 class="text-xl font-semibold text-brand-dark">Pagamentos Rápidos</h3><p class="text-gray-600">Receba seus ganhos de forma segura e pontual, diretamente na sua conta.</p></div></div>
-                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1" aria-hidden="true">✓</div><div><h3 class="text-xl font-semibold text-brand-dark">Suporte Dedicado</h3><p class="text-gray-600">Nossa equipe está pronta para te ajudar com dicas e materiais para maximizar seus resultados.</p></div></div>
+                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1" aria-hidden="true">✓</div><div><h3 class="text-xl font-semibold text-brand-dark dark:text-white">Renda Extra Garantida</h3><p class="text-gray-600 dark:text-slate-300">Uma forma comprovada de monetizar sua presença online sem precisar vender nada.</p></div></div>
+                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1" aria-hidden="true">✓</div><div><h3 class="text-xl font-semibold text-brand-dark dark:text-white">Flexibilidade Total</h3><p class="text-gray-600 dark:text-slate-300">Trabalhe quando e de onde quiser. Você define seus horários e sua rotina de postagens.</p></div></div>
+                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1" aria-hidden="true">✓</div><div><h3 class="text-xl font-semibold text-brand-dark dark:text-white">Pagamentos Rápidos</h3><p class="text-gray-600 dark:text-slate-300">Receba seus ganhos de forma segura e pontual, diretamente na sua conta.</p></div></div>
+                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1" aria-hidden="true">✓</div><div><h3 class="text-xl font-semibold text-brand-dark dark:text-white">Suporte Dedicado</h3><p class="text-gray-600 dark:text-slate-300">Nossa equipe está pronta para te ajudar com dicas e materiais para maximizar seus resultados.</p></div></div>
                 </div>
             </div>
         </section>
 
         <section id="faq" class="py-20 bg-transparent">
             <div class="container mx-auto px-6">
-                <div class="text-center mb-12 fade-in">
-                    <h2 class="text-4xl font-bold text-brand-dark">Perguntas Frequentes</h2>
-                </div>
-                <div class="max-w-3xl mx-auto bg-white/80 backdrop-blur-sm p-6 rounded-lg shadow-md">
-                    <div class="border-b border-brand-light py-4 fade-in">
-                        <h3>
-                           <button class="w-full text-left flex justify-between items-center focus:outline-none" aria-expanded="false" aria-controls="faq1-content">
-                                <span class="text-xl font-semibold text-brand-dark">Preciso vender algum produto?</span>
-                                <span class="text-2xl text-brand-primary" aria-hidden="true">+</span>
-                           </button>
-                        </h3>
-                        <div id="faq1-content" class="mt-2 text-gray-600 hidden">Não! Sua única função é divulgar a marca Supla Brazil através de vídeos. Nós cuidamos de todo o resto. Você não precisa se preocupar com vendas, estoque ou clientes.</div>
+                <div class="text-center mb-12 fade-in"><h2 class="text-4xl font-bold text-brand-dark dark:text-white">Perguntas Frequentes</h2></div>
+                <div class="max-w-3xl mx-auto bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-6 rounded-lg shadow-md dark:shadow-slate-700/50">
+                    <div class="border-b border-brand-light dark:border-slate-600 py-4 fade-in">
+                        <h3><button class="w-full text-left flex justify-between items-center focus:outline-none" aria-expanded="false" aria-controls="faq1-content"><span class="text-xl font-semibold text-brand-dark dark:text-white">Preciso vender algum produto?</span><span class="text-2xl text-brand-primary dark:text-green-400" aria-hidden="true">+</span></button></h3>
+                        <div id="faq1-content" class="mt-2 text-gray-600 dark:text-slate-300 hidden">Não! Sua única função é divulgar a marca Supla Brazil através de vídeos. Nós cuidamos de todo o resto. Você não precisa se preocupar com vendas, estoque ou clientes.</div>
                     </div>
-                    <div class="border-b border-brand-light py-4 fade-in">
-                         <h3>
-                           <button class="w-full text-left flex justify-between items-center focus:outline-none" aria-expanded="false" aria-controls="faq2-content">
-                                <span class="text-xl font-semibold text-brand-dark">Quanto posso ganhar?</span>
-                                <span class="text-2xl text-brand-primary" aria-hidden="true">+</span>
-                           </button>
-                        </h3>
-                        <div id="faq2-content" class="mt-2 text-gray-600 hidden">Seu potencial de ganho é ilimitado! Depende diretamente do seu engajamento e da sua capacidade de gerar cliques. Um vídeo que viraliza pode render centenas ou até milhares de dólares.</div>
+                    <div class="border-b border-brand-light dark:border-slate-600 py-4 fade-in">
+                         <h3><button class="w-full text-left flex justify-between items-center focus:outline-none" aria-expanded="false" aria-controls="faq2-content"><span class="text-xl font-semibold text-brand-dark dark:text-white">Quanto posso ganhar?</span><span class="text-2xl text-brand-primary dark:text-green-400" aria-hidden="true">+</span></button></h3>
+                        <div id="faq2-content" class="mt-2 text-gray-600 dark:text-slate-300 hidden">Seu potencial de ganho é ilimitado! Depende diretamente do seu engajamento e da sua capacidade de gerar cliques. Um vídeo que viraliza pode render centenas ou até milhares de dólares.</div>
                     </div>
                     <div class="py-4 fade-in">
-                         <h3>
-                           <button class="w-full text-left flex justify-between items-center focus:outline-none" aria-expanded="false" aria-controls="faq3-content">
-                                <span class="text-xl font-semibold text-brand-dark">Preciso ter muitos seguidores?</span>
-                                <span class="text-2xl text-brand-primary" aria-hidden="true">+</span>
-                           </button>
-                        </h3>
-                        <div id="faq3-content" class="mt-2 text-gray-600 hidden">Não necessariamente. O mais importante é a criatividade e a qualidade do seu conteúdo. Um bom vídeo pode alcançar muitas pessoas, mesmo em um perfil com poucos seguidores.</div>
+                         <h3><button class="w-full text-left flex justify-between items-center focus:outline-none" aria-expanded="false" aria-controls="faq3-content"><span class="text-xl font-semibold text-brand-dark dark:text-white">Preciso ter muitos seguidores?</span><span class="text-2xl text-brand-primary dark:text-green-400" aria-hidden="true">+</span></button></h3>
+                        <div id="faq3-content" class="mt-2 text-gray-600 dark:text-slate-300 hidden">Não necessariamente. O mais importante é a criatividade e a qualidade do seu conteúdo. Um bom vídeo pode alcançar muitas pessoas, mesmo em um perfil com poucos seguidores.</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="cadastro" class="py-20 bg-brand-dark text-white">
+        <section id="cadastro" class="py-20 bg-brand-dark dark:bg-slate-900">
             <div class="container mx-auto px-6 text-center fade-in">
-                <h2 class="text-4xl font-bold mb-4">Seja um Influenciador Supla Brazil</h2>
-                <p class="text-xl text-brand-light mb-8 max-w-2xl mx-auto">
-                    Preencha o formulário abaixo para entrar na nossa lista de parceiros. O cadastro é gratuito e leva menos de um minuto!
-                </p>
+                <h2 class="text-4xl font-bold text-white">Seja um Influenciador Supla Brazil</h2>
+                <p class="text-xl text-brand-light dark:text-slate-300 mb-8 max-w-2xl mx-auto">Preencha o formulário abaixo para entrar na nossa lista de parceiros. O cadastro é gratuito e leva menos de um minuto!</p>
                 <div id="form-wrapper">
                     <form id="contact-form" class="max-w-md mx-auto text-left">
-                        <input type="hidden" name="access_key" value="3b848480-c4c7-4269-81a4-42a83b82a924">
-                        <input type="hidden" name="subject" value="Novo Cadastro - Influenciador Supla Brazil">
+                        <input type="hidden" name="access_key" value="3b848480-c4c7-4269-81a4-42a83b82a924"><input type="hidden" name="subject" value="Novo Cadastro - Influenciador Supla Brazil">
                         <div class="mb-4">
-                            <label for="name" class="block text-brand-light mb-2">Nome Completo</label>
-                            <input type="text" name="name" id="name" required class="w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-light text-white">
+                            <label for="name" class="block text-brand-light dark:text-slate-300 mb-2">Nome Completo</label>
+                            <input type="text" name="name" id="name" required class="w-full px-4 py-2 rounded-lg bg-gray-800/50 dark:bg-slate-700 border border-brand-secondary dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-light dark:focus:ring-green-400 text-white">
                         </div>
                         <div class="mb-4">
-                            <label for="email" class="block text-brand-light mb-2">Seu Melhor E-mail</label>
-                            <input type="email" name="email" id="email" required class="w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-light text-white">
+                            <label for="email" class="block text-brand-light dark:text-slate-300 mb-2">Seu Melhor E-mail</label>
+                            <input type="email" name="email" id="email" required class="w-full px-4 py-2 rounded-lg bg-gray-800/50 dark:bg-slate-700 border border-brand-secondary dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-light dark:focus:ring-green-400 text-white">
                         </div>
                         <div class="mb-6">
-                            <label for="social" class="block text-brand-light mb-2">Link do seu Perfil (TikTok, Instagram, etc.)</label>
-                            <input type="url" name="social" id="social" required class="w-full px-4 py-2 rounded-lg bg-gray-800/50 border border-brand-secondary focus:outline-none focus:ring-2 focus:ring-brand-light text-white" placeholder="https://www.tiktok.com/@seu_usuario">
+                            <label for="social" class="block text-brand-light dark:text-slate-300 mb-2">Link do seu Perfil (TikTok, Instagram, etc.)</label>
+                            <input type="url" name="social" id="social" required class="w-full px-4 py-2 rounded-lg bg-gray-800/50 dark:bg-slate-700 border border-brand-secondary dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-light dark:focus:ring-green-400 text-white" placeholder="https://www.tiktok.com/@seu_usuario">
                         </div>
                         <div class="text-center">
-                            <button id="submit-button" type="submit" class="bg-white text-brand-secondary font-bold py-3 px-10 rounded-lg hover:bg-gray-200 transition duration-300 text-lg shadow-xl inline-block">
-                                Enviar Cadastro
-                            </button>
+                            <button id="submit-button" type="submit" class="bg-white text-brand-secondary font-bold py-3 px-10 rounded-lg hover:bg-gray-200 transition duration-300 text-lg shadow-xl inline-block">Enviar Cadastro</button>
                         </div>
                     </form>
                     <div id="form-feedback"></div>
@@ -304,10 +276,10 @@
         </section>
     </main>
 
-    <footer class="bg-white/90 backdrop-blur-sm py-8">
-        <div class="container mx-auto px-6 text-center text-gray-600">
+    <footer class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm py-8">
+        <div class="container mx-auto px-6 text-center text-gray-600 dark:text-slate-300">
             <img src="https://iili.io/FlyBJF1.png" alt="Logo Supla Brazil" class="h-16 w-auto mx-auto mb-4">
-            <p class="font-bold text-brand-dark text-lg">Supla Brazil</p>
+            <p class="font-bold text-brand-dark dark:text-white text-lg">Supla Brazil</p>
             <p class="mt-4">&copy; <span id="year"></span> Supla Brazil. Todos os direitos reservados.</p>
             <p class="text-sm mt-2">Construindo oportunidades na América do Sul.</p>
         </div>
@@ -315,33 +287,60 @@
 
     <div id="notification-container"></div>
 
+    <button id="flash-offer-trigger" aria-label="Abrir oferta relâmpago">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 5a3 3 0 015.252-2.121l.738.738a.75.75 0 01-1.06 1.06l-.738-.738A1.5 1.5 0 005 5zm4.242-2.121a3 3 0 014.243 4.242l-6.22 6.22a.75.75 0 01-1.06-1.06l6.22-6.22z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M3.105 8.35a.75.75 0 011.06-.02l.02.02 6.22 6.22a.75.75 0 01-1.06 1.06l-6.22-6.22a.75.75 0 01.02-1.06zM14.5 5a1.5 1.5 0 00-2.121-2.121l-.738.738a.75.75 0 01-1.06-1.06l.738-.738A3 3 0 0114.5 5z" clip-rule="evenodd" /></svg>
+    </button>
+
+    <div id="flash-offer-modal-backdrop">
+        <div id="flash-offer-modal" role="dialog" aria-modal="true" aria-labelledby="flash-offer-title">
+            <div class="p-6 text-center">
+                <span class="text-3xl">🎁</span>
+                <h2 id="flash-offer-title" class="text-2xl font-bold text-brand-dark dark:text-white mt-2">Oferta Relâmpago Exclusiva!</h2>
+                <p id="flash-offer-text" class="text-gray-600 dark:text-slate-300 mt-2 mb-4">Cadastre-se agora no nosso <strong>Grupo VIP</strong> e receba dicas exclusivas para maximizar seus ganhos. Vagas limitadas!</p>
+                <div class="flash-timer font-mono text-3xl font-bold p-3 rounded-lg my-4 inline-block">
+                    <span id="flash-minutes">07</span>:<span id="flash-seconds">00</span>
+                </div>
+                <button id="flash-offer-button" class="w-full bg-brand-secondary text-white font-bold py-3 px-10 rounded-lg hover:bg-brand-primary transition duration-300 text-lg shadow-xl">
+                    Quero Acesso VIP Agora!
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        'brand-primary': '#4b833c',
-                        'brand-secondary': '#5a9547',
-                        'brand-light': '#abca8c',
-                        'brand-dark': '#0b451f',
-                        'brand-bg': '#f7fafc',
-                    }
-                }
-            }
-        }
+        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { 'brand-primary': '#4b833c', 'brand-secondary': '#5a9547', 'brand-light': '#abca8c', 'brand-dark': '#0b451f', 'brand-bg': '#f7fafc' } } } }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             
-            function startCountdown() {
-                const countdownDate = new Date().getTime() + (2 * 24 * 60 * 60 * 1000) + (18 * 60 * 60 * 1000) + (22 * 60 * 1000) + (43 * 1000);
-                const interval = setInterval(function() {
+            // --- THEME TOGGLE LOGIC ---
+            const themeToggleButton = document.getElementById('theme-toggle-button');
+            const lightIcon = document.getElementById('theme-icon-light');
+            const darkIcon = document.getElementById('theme-icon-dark');
+
+            // Apply saved theme on load
+            if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                lightIcon.classList.add('hidden');
+                darkIcon.classList.remove('hidden');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+
+            themeToggleButton.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                lightIcon.classList.toggle('hidden', isDark);
+                darkIcon.classList.toggle('hidden', !isDark);
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            });
+
+            // --- MAIN COUNTDOWN TIMER ---
+            function startMainCountdown() {
+                const countdownDate = new Date('2025-07-13T19:22:43-03:00').getTime();
+                const interval = setInterval(() => {
                     const now = new Date().getTime();
                     const distance = countdownDate - now;
 
@@ -350,37 +349,23 @@
                         document.getElementById('promo-banner').innerHTML = "<div class='text-center text-lg font-bold p-3'>PROMOÇÃO ENCERRADA</div>";
                         return;
                     }
-
-                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                    document.getElementById('days').textContent = String(days).padStart(2, '0');
-                    document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-                    document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-                    document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+                    document.getElementById('days').textContent = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+                    document.getElementById('hours').textContent = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+                    document.getElementById('minutes').textContent = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+                    document.getElementById('seconds').textContent = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
                 }, 1000);
             }
-            startCountdown();
+            startMainCountdown();
 
+            // --- SOCIAL PROOF NOTIFICATIONS ---
             function showSocialProof() {
                 const names = ["Amanda F.", "Giulia J.", "Lucas P.", "Mariana S.", "Carlos A.", "Beatriz L.", "Rafael M.", "Juliana C.", "Fernando G.", "Larissa T.", "Ricardo R.", "Camila V."];
                 const locations = ["de São Paulo", "do Rio de Janeiro", "de Minas Gerais", "da Bahia", "de Pernambuco", "do Ceará", "do Paraná", "de Santa Catarina", "do Rio Grande do Sul", "de Goiás"];
-                const actions = [
-                    { template: "acabou de se cadastrar", type: "signup" },
-                    { template: "sacou US$ {value}", type: "payout" },
-                    { template: "enviou o formulário", type: "signup" },
-                    { template: "recebeu um pagamento de US$ {value}", type: "payout" }
-                ];
-                
+                const actions = [{ template: "acabou de se cadastrar", type: "signup" }, { template: "sacou US$ {value}", type: "payout" }];
                 const name = names[Math.floor(Math.random() * names.length)];
                 const location = locations[Math.floor(Math.random() * locations.length)];
                 let action = actions[Math.floor(Math.random() * actions.length)];
-                
-                let icon = '';
-                let messageText = '';
-
+                let icon = ''; let messageText = '';
                 if (action.type === "payout") {
                     const value = (Math.random() * (150 - 15) + 15).toFixed(2);
                     messageText = action.template.replace('{value}', `<strong>${value}</strong>`);
@@ -389,65 +374,88 @@
                     messageText = action.template;
                     icon = '<span class="notification-icon" style="color: #4b833c;">✓</span>';
                 }
-
                 const fullMessage = `${icon}<span class="notification-text"><strong>${name}</strong> ${location} ${messageText}</span>`;
-
                 const container = document.getElementById('notification-container');
                 const notification = document.createElement('div');
                 notification.className = 'notification-popup';
                 notification.innerHTML = fullMessage;
                 container.appendChild(notification);
-
                 setTimeout(() => { notification.classList.add('show'); }, 100);
                 setTimeout(() => { notification.classList.remove('show'); notification.classList.add('hide'); }, 5000);
                 setTimeout(() => { notification.remove(); }, 5500);
             }
             setInterval(showSocialProof, Math.random() * 5000 + 7000);
 
-            if (document.getElementById('particles-js')) {
-                particlesJS('particles-js', { /* ... particles.js config ... */ });
+            // --- FLASH OFFER LOGIC ---
+            const flashTrigger = document.getElementById('flash-offer-trigger');
+            const flashBackdrop = document.getElementById('flash-offer-modal-backdrop');
+            const flashModal = document.getElementById('flash-offer-modal');
+            const flashButton = document.getElementById('flash-offer-button');
+            const flashOfferText = document.getElementById('flash-offer-text');
+            let flashInterval;
+
+            function updateFlashTimer() {
+                const endTime = localStorage.getItem('flashOfferEndTime');
+                if (!endTime) return;
+                const distance = +endTime - new Date().getTime();
+                if (distance < 0) {
+                    clearInterval(flashInterval);
+                    document.getElementById('flash-minutes').textContent = "00";
+                    document.getElementById('flash-seconds').textContent = "00";
+                    flashButton.disabled = true;
+                    flashButton.textContent = "Oferta Expirada";
+                    flashOfferText.innerHTML = "Infelizmente o tempo acabou. Fique de olho para futuras oportunidades!";
+                    return;
+                }
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                document.getElementById('flash-minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('flash-seconds').textContent = String(seconds).padStart(2, '0');
             }
 
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-            if (mobileMenuButton && mobileMenu) {
-                mobileMenuButton.addEventListener('click', () => {
-                    const isExpanded = mobileMenuButton.getAttribute('aria-expanded') === 'true';
-                    mobileMenu.classList.toggle('hidden');
-                    mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
-                });
+            function openFlashModal() {
+                let endTime = localStorage.getItem('flashOfferEndTime');
+                if (!endTime) {
+                    endTime = new Date().getTime() + 7 * 60 * 1000;
+                    localStorage.setItem('flashOfferEndTime', endTime);
+                }
+                flashBackdrop.classList.add('visible');
+                flashModal.classList.add('visible');
+                clearInterval(flashInterval);
+                updateFlashTimer();
+                flashInterval = setInterval(updateFlashTimer, 1000);
             }
-            
+
+            function closeFlashModal() {
+                flashBackdrop.classList.remove('visible');
+                flashModal.classList.remove('visible');
+                clearInterval(flashInterval);
+            }
+
+            flashTrigger.addEventListener('click', openFlashModal);
+            flashBackdrop.addEventListener('click', closeFlashModal);
+
+            // --- General Page Logic (Counters, FAQ, etc.) ---
             const animateCounter = (element, target, isCurrency = false) => {
-                let startTime;
-                const duration = 2500;
+                let startTime; const duration = 2500;
                 const step = (timestamp) => {
                     if (!startTime) startTime = timestamp;
                     const progress = Math.min((timestamp - startTime) / duration, 1);
                     let currentNumber = Math.floor(progress * target);
-                    
-                    if (isCurrency) {
-                        element.innerText = `+${currentNumber.toLocaleString('pt-BR')}`;
-                    } else {
-                        element.innerText = `+${currentNumber.toLocaleString('pt-BR')}`;
-                    }
+                    element.innerText = `+${currentNumber.toLocaleString('pt-BR')}`;
                     if (progress < 1) requestAnimationFrame(step);
                 };
                 requestAnimationFrame(step);
             };
 
-            const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
                         if (entry.target.id === 'stats-container') {
-                            const counters = entry.target.querySelectorAll('.counter-value');
-                            counters.forEach(counter => {
+                            entry.target.querySelectorAll('.counter-value').forEach(counter => {
                                 if (!counter.dataset.animated) {
-                                    const target = parseInt(counter.dataset.target, 10);
-                                    const isCurrency = counter.dataset.currency === 'true';
-                                    animateCounter(counter, target, isCurrency);
+                                    animateCounter(counter, parseInt(counter.dataset.target, 10), counter.dataset.currency === 'true');
                                     counter.dataset.animated = 'true';
                                 }
                             });
@@ -455,37 +463,43 @@
                         }
                     }
                 });
-            }, observerOptions);
+            }, { root: null, rootMargin: '0px', threshold: 0.1 });
 
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
             const statsContainer = document.getElementById('stats-container');
-            if(statsContainer) {
-                observer.observe(statsContainer);
-            }
+            if (statsContainer) observer.observe(statsContainer);
 
-            const faqContainer = document.querySelector('#faq');
-            if (faqContainer) {
-                const faqButtons = faqContainer.querySelectorAll('button[aria-controls]');
-                faqButtons.forEach(button => {
-                    button.addEventListener('click', () => {
-                        const content = document.getElementById(button.getAttribute('aria-controls'));
-                        const isExpanded = button.getAttribute('aria-expanded') === 'true';
-                        faqButtons.forEach(otherButton => {
-                            if (otherButton !== button) {
-                                document.getElementById(otherButton.getAttribute('aria-controls')).classList.add('hidden');
-                                otherButton.setAttribute('aria-expanded', 'false');
-                                otherButton.querySelector('span[aria-hidden]').textContent = '+';
-                            }
-                        });
-                        content.classList.toggle('hidden');
-                        button.setAttribute('aria-expanded', !isExpanded);
-                        button.querySelector('span[aria-hidden]').textContent = !isExpanded ? '−' : '+';
+            document.querySelector('#faq')?.querySelectorAll('button[aria-controls]').forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = document.getElementById(button.getAttribute('aria-controls'));
+                    const isExpanded = button.getAttribute('aria-expanded') === 'true';
+                    document.querySelector('#faq').querySelectorAll('button[aria-controls]').forEach(otherButton => {
+                        if (otherButton !== button) {
+                            document.getElementById(otherButton.getAttribute('aria-controls')).classList.add('hidden');
+                            otherButton.setAttribute('aria-expanded', 'false');
+                            otherButton.querySelector('span[aria-hidden]').textContent = '+';
+                        }
                     });
+                    content.classList.toggle('hidden');
+                    button.setAttribute('aria-expanded', !isExpanded);
+                    button.querySelector('span[aria-hidden]').textContent = !isExpanded ? '−' : '+';
                 });
-            }
+            });
 
             document.getElementById('year').textContent = new Date().getFullYear();
+            
+            // Particles.js needs to be re-initialized for dark mode to work correctly on first load
+            const initParticles = (isDark) => {
+                const particleColor = isDark ? "#6ee7b7" : "#5a9547";
+                const lineColor = isDark ? "#334155" : "#abca8c";
+                if (document.getElementById('particles-js')) {
+                    particlesJS('particles-js', { particles: { number: { value: 60 }, color: { value: particleColor }, shape: { type: "circle" }, opacity: { value: 0.5, random: false }, size: { value: 3, random: true }, line_linked: { enable: true, distance: 150, color: lineColor, opacity: 0.4, width: 1 }, move: { enable: true, speed: 2, direction: "none", out_mode: "out" } }, interactivity: { detect_on: "canvas", events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true }, modes: { grab: { distance: 140, line_linked: { opacity: 1 } }, push: { particles_nb: 4 } } }, retina_detect: true });
+                }
+            }
+            initParticles(document.documentElement.classList.contains('dark'));
+            themeToggleButton.addEventListener('click', () => initParticles(document.documentElement.classList.contains('dark')));
 
+            // Form submission logic remains unchanged
             const form = document.getElementById('contact-form');
             if (form) {
                 form.addEventListener('submit', function (e) {
@@ -494,35 +508,25 @@
                     const formWrapper = document.getElementById('form-wrapper');
                     const successMessage = document.getElementById('success-message');
                     const feedbackContainer = document.getElementById('form-feedback');
-                    
-                    submitButton.textContent = 'Enviando...';
-                    submitButton.disabled = true;
+                    submitButton.textContent = 'Enviando...'; submitButton.disabled = true;
                     const formData = new FormData(form);
                     const object = Object.fromEntries(formData);
                     const json = JSON.stringify(object);
                     feedbackContainer.innerHTML = '';
-                    fetch('https://api.web3forms.com/submit', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-                        body: json
-                    })
+                    fetch('https://api.web3forms.com/submit', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: json })
                     .then(async (response) => {
                         let jsonResponse = await response.json();
                         if (response.status == 200) {
                             formWrapper.classList.add('hidden');
                             successMessage.classList.remove('hidden');
                         } else {
-                            console.log(response);
                             feedbackContainer.innerHTML = `<p class="error-message" style="display: block;">${jsonResponse.message || 'Algo deu errado. Tente novamente.'}</p>`;
-                            submitButton.textContent = 'Enviar Cadastro';
-                            submitButton.disabled = false;
+                            submitButton.textContent = 'Enviar Cadastro'; submitButton.disabled = false;
                         }
                     })
                     .catch(error => {
-                        console.log(error);
                         feedbackContainer.innerHTML = `<p class="error-message" style="display: block;">Ocorreu um erro de conexão. Verifique sua internet e tente novamente.</p>`;
-                        submitButton.textContent = 'Enviar Cadastro';
-                        submitButton.disabled = false;
+                        submitButton.textContent = 'Enviar Cadastro'; submitButton.disabled = false;
                     });
                 });
             }
