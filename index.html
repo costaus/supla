@@ -13,6 +13,17 @@
     <link rel="icon" href="https://iili.io/FlyBJF1.png" type="image/png">
 
     <style>
+
+/*
+██████╗ █████╗ ███╗   ██╗
+██╔══██╗██╔══██╗████╗  ██║
+██║  ██║███████║██╔██╗ ██║
+██║  ██║██╔══██║██║╚██╗██║
+██████╔╝██║  ██║██║ ╚████║
+╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝
+*/
+
+        
         html { scroll-behavior: smooth; }
         body { 
             transition: background-color 0.3s, color 0.3s, padding-top 0.3s;
@@ -114,7 +125,8 @@
         .dark .notification-popup { background-color: rgba(30, 41, 59, 0.8); border-color: #475569; }
         .notification-popup.show { opacity: 1; transform: translateY(0); }
         .notification-popup.hide { opacity: 0; transform: translateY(30px); }
-        .notification-icon { font-size: 1.25rem; }
+        .notification-icon { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; }
+        .notification-icon svg { width: 100%; height: 100%; }
         .notification-text { font-size: 0.9rem; color: #2d3748; }
         .dark .notification-text { color: #cbd5e1; }
         .notification-text strong { font-weight: 600; color: #0b451f; }
@@ -150,13 +162,20 @@
         #flash-offer-modal.visible { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: all; }
         .flash-modal-header {
             background: linear-gradient(to right, #5a9547, #4b833c);
-            padding: 1.5rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .flash-modal-icon-wrapper {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            padding: 0.75rem;
         }
         .flash-modal-icon {
             color: white;
-            width: 48px;
-            height: 48px;
-            margin: 0 auto;
+            width: 32px;
+            height: 32px;
         }
         .flash-timer { background: #f1f5f9; color: #0b451f; }
         .dark .flash-timer { background: #334155; color: #a3e635; }
@@ -362,14 +381,16 @@
     <div id="flash-offer-modal-backdrop">
         <div id="flash-offer-modal" role="dialog" aria-modal="true" aria-labelledby="flash-offer-title">
             <div class="flash-modal-header">
-                <svg class="flash-modal-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 11.25v8.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5v-8.25M12 4.875A2.625 2.625 0 1014.625 7.5H12v4.5h3.75m-3.75 0h-3.75a2.625 2.625 0 110-5.25h3.75" />
-                </svg>
+                <div id="flash-icon-wrapper" class="flash-modal-icon-wrapper">
+                    <svg id="flash-icon-initial" class="flash-modal-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                    </svg>
+                </div>
             </div>
-            <div class="p-6 text-center">
+            <div id="flash-modal-content" class="p-6 text-center">
                 <h2 id="flash-offer-title" class="text-2xl font-bold text-brand-dark dark:text-white mt-2">Oferta VIP por Tempo Limitado!</h2>
                 <p id="flash-offer-text" class="text-gray-600 dark:text-slate-300 mt-2 mb-4">Entre no nosso <strong>Grupo VIP exclusivo</strong> e receba dicas de monetização antes de todo mundo. As vagas acabam em:</p>
-                <div class="flash-timer font-mono text-3xl font-bold p-3 rounded-lg my-4 inline-block">
+                <div id="flash-timer-container" class="flash-timer font-mono text-3xl font-bold p-3 rounded-lg my-4 inline-block">
                     <span id="flash-minutes">07</span>:<span id="flash-seconds">00</span>
                 </div>
                 <button id="flash-offer-button" class="w-full bg-brand-secondary text-white font-bold py-3 px-10 rounded-lg hover:bg-brand-primary transition duration-300 text-lg shadow-xl">
@@ -496,14 +517,20 @@
             }
 
             function setupSocialProof() {
-                const names = ["Amanda F.", "Lucas P.", "Mariana S.", "Beatriz L.", "Rafael M.", "Juliana C.", "Fernando G.", "Larissa T.", "Ricardo R.", "Camila V.", "Bruno A.", "Letícia M.", "Thiago O.", "Gabriela P.", "Vinícius C.", "Isabela R.", "Felipe D.", "Manuela B.", "Diego L.", "Sophia N."];
-                const locations = ["de São Paulo", "do Rio de Janeiro", "de Minas Gerais", "da Bahia", "de Pernambuco", "do Ceará", "do Paraná", "de Santa Catarina", "do Rio Grande do Sul", "de Goiás", "do Distrito Federal", "do Amazonas", "do Espírito Santo"];
+                const icons = {
+                    signup: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full text-green-600"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.5 22.5a12.318 12.318 0 01-6.25-3.265z" /></svg>`,
+                    payout: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full text-brand-primary"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.826-1.106-2.156 0-2.982l.879-.659m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>`,
+                    milestone: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full text-amber-500"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9a9.75 9.75 0 01-9-9.75v-1.5a9.75 9.75 0 019-9.75h9a9.75 9.75 0 019 9.75v1.5a9.75 9.75 0 01-9 9.75z" /></svg>`,
+                    vip: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full text-violet-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.572L16.5 21.75l-.398-1.178a3.375 3.375 0 00-2.986-2.986L12 17.25l1.178-.398a3.375 3.375 0 002.986-2.986L16.5 12.75l.398 1.178a3.375 3.375 0 002.986 2.986L21 17.25l-1.178.398a3.375 3.375 0 00-2.986 2.986z" /></svg>`,
+                };
+
+                const names = ["Amanda F.", "Lucas P.", "Mariana S.", "Beatriz L.", "Rafael M.", "Juliana C.", "Fernando G."];
+                const locations = ["de São Paulo", "do Rio de Janeiro", "de Minas Gerais", "da Bahia", "de Pernambuco"];
                 const actions = [
-                    { template: "acabou de se cadastrar", type: "signup", icon: '<span class="notification-icon" style="color: #4b833c;">✓</span>' }, 
-                    { template: "sacou US$ {value}", type: "payout", icon: '<span class="notification-icon">💲</span>' },
-                    { template: "atingiu a meta de 100 cliques", type: "milestone", icon: '<span class="notification-icon">🎯</span>' },
-                    { template: "acaba de se tornar VIP", type: "vip", icon: '<span class="notification-icon">⭐</span>' },
-                    { template: "recebeu o primeiro pagamento de US$ {value}", type: "payout", icon: '<span class="notification-icon">💰</span>' }
+                    { template: "acabou de se cadastrar", type: "signup", icon: icons.signup }, 
+                    { template: "sacou US$ {value}", type: "payout", icon: icons.payout },
+                    { template: "atingiu a meta de 100 cliques", type: "milestone", icon: icons.milestone },
+                    { template: "acaba de se tornar VIP", type: "vip", icon: icons.vip }
                 ];
                 
                 setInterval(() => {
@@ -517,7 +544,7 @@
                         messageText = messageText.replace('{value}', `<strong>${value}</strong>`);
                     }
                     
-                    const fullMessage = `${action.icon}<span class="notification-text"><strong>${name}</strong> ${location} ${messageText}</span>`;
+                    const fullMessage = `<div class="notification-icon">${action.icon}</div><span class="notification-text"><strong>${name}</strong> ${location} ${messageText}</span>`;
                     const container = document.getElementById('notification-container');
                     const notification = document.createElement('div');
                     notification.className = 'notification-popup';
@@ -535,7 +562,10 @@
                 const flashBackdrop = document.getElementById('flash-offer-modal-backdrop');
                 const flashModal = document.getElementById('flash-offer-modal');
                 const flashButton = document.getElementById('flash-offer-button');
+                const flashOfferTitle = document.getElementById('flash-offer-title');
                 const flashOfferText = document.getElementById('flash-offer-text');
+                const flashTimerContainer = document.getElementById('flash-timer-container');
+                const flashIconWrapper = document.getElementById('flash-icon-wrapper');
                 let flashInterval;
 
                 function updateFlashTimer() {
@@ -580,10 +610,25 @@
                 }
 
                 flashTrigger.addEventListener('click', openFlashModal);
-                flashBackdrop.addEventListener('click', closeFlashModal);
+                flashBackdrop.addEventListener('click', (e) => {
+                    if (e.target === flashBackdrop) {
+                        closeFlashModal();
+                    }
+                });
+                
                 flashButton.addEventListener('click', () => {
-                    window.open('https://t.me/your-telegram-group', '_blank');
-                    closeFlashModal();
+                    flashButton.disabled = true;
+                    flashButton.textContent = 'Confirmando...';
+
+                    setTimeout(() => {
+                        flashIconWrapper.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="flash-modal-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
+                        flashOfferTitle.textContent = "Acesso VIP Garantido!";
+                        flashOfferText.innerHTML = "Ótima escolha! Fique de olho no seu e-mail de cadastro para receber as instruções exclusivas.";
+                        flashTimerContainer.style.display = 'none';
+                        flashButton.style.display = 'none';
+
+                        setTimeout(closeFlashModal, 3000);
+                    }, 500);
                 });
             }
             
@@ -610,7 +655,9 @@
                         }
                     }
                 });
-                firstFocusableEl.focus();
+                if (firstFocusableEl) {
+                    firstFocusableEl.focus();
+                }
             }
 
             function releaseFocus() {
@@ -626,30 +673,34 @@
                 const influencersCounterEl = document.getElementById('influencers-counter');
                 const paymentsCounterEl = document.getElementById('payments-counter');
 
+                let latestStats = {
+                    requests: 0,
+                    influencers: 0,
+                    payments: 0
+                };
+                
                 let hasAnimated = false;
+                let incrementsStarted = false;
 
                 function animateCounter(element, start, end, duration, isCurrency) {
                     let startTime = null;
-
-                    function animationStep(timestamp) {
+                    const step = (timestamp) => {
                         if (!startTime) startTime = timestamp;
                         const progress = Math.min((timestamp - startTime) / duration, 1);
                         const currentValue = Math.floor(progress * (end - start) + start);
-                        
                         element.textContent = (isCurrency ? 'US$ ' : '') + currentValue.toLocaleString('pt-BR');
-
                         if (progress < 1) {
-                            requestAnimationFrame(animationStep);
+                            requestAnimationFrame(step);
                         } else {
-                            element.textContent = (isCurrency ? 'US$ ' : '') + end.toLocaleString('pt-BR');
+                           element.textContent = (isCurrency ? 'US$ ' : '') + end.toLocaleString('pt-BR');
                         }
-                    }
-                    requestAnimationFrame(animationStep);
+                    };
+                    requestAnimationFrame(step);
                 }
 
                 function startFirestoreIncrements() {
-                    if (window.incrementsStarted) return;
-                    window.incrementsStarted = true;
+                    if (incrementsStarted) return;
+                    incrementsStarted = true;
 
                     setInterval(() => {
                         const incrementValue = Math.floor(Math.random() * 2) + 1;
@@ -667,66 +718,45 @@
                 }
 
                 onSnapshot(countersRef, (docSnap) => {
-                    if (!docSnap.exists()) {
-                        const initialData = {
-                            requests: parseInt(requestsCounterEl.dataset.initial, 10) || 16478,
-                            influencers: parseInt(influencersCounterEl.dataset.initial, 10) || 482,
-                            payments: parseInt(paymentsCounterEl.dataset.initial, 10) || 112540
-                        };
-                        setDoc(countersRef, initialData).catch(()=>{});
-                        return;
-                    }
-                    
-                    const data = docSnap.data();
-                    const targetRequests = Math.floor(data.requests);
-                    const targetInfluencers = Math.floor(data.influencers);
-                    const targetPayments = Math.floor(data.payments);
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        latestStats.requests = Math.floor(data.requests);
+                        latestStats.influencers = Math.floor(data.influencers);
+                        latestStats.payments = Math.floor(data.payments);
 
-                    if (!hasAnimated && statsContainer.classList.contains('visible')) {
-                        animateCounter(requestsCounterEl, 0, targetRequests, 2000, false);
-                        animateCounter(influencersCounterEl, 0, targetInfluencers, 2000, false);
-                        animateCounter(paymentsCounterEl, 0, targetPayments, 2000, true);
-                        hasAnimated = true;
+                        if (hasAnimated) {
+                            requestsCounterEl.textContent = latestStats.requests.toLocaleString('pt-BR');
+                            influencersCounterEl.textContent = latestStats.influencers.toLocaleString('pt-BR');
+                            paymentsCounterEl.textContent = 'US$ ' + latestStats.payments.toLocaleString('pt-BR');
+                        }
                     } else {
-                        requestsCounterEl.textContent = targetRequests.toLocaleString('pt-BR');
-                        influencersCounterEl.textContent = targetInfluencers.toLocaleString('pt-BR');
-                        paymentsCounterEl.textContent = 'US$ ' + targetPayments.toLocaleString('pt-BR');
+                        const initialData = {
+                            requests: parseInt(requestsCounterEl.dataset.initial, 10),
+                            influencers: parseInt(influencersCounterEl.dataset.initial, 10),
+                            payments: parseInt(paymentsCounterEl.dataset.initial, 10)
+                        };
+                        setDoc(countersRef, initialData).catch(e => console.error("Error creating counters doc:", e));
                     }
                 }, (error) => {
-                    console.error("Erro ao buscar dados do Firestore: ", error);
+                    console.error("Error listening to Firestore:", error);
                 });
 
-                const observer = new IntersectionObserver((entries) => {
+                const observer = new IntersectionObserver((entries, obs) => {
                     entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            statsContainer.classList.add('visible');
-                            if (!hasAnimated) {
-                                // Trigger a re-check in the onSnapshot to start animation
-                                const event = new Event('start-animation');
-                                document.dispatchEvent(event);
-                            }
+                        if (entry.isIntersecting && !hasAnimated) {
+                            hasAnimated = true;
+                            
+                            animateCounter(requestsCounterEl, 0, latestStats.requests, 2000, false);
+                            animateCounter(influencersCounterEl, 0, latestStats.influencers, 2000, false);
+                            animateCounter(paymentsCounterEl, 0, latestStats.payments, 2000, true);
+                            
                             startFirestoreIncrements();
+                            obs.unobserve(entry.target);
                         }
                     });
                 }, { threshold: 0.5 });
 
                 observer.observe(statsContainer);
-                
-                document.addEventListener('start-animation', () => {
-                    if (!hasAnimated && statsContainer.classList.contains('visible')) {
-                        const currentRequests = parseInt(requestsCounterEl.textContent.replace(/\D/g, '')) || 0;
-                        const currentInfluencers = parseInt(influencersCounterEl.textContent.replace(/\D/g, '')) || 0;
-                        const currentPayments = parseInt(paymentsCounterEl.textContent.replace(/\D/g, '')) || 0;
-                        
-                        // Check if data is loaded from Firebase before animating
-                        if (requestsCounterEl.textContent !== "0") {
-                            animateCounter(requestsCounterEl, 0, currentRequests, 2000, false);
-                            animateCounter(influencersCounterEl, 0, currentInfluencers, 2000, false);
-                            animateCounter(paymentsCounterEl, 0, currentPayments, 2000, true);
-                            hasAnimated = true;
-                        }
-                    }
-                });
             }
 
             function setupFaq() {
