@@ -26,7 +26,7 @@
             position: relative;
             width: 95%; /* Largura responsiva, maior para celular */
             max-width: 900px; /* Largura máxima para tablets/desktops */
-            height: 750px; /* Altura fixa da área do jogo, maior */
+            height: 900px; /* Altura da área do jogo AUMENTADA */
             background-color: #333; /* Fundo escuro para o jogo */
             border-radius: 30px; /* Cantos mais arredondados */
             overflow: hidden; /* Importante para que os objetos caindo não saiam da área visível */
@@ -124,7 +124,7 @@
         /* Animação para o efeito de "comer" (salto e leve escala) */
         @keyframes eatAnimation {
             0% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-20px) scale(1.1); } /* Salta para cima e aumenta um pouco */
+            50% { transform: translateY(-10px) scale(1.02); } /* Salta menos e aumenta bem pouco */
             100% { transform: translateY(0) scale(1); }
         }
 
@@ -145,7 +145,20 @@
             animation: rotate 3s linear infinite; /* Animação de rotação mais lenta */
         }
 
-        /* Animação de rotação para as rolas */
+        /* Estilos para o novo objeto de penalidade */
+        .penalty-object {
+            position: absolute;
+            width: 160px; /* Mesma largura das rolas */
+            height: 160px; /* Mesma altura das rolas */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 4;
+            animation: rotate 3s linear infinite; /* Animação de rotação */
+            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.7)); /* Sombra vermelha para destacar perigo */
+        }
+
+        /* Animação de rotação para os objetos */
         @keyframes rotate {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
@@ -160,7 +173,7 @@
         @media (max-width: 768px) {
             #game-container {
                 width: 95%;
-                height: 650px; /* Altura ligeiramente menor para dispositivos móveis */
+                height: 800px; /* Altura ligeiramente menor para dispositivos móveis */
             }
             #start-screen h1 {
                 font-size: 4.5em;
@@ -177,7 +190,7 @@
                 height: 190px;
                 bottom: 60px;
             }
-            .rola {
+            .rola, .penalty-object {
                 width: 140px;
                 height: 140px;
             }
@@ -186,7 +199,7 @@
         /* Ajustes responsivos para telas muito pequenas (smartphones) */
         @media (max-width: 480px) {
             #game-container {
-                height: 600px;
+                height: 700px; /* Altura ainda menor para smartphones */
                 border-radius: 20px;
             }
             #start-screen h1 {
@@ -206,7 +219,7 @@
                 height: 160px;
                 bottom: 50px;
             }
-            .rola {
+            .rola, .penalty-object {
                 width: 120px;
                 height: 120px;
             }
@@ -232,22 +245,24 @@
         const character = document.getElementById('character');
         const scoreDisplay = document.getElementById('score-display');
         const startScreen = document.getElementById('start-screen');
-        const startButton = document.getElementById('start-button');
+        const startButton = document.getElementById('startButton');
 
-        // URLs das imagens dos objetos "rolas"
+        // URLs das imagens dos objetos "rolas" (Rola 2 removida)
         const ROLA_IMAGES = [
             'https://files.catbox.moe/n39c1e.png', // Rola 1
-            'https://files.catbox.moe/b9dyhd.png', // Rola 2
             'https://files.catbox.moe/qkukmd.png'  // Rola 3
         ];
+        // URL da imagem do objeto de penalidade
+        const PENALTY_IMAGE_URL = 'https://iili.io/FUuPJxs.png';
+
         // URLs das imagens do personagem (boca aberta e fechada)
         const CHARACTER_MOUTH_OPEN_IMAGE = 'https://files.catbox.moe/5dz13l.png';
         const CHARACTER_MOUTH_CLOSED_IMAGE = 'https://files.catbox.moe/hjspq9.png';
 
         let score = 0; // Pontuação inicial
         let characterX = 0; // Posição X inicial do personagem (será calculada no load)
-        let rolas = []; // Array para armazenar os objetos "rola" caindo
-        let rolaGenerationInterval; // Variável para o intervalo de geração de rolas
+        let rolas = []; // Array para armazenar os objetos caindo (incluindo penalidades)
+        let rolaGenerationInterval; // Variável para o intervalo de geração de objetos
         let gameRunning = false; // Flag para controlar se o jogo está rodando
 
         // Variáveis para o controle de arrastar
@@ -275,16 +290,16 @@
         function startGame() {
             score = 0; // Reseta a pontuação
             scoreDisplay.textContent = `Rolas: ${score}`; // Atualiza o display da pontuação
-            rolas = []; // Limpa quaisquer rolas existentes
-            // Remove todos os elementos .rola do DOM, caso existam de uma partida anterior
-            document.querySelectorAll('.rola').forEach(rola => rola.remove());
+            rolas = []; // Limpa quaisquer objetos existentes
+            // Remove todos os elementos .rola e .penalty-object do DOM, caso existam de uma partida anterior
+            document.querySelectorAll('.rola, .penalty-object').forEach(obj => obj.remove());
 
             startScreen.style.display = 'none'; // Esconde a tela de início
             gameRunning = true; // Define o estado do jogo como rodando
             initializeCharacterPosition(); // Garante que o personagem esteja no centro
             gameLoop(); // Inicia o loop principal do jogo
-            // Inicia a geração de novas rolas a cada 900ms (mais rápido para mais desafio)
-            rolaGenerationInterval = setInterval(createRola, 900);
+            // Inicia a geração de novos objetos a cada 1200ms (mais lento)
+            rolaGenerationInterval = setInterval(createFallingObject, 1200);
         }
 
         // Adiciona um ouvinte de evento para o botão de iniciar
@@ -335,28 +350,37 @@
             isDragging = false;
         });
 
-        // --- Criação de Rolas ---
+        // --- Criação de Objetos Caindo (Rolas ou Penalidades) ---
 
-        function createRola() {
-            const rola = document.createElement('div'); // Cria um novo elemento div
-            rola.classList.add('rola'); // Adiciona a classe 'rola' para aplicar os estilos CSS
-            // Define a imagem de fundo da rola aleatoriamente a partir das URLs fornecidas
-            rola.style.backgroundImage = `url(${ROLA_IMAGES[Math.floor(Math.random() * ROLA_IMAGES.length)]})`;
+        function createFallingObject() {
+            const obj = document.createElement('div'); // Cria um novo elemento div
 
-            // Largura da rola (usa o valor do CSS ou padrão)
-            const rolaWidth = rola.offsetWidth || 160;
-            // Define uma posição X inicial aleatória para a rola
-            rola.x = Math.random() * (gameContainer.offsetWidth - rolaWidth);
-            rola.y = -rolaWidth; // Inicia a rola acima do contêiner do jogo
+            // Decide aleatoriamente se será uma "rola" ou um "objeto de penalidade"
+            const isPenalty = Math.random() < 0.2; // 20% de chance de ser um objeto de penalidade
 
-            rola.style.left = `${rola.x}px`;
-            rola.style.top = `${rola.y}px`;
+            if (isPenalty) {
+                obj.classList.add('penalty-object'); // Adiciona a classe para estilos de penalidade
+                obj.style.backgroundImage = `url(${PENALTY_IMAGE_URL})`;
+            } else {
+                obj.classList.add('rola'); // Adiciona a classe 'rola' para aplicar os estilos CSS
+                // Define a imagem de fundo da rola aleatoriamente a partir das URLs fornecidas
+                obj.style.backgroundImage = `url(${ROLA_IMAGES[Math.floor(Math.random() * ROLA_IMAGES.length)]})`;
+            }
 
-            // Define uma velocidade de queda aleatória para cada rola
-            rola.speed = 6 + Math.random() * 2; // Velocidade entre 6 e 8 (ainda mais rápido)
+            // Largura do objeto (usa o valor do CSS ou padrão)
+            const objWidth = obj.offsetWidth || 160;
+            // Define uma posição X inicial aleatória para o objeto
+            obj.x = Math.random() * (gameContainer.offsetWidth - objWidth);
+            obj.y = -objWidth; // Inicia o objeto acima do contêiner do jogo
 
-            gameContainer.appendChild(rola); // Adiciona a rola ao contêiner do jogo
-            rolas.push(rola); // Adiciona a rola ao array de rolas ativas
+            obj.style.left = `${obj.x}px`;
+            obj.style.top = `${obj.y}px`;
+
+            // Define uma velocidade de queda aleatória para cada objeto (mais lento)
+            obj.speed = 4 + Math.random() * 2; // Velocidade entre 4 e 6
+
+            gameContainer.appendChild(obj); // Adiciona o objeto ao contêiner do jogo
+            rolas.push(obj); // Adiciona o objeto ao array de objetos ativos
         }
 
         // --- Loop Principal do Jogo ---
@@ -368,31 +392,28 @@
             const characterHeight = character.offsetHeight;
             const characterWidth = character.offsetWidth;
             const characterBottom = gameContainerHeight - 70; // Posição inferior do personagem (ajustada pela bottom do CSS)
-            const characterTop = characterBottom - characterHeight; // Posição superior do personagem
+            // Ajusta o "topo" do hitbox do personagem para que a boca abra antes
+            const characterTop = characterBottom - characterHeight + 50; // Aumenta o hitbox para cima em 50px
 
-            // Itera sobre as rolas de trás para frente para evitar problemas ao remover elementos
+            // Itera sobre os objetos de trás para frente para evitar problemas ao remover elementos
             for (let i = rolas.length - 1; i >= 0; i--) {
-                const rola = rolas[i];
-                rola.y += rola.speed; // Atualiza a posição Y da rola (faz ela cair)
-                rola.style.top = `${rola.y}px`; // Atualiza a posição da rola no DOM
+                const obj = rolas[i];
+                obj.y += obj.speed; // Atualiza a posição Y do objeto (faz ele cair)
+                obj.style.top = `${obj.y}px`; // Atualiza a posição do objeto no DOM
 
                 // --- Detecção de Colisão ---
-                // Obtém as dimensões e posições da rola
-                const rolaLeft = rola.x;
-                const rolaRight = rola.x + (rola.offsetWidth || 160); // Usa o offsetWidth ou padrão
-                const rolaTop = rola.y;
-                const rolaBottom = rola.y + (rola.offsetHeight || 160); // Usa o offsetHeight ou padrão
+                // Obtém as dimensões e posições do objeto
+                const objLeft = obj.x;
+                const objRight = obj.x + (obj.offsetWidth || 160); // Usa o offsetWidth ou padrão
+                const objTop = obj.y;
+                const objBottom = obj.y + (obj.offsetHeight || 160); // Usa o offsetHeight ou padrão
 
                 // Detecção de colisão AABB (Axis-Aligned Bounding Box)
-                if (rolaRight > characterX &&
-                    rolaLeft < (characterX + characterWidth) &&
-                    rolaBottom > characterTop &&
-                    rolaTop < characterBottom) {
+                if (objRight > characterX &&
+                    objLeft < (characterX + characterWidth) &&
+                    objBottom > characterTop &&
+                    objTop < characterBottom) {
                     // Colisão detectada!
-                    score++; // Incrementa a pontuação
-                    scoreDisplay.textContent = `Rolas: ${score}`; // Atualiza o display da pontuação
-                    rola.remove(); // Remove a rola do DOM
-                    rolas.splice(i, 1); // Remove a rola do array
 
                     // Animação da boca do personagem e efeito de "salto"
                     character.style.backgroundImage = `url(${CHARACTER_MOUTH_OPEN_IMAGE})`; // Abre a boca
@@ -402,13 +423,22 @@
                         character.style.backgroundImage = `url(${CHARACTER_MOUTH_CLOSED_IMAGE})`; // Fecha a boca
                         character.classList.remove('character-eating'); // Remove classe do efeito de "salto"
                     }, 300); // Duração da animação de boca aberta e salto
+
+                    if (obj.classList.contains('rola')) {
+                        score++; // Incrementa a pontuação para rolas
+                    } else if (obj.classList.contains('penalty-object')) {
+                        score = Math.max(0, score - 2); // Diminui a pontuação (não deixa ficar negativo)
+                    }
+                    scoreDisplay.textContent = `Rolas: ${score}`; // Atualiza o display da pontuação
+                    obj.remove(); // Remove o objeto do DOM
+                    rolas.splice(i, 1); // Remove o objeto do array
                 }
 
-                // Remove a rola se ela sair da tela (atingir a parte inferior)
-                if (rola.y > gameContainerHeight) {
-                    rola.remove(); // Remove do DOM
+                // Remove o objeto se ele sair da tela (atingir a parte inferior)
+                if (obj.y > gameContainerHeight) {
+                    obj.remove(); // Remove do DOM
                     rolas.splice(i, 1); // Remove do array
-                    // Opcional: Adicionar lógica de "Game Over" aqui se rolas escaparem
+                    // Opcional: Adicionar lógica de "Game Over" aqui se objetos escaparem
                 }
             }
 
@@ -427,12 +457,12 @@
         window.addEventListener('resize', () => {
             initializeCharacterPosition(); // Recalcula a posição do personagem
 
-            // Ajusta a posição das rolas se elas ficarem fora dos limites horizontais após o redimensionamento
-            rolas.forEach(rola => {
-                const rolaWidth = rola.offsetWidth || 160; // Usa o offsetWidth ou padrão
-                if (rola.x + rolaWidth > gameContainer.offsetWidth) {
-                    rola.x = gameContainer.offsetWidth - rolaWidth;
-                    rola.style.left = `${rola.x}px`;
+            // Ajusta a posição dos objetos se eles ficarem fora dos limites horizontais após o redimensionamento
+            rolas.forEach(obj => {
+                const objWidth = obj.offsetWidth || 160; // Usa o offsetWidth ou padrão
+                if (obj.x + objWidth > gameContainer.offsetWidth) {
+                    obj.x = gameContainer.offsetWidth - objWidth;
+                    obj.style.left = `${obj.x}px`;
                 }
             });
         });
