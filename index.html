@@ -199,7 +199,7 @@
         /* Ajustes responsivos para telas muito pequenas (smartphones) */
         @media (max-width: 480px) {
             #game-container {
-                height: 700px; /* Altura ainda menor para smartphones */
+                height: 700px;
                 border-radius: 20px;
             }
             #start-screen h1 {
@@ -245,7 +245,8 @@
         const character = document.getElementById('character');
         const scoreDisplay = document.getElementById('score-display');
         const startScreen = document.getElementById('start-screen');
-        const startButton = document.getElementById('startButton');
+        // CORREÇÃO: ID do botão de iniciar agora está correto
+        const startButton = document.getElementById('start-button'); 
 
         // URLs das imagens dos objetos "rolas" (Rola 2 removida)
         const ROLA_IMAGES = [
