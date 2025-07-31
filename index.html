@@ -106,6 +106,18 @@
             z-index: 10;
         }
 
+        /* Estilos do display de vidas */
+        #lives-display {
+            position: absolute;
+            top: 35px;
+            right: 35px;
+            font-size: 3.5em; /* Vidas ainda maior */
+            font-weight: bold;
+            color: #FFD700; /* Cor dourada para as vidas */
+            text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
+            z-index: 10;
+        }
+
         /* Estilos do personagem principal */
         #character {
             position: absolute;
@@ -117,7 +129,7 @@
             background-position: center;
             /* Transição para imagem e transformação (para o efeito de "salto") */
             transition: background-image 0.1s ease-in-out, transform 0.15s ease-out;
-            z-index: 5;
+            z-index: 5; /* Personagem acima dos objetos caindo */
             cursor: grab; /* Indica que o elemento pode ser arrastado */
         }
 
@@ -141,7 +153,7 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            z-index: 4;
+            z-index: 4; /* Rolas abaixo do personagem */
             animation: rotate 3s linear infinite; /* Animação de rotação mais lenta */
         }
 
@@ -153,7 +165,7 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            z-index: 4;
+            z-index: 4; /* Objeto de penalidade abaixo do personagem */
             animation: rotate 3s linear infinite; /* Animação de rotação */
             filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.7)); /* Sombra vermelha para destacar perigo */
         }
@@ -169,38 +181,65 @@
             display: none;
         }
 
+        /* Estilos da tela de fim de jogo */
+        #game-over-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.98); /* Fundo quase opaco */
+            display: none; /* Escondido por padrão */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 101; /* Acima de tudo */
+            border-radius: 25px;
+            text-align: center;
+        }
+
+        #game-over-screen h2 {
+            font-size: 4em;
+            margin-bottom: 30px;
+            color: #FFD700;
+            text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.9);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 900;
+        }
+
+        #game-over-screen p {
+            font-size: 2.5em;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        #restart-button {
+            padding: 20px 40px;
+            font-size: 2.5em;
+            background: linear-gradient(145deg, #ff1493, #ff69b4);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        #restart-button:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            background: linear-gradient(145deg, #ff69b4, #ff1493);
+        }
+
         /* Ajustes responsivos para telas menores (tablets) */
         @media (max-width: 768px) {
             #game-container {
                 width: 95%;
-                height: 800px; /* Altura ligeiramente menor para dispositivos móveis */
-            }
-            #start-screen h1 {
-                font-size: 4.5em;
-            }
-            #start-button {
-                padding: 25px 50px;
-                font-size: 2.5em;
-            }
-            #score-display {
-                font-size: 3em;
-            }
-            #character {
-                width: 190px;
-                height: 190px;
-                bottom: 60px;
-            }
-            .rola, .penalty-object {
-                width: 140px;
-                height: 140px;
-            }
-        }
-
-        /* Ajustes responsivos para telas muito pequenas (smartphones) */
-        @media (max-width: 480px) {
-            #game-container {
-                height: 700px;
-                border-radius: 20px;
+                height: 80vh; /* Altura responsiva para tablets */
             }
             #start-screen h1 {
                 font-size: 4em;
@@ -209,19 +248,72 @@
                 padding: 20px 40px;
                 font-size: 2em;
             }
-            #score-display {
+            #score-display, #lives-display {
                 font-size: 2.5em;
-                top: 25px;
-                left: 25px;
+                top: 25px; /* Ajuste a posição para telas menores */
             }
             #character {
-                width: 160px;
-                height: 160px;
-                bottom: 50px;
+                width: 180px;
+                height: 180px;
+                bottom: 55px;
             }
             .rola, .penalty-object {
-                width: 120px;
-                height: 120px;
+                width: 130px;
+                height: 130px;
+            }
+            #game-over-screen h2 {
+                font-size: 3.5em;
+            }
+            #game-over-screen p {
+                font-size: 2em;
+            }
+            #restart-button {
+                padding: 15px 30px;
+                font-size: 2em;
+            }
+        }
+
+        /* Ajustes responsivos para telas muito pequenas (smartphones) */
+        @media (max-width: 480px) {
+            #game-container {
+                height: 85vh; /* Altura responsiva para smartphones */
+                border-radius: 20px;
+            }
+            #start-screen h1 {
+                font-size: 3.5em;
+            }
+            #start-button {
+                padding: 15px 30px;
+                font-size: 1.8em;
+            }
+            #score-display {
+                font-size: 1.8em; /* Fonte menor para caber na tela */
+                top: 20px;
+                left: 20px;
+            }
+            #lives-display {
+                font-size: 1.8em; /* Fonte menor para caber na tela */
+                top: 20px;
+                right: 20px;
+            }
+            #character {
+                width: 150px;
+                height: 150px;
+                bottom: 40px;
+            }
+            .rola, .penalty-object {
+                width: 100px;
+                height: 100px;
+            }
+            #game-over-screen h2 {
+                font-size: 3em;
+            }
+            #game-over-screen p {
+                font-size: 1.5em;
+            }
+            #restart-button {
+                padding: 12px 25px;
+                font-size: 1.5em;
             }
         }
     </style>
@@ -235,8 +327,16 @@
         </div>
         <!-- Display de pontuação -->
         <div id="score-display">Rolas: 0</div>
+        <!-- Display de vidas -->
+        <div id="lives-display">Vidas: 3</div>
         <!-- Personagem principal -->
         <div id="character"></div>
+        <!-- Tela de Fim de Jogo -->
+        <div id="game-over-screen">
+            <h2>Fim de Jogo!</h2>
+            <p id="final-score">Sua Pontuação Final: 0</p>
+            <button id="restart-button">Jogar Novamente</button>
+        </div>
     </div>
 
     <script>
@@ -244,27 +344,32 @@
         const gameContainer = document.getElementById('game-container');
         const character = document.getElementById('character');
         const scoreDisplay = document.getElementById('score-display');
+        const livesDisplay = document.getElementById('lives-display'); // Referência ao display de vidas
         const startScreen = document.getElementById('start-screen');
-        // CORREÇÃO: ID do botão de iniciar agora está correto
-        const startButton = document.getElementById('start-button'); 
+        const startButton = document.getElementById('start-button');
+        const gameOverScreen = document.getElementById('game-over-screen'); // Referência à tela de fim de jogo
+        const finalScoreDisplay = document.getElementById('final-score'); // Referência à pontuação final
+        const restartButton = document.getElementById('restart-button'); // Referência ao botão de reiniciar
 
         // URLs das imagens dos objetos "rolas" (Rola 2 removida)
         const ROLA_IMAGES = [
             'https://files.catbox.moe/n39c1e.png', // Rola 1
             'https://files.catbox.moe/qkukmd.png'  // Rola 3
         ];
-        // URL da imagem do objeto de penalidade
-        const PENALTY_IMAGE_URL = 'https://iili.io/FUuPJxs.png';
+        // URL da imagem do objeto de penalidade (NOVA IMAGEM)
+        const PENALTY_IMAGE_URL = 'https://files.catbox.moe/0c0ea9.png';
 
         // URLs das imagens do personagem (boca aberta e fechada)
         const CHARACTER_MOUTH_OPEN_IMAGE = 'https://files.catbox.moe/5dz13l.png';
         const CHARACTER_MOUTH_CLOSED_IMAGE = 'https://files.catbox.moe/hjspq9.png';
 
         let score = 0; // Pontuação inicial
+        let lives = 3; // Vidas iniciais
         let characterX = 0; // Posição X inicial do personagem (será calculada no load)
         let rolas = []; // Array para armazenar os objetos caindo (incluindo penalidades)
         let rolaGenerationInterval; // Variável para o intervalo de geração de objetos
         let gameRunning = false; // Flag para controlar se o jogo está rodando
+        let gameOver = false; // Flag para controlar o estado de fim de jogo
 
         // Variáveis para o controle de arrastar
         let isDragging = false;
@@ -290,13 +395,17 @@
 
         function startGame() {
             score = 0; // Reseta a pontuação
+            lives = 3; // Reseta as vidas
             scoreDisplay.textContent = `Rolas: ${score}`; // Atualiza o display da pontuação
+            livesDisplay.textContent = `Vidas: ${lives}`; // Atualiza o display de vidas
             rolas = []; // Limpa quaisquer objetos existentes
             // Remove todos os elementos .rola e .penalty-object do DOM, caso existam de uma partida anterior
             document.querySelectorAll('.rola, .penalty-object').forEach(obj => obj.remove());
 
             startScreen.style.display = 'none'; // Esconde a tela de início
+            gameOverScreen.style.display = 'none'; // Esconde a tela de fim de jogo
             gameRunning = true; // Define o estado do jogo como rodando
+            gameOver = false; // Reseta o estado de fim de jogo
             initializeCharacterPosition(); // Garante que o personagem esteja no centro
             gameLoop(); // Inicia o loop principal do jogo
             // Inicia a geração de novos objetos a cada 1200ms (mais lento)
@@ -305,6 +414,8 @@
 
         // Adiciona um ouvinte de evento para o botão de iniciar
         startButton.addEventListener('click', startGame);
+        // Adiciona um ouvinte de evento para o botão de reiniciar
+        restartButton.addEventListener('click', startGame);
 
         // --- Controles de Teclado (para desktop) ---
         document.addEventListener('keydown', (e) => {
@@ -357,7 +468,8 @@
             const obj = document.createElement('div'); // Cria um novo elemento div
 
             // Decide aleatoriamente se será uma "rola" ou um "objeto de penalidade"
-            const isPenalty = Math.random() < 0.2; // 20% de chance de ser um objeto de penalidade
+            // Aumenta a chance de ser penalidade para 25% para mais desafio
+            const isPenalty = Math.random() < 0.25; 
 
             if (isPenalty) {
                 obj.classList.add('penalty-object'); // Adiciona a classe para estilos de penalidade
@@ -380,6 +492,8 @@
             // Define uma velocidade de queda aleatória para cada objeto (mais lento)
             obj.speed = 4 + Math.random() * 2; // Velocidade entre 4 e 6
 
+            obj.mouthOpenTriggered = false; // Flag para controlar se a boca já abriu para este objeto
+
             gameContainer.appendChild(obj); // Adiciona o objeto ao contêiner do jogo
             rolas.push(obj); // Adiciona o objeto ao array de objetos ativos
         }
@@ -387,14 +501,16 @@
         // --- Loop Principal do Jogo ---
 
         function gameLoop() {
-            if (!gameRunning) return; // Se o jogo não estiver rodando, para o loop
+            if (!gameRunning || gameOver) return; // Se o jogo não estiver rodando ou for game over, para o loop
 
             const gameContainerHeight = gameContainer.offsetHeight;
             const characterHeight = character.offsetHeight;
             const characterWidth = character.offsetWidth;
             const characterBottom = gameContainerHeight - 70; // Posição inferior do personagem (ajustada pela bottom do CSS)
-            // Ajusta o "topo" do hitbox do personagem para que a boca abra antes
-            const characterTop = characterBottom - characterHeight + 50; // Aumenta o hitbox para cima em 50px
+            const characterTop = characterBottom - characterHeight; // Posição superior do personagem
+
+            // Distância para a boca abrir antes da colisão
+            const mouthOpenTriggerDistance = 70; // Ajuste este valor para controlar quão cedo a boca abre
 
             // Itera sobre os objetos de trás para frente para evitar problemas ao remover elementos
             for (let i = rolas.length - 1; i >= 0; i--) {
@@ -402,49 +518,78 @@
                 obj.y += obj.speed; // Atualiza a posição Y do objeto (faz ele cair)
                 obj.style.top = `${obj.y}px`; // Atualiza a posição do objeto no DOM
 
-                // --- Detecção de Colisão ---
                 // Obtém as dimensões e posições do objeto
                 const objLeft = obj.x;
-                const objRight = obj.x + (obj.offsetWidth || 160); // Usa o offsetWidth ou padrão
+                const objRight = obj.x + (obj.offsetWidth || 160);
                 const objTop = obj.y;
-                const objBottom = obj.y + (obj.offsetHeight || 160); // Usa o offsetHeight ou padrão
+                const objBottom = obj.y + (obj.offsetHeight || 160);
 
-                // Detecção de colisão AABB (Axis-Aligned Bounding Box)
+                // Lógica para abrir a boca antes da colisão
+                // Verifica se o objeto está na área de "pré-colisão" e se a boca ainda não foi acionada para ele
+                if (!obj.mouthOpenTriggered &&
+                    objBottom > (characterTop - mouthOpenTriggerDistance) &&
+                    objBottom < characterTop + (characterHeight / 2) && // Garante que esteja acima do meio do personagem
+                    objRight > characterX &&
+                    objLeft < (characterX + characterWidth)) {
+                    
+                    character.style.backgroundImage = `url(${CHARACTER_MOUTH_OPEN_IMAGE})`; // Abre a boca
+                    character.classList.add('character-eating'); // Adiciona classe para o efeito de "salto"
+                    obj.mouthOpenTriggered = true; // Marca que a boca foi acionada para este objeto
+                }
+
+                // --- Detecção de Colisão ---
                 if (objRight > characterX &&
                     objLeft < (characterX + characterWidth) &&
                     objBottom > characterTop &&
                     objTop < characterBottom) {
                     // Colisão detectada!
-
-                    // Animação da boca do personagem e efeito de "salto"
-                    character.style.backgroundImage = `url(${CHARACTER_MOUTH_OPEN_IMAGE})`; // Abre a boca
-                    character.classList.add('character-eating'); // Adiciona classe para o efeito de "salto"
-
-                    setTimeout(() => {
-                        character.style.backgroundImage = `url(${CHARACTER_MOUTH_CLOSED_IMAGE})`; // Fecha a boca
-                        character.classList.remove('character-eating'); // Remove classe do efeito de "salto"
-                    }, 300); // Duração da animação de boca aberta e salto
-
+                    
                     if (obj.classList.contains('rola')) {
                         score++; // Incrementa a pontuação para rolas
                     } else if (obj.classList.contains('penalty-object')) {
-                        score = Math.max(0, score - 2); // Diminui a pontuação (não deixa ficar negativo)
+                        score -= 30; // Diminui a pontuação em 30 (pode ficar negativo)
+                        lives--; // Perde 1 vida
+                        livesDisplay.textContent = `Vidas: ${lives}`; // Atualiza o display de vidas
+
+                        if (lives <= 0) {
+                            endGame(); // Chama a função de fim de jogo se as vidas acabarem
+                            return; // Sai do loop para evitar processamento adicional
+                        }
                     }
                     scoreDisplay.textContent = `Rolas: ${score}`; // Atualiza o display da pontuação
                     obj.remove(); // Remove o objeto do DOM
                     rolas.splice(i, 1); // Remove o objeto do array
+
+                    // Reseta a animação da boca após um curto atraso
+                    setTimeout(() => {
+                        character.style.backgroundImage = `url(${CHARACTER_MOUTH_CLOSED_IMAGE})`; // Fecha a boca
+                        character.classList.remove('character-eating'); // Remove classe do efeito de "salto"
+                    }, 300); // Duração da animação de boca aberta e salto
                 }
 
                 // Remove o objeto se ele sair da tela (atingir a parte inferior)
                 if (obj.y > gameContainerHeight) {
                     obj.remove(); // Remove do DOM
                     rolas.splice(i, 1); // Remove do array
-                    // Opcional: Adicionar lógica de "Game Over" aqui se objetos escaparem
+                    // Não há penalidade por deixar cair, apenas por pegar o errado
                 }
             }
 
             // Solicita o próximo quadro de animação (loop contínuo)
             requestAnimationFrame(gameLoop);
+        }
+
+        // --- Função de Fim de Jogo ---
+        function endGame() {
+            gameRunning = false;
+            gameOver = true;
+            clearInterval(rolaGenerationInterval); // Para a geração de novos objetos
+            // Remove todos os objetos caindo atualmente na tela
+            rolas.forEach(obj => obj.remove());
+            rolas = []; // Limpa o array de objetos
+
+            finalScoreDisplay.textContent = `Sua Pontuação Final: ${score}`; // Exibe a pontuação final
+            gameOverScreen.style.display = 'flex'; // Mostra a tela de fim de jogo
         }
 
         // --- Eventos de Carregamento e Redimensionamento ---
