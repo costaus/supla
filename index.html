@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comedor de Rolas</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         /* Estilos gerais do corpo da página */
         body {
@@ -14,7 +14,7 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh; /* Garante que o corpo ocupe a altura total da viewport */
-            background: linear-gradient(135deg, #6a0572 0%, #ab00c2 100%); /* Gradiente de fundo roxo/rosa */
+            background: linear-gradient(135deg, #4b0082 0%, #8a2be2 100%); /* Gradiente de fundo roxo escuro */
             font-family: 'Inter', sans-serif; /* Fonte moderna e limpa */
             color: white;
             flex-direction: column; /* Organiza os elementos verticalmente */
@@ -25,13 +25,13 @@
         #game-container {
             position: relative;
             width: 95%; /* Largura responsiva, maior para celular */
-            max-width: 850px; /* Largura máxima para tablets/desktops */
-            height: 700px; /* Altura fixa da área do jogo, maior */
+            max-width: 900px; /* Largura máxima para tablets/desktops */
+            height: 750px; /* Altura fixa da área do jogo, maior */
             background-color: #333; /* Fundo escuro para o jogo */
-            border-radius: 25px; /* Cantos mais arredondados */
+            border-radius: 30px; /* Cantos mais arredondados */
             overflow: hidden; /* Importante para que os objetos caindo não saiam da área visível */
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7); /* Sombra mais pronunciada */
-            border: 10px solid #8d009e; /* Borda mais grossa e roxa */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); /* Sombra mais pronunciada e escura */
+            border: 12px solid #ff69b4; /* Borda grossa e rosa choque */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -50,85 +50,94 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.95); /* Fundo mais escuro e semi-transparente */
+            background-color: rgba(0, 0, 0, 0.98); /* Fundo quase opaco */
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             z-index: 100; /* Garante que fique acima de outros elementos */
-            border-radius: 20px;
+            border-radius: 25px;
             text-align: center;
         }
 
         /* Estilos do título na tela de início */
         #start-screen h1 {
-            font-size: 4.5em; /* Título maior */
-            margin-bottom: 40px;
+            font-size: 5em; /* Título ainda maior */
+            margin-bottom: 50px;
             color: #FFD700; /* Cor dourada */
-            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8); /* Sombra mais forte no texto */
-            letter-spacing: 3px; /* Espaçamento entre letras */
+            text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.9); /* Sombra mais forte no texto */
+            letter-spacing: 4px; /* Espaçamento entre letras */
             text-transform: uppercase;
+            font-weight: 900; /* Mais negrito */
         }
 
         /* Estilos do botão de iniciar */
         #start-button {
-            padding: 25px 50px; /* Botão maior */
-            font-size: 2.8em; /* Texto maior no botão */
-            background: linear-gradient(145deg, #e91e63, #ff4081); /* Gradiente de rosa vibrante */
+            padding: 30px 60px; /* Botão ainda maior */
+            font-size: 3em; /* Texto maior no botão */
+            background: linear-gradient(145deg, #ff1493, #ff69b4); /* Gradiente de rosa profundo */
             color: white;
             border: none;
-            border-radius: 20px; /* Cantos mais arredondados */
+            border-radius: 25px; /* Cantos mais arredondados */
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
             transition: all 0.3s ease; /* Transição suave para efeitos de hover */
             text-transform: uppercase; /* Texto em maiúsculas */
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             font-weight: bold;
         }
 
         /* Efeito de hover no botão de iniciar */
         #start-button:hover {
-            transform: translateY(-7px); /* Move o botão ligeiramente para cima */
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7); /* Sombra maior */
-            background: linear-gradient(145deg, #ff4081, #e91e63); /* Inverte o gradiente no hover */
+            transform: translateY(-10px); /* Move o botão ligeiramente para cima */
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); /* Sombra maior */
+            background: linear-gradient(145deg, #ff69b4, #ff1493); /* Inverte o gradiente no hover */
         }
 
         /* Estilos do display de pontuação */
         #score-display {
             position: absolute;
-            top: 30px;
-            left: 30px;
-            font-size: 3.2em; /* Pontuação maior */
+            top: 35px;
+            left: 35px;
+            font-size: 3.5em; /* Pontuação ainda maior */
             font-weight: bold;
             color: #FFD700; /* Cor dourada para a pontuação */
-            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
+            text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
             z-index: 10;
         }
 
         /* Estilos do personagem principal */
         #character {
             position: absolute;
-            bottom: 60px; /* Posição do personagem na parte inferior, mais acima */
-            width: 180px; /* Largura do personagem aumentada */
-            height: 180px; /* Altura do personagem aumentada */
+            bottom: 70px; /* Posição do personagem na parte inferior, mais acima */
+            width: 220px; /* Largura do personagem aumentada */
+            height: 220px; /* Altura do personagem aumentada */
             background-size: contain; /* Ajusta a imagem para caber no elemento */
             background-repeat: no-repeat;
             background-position: center;
-            transition: background-image 0.1s ease-in-out, transform 0.1s ease-out; /* Transição para imagem e transformação */
+            /* Transição para imagem e transformação (para o efeito de "salto") */
+            transition: background-image 0.1s ease-in-out, transform 0.15s ease-out;
             z-index: 5;
             cursor: grab; /* Indica que o elemento pode ser arrastado */
         }
 
-        /* Classe para a animação de comer (efeito de "salto") */
+        /* Animação para o efeito de "comer" (salto e leve escala) */
+        @keyframes eatAnimation {
+            0% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); } /* Salta para cima e aumenta um pouco */
+            100% { transform: translateY(0) scale(1); }
+        }
+
+        /* Classe para ativar a animação de comer */
         .character-eating {
-            transform: scale(1.1); /* Aumenta ligeiramente o tamanho ao comer */
+            animation: eatAnimation 0.3s ease-out; /* Duração da animação de comer */
         }
 
         /* Estilos para os objetos "rola" caindo */
         .rola {
             position: absolute;
-            width: 130px; /* Largura da rola aumentada */
-            height: 130px; /* Altura da rola aumentada */
+            width: 160px; /* Largura da rola aumentada */
+            height: 160px; /* Altura da rola aumentada */
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -151,17 +160,46 @@
         @media (max-width: 768px) {
             #game-container {
                 width: 95%;
-                height: 600px; /* Altura ligeiramente menor para dispositivos móveis */
+                height: 650px; /* Altura ligeiramente menor para dispositivos móveis */
+            }
+            #start-screen h1 {
+                font-size: 4.5em;
+            }
+            #start-button {
+                padding: 25px 50px;
+                font-size: 2.5em;
+            }
+            #score-display {
+                font-size: 3em;
+            }
+            #character {
+                width: 190px;
+                height: 190px;
+                bottom: 60px;
+            }
+            .rola {
+                width: 140px;
+                height: 140px;
+            }
+        }
+
+        /* Ajustes responsivos para telas muito pequenas (smartphones) */
+        @media (max-width: 480px) {
+            #game-container {
+                height: 600px;
+                border-radius: 20px;
             }
             #start-screen h1 {
                 font-size: 4em;
             }
             #start-button {
                 padding: 20px 40px;
-                font-size: 2.2em;
+                font-size: 2em;
             }
             #score-display {
-                font-size: 2.8em;
+                font-size: 2.5em;
+                top: 25px;
+                left: 25px;
             }
             #character {
                 width: 160px;
@@ -169,37 +207,8 @@
                 bottom: 50px;
             }
             .rola {
-                width: 110px;
-                height: 110px;
-            }
-        }
-
-        /* Ajustes responsivos para telas muito pequenas (smartphones) */
-        @media (max-width: 480px) {
-            #game-container {
-                height: 550px;
-                border-radius: 15px;
-            }
-            #start-screen h1 {
-                font-size: 3.5em;
-            }
-            #start-button {
-                padding: 18px 35px;
-                font-size: 1.8em;
-            }
-            #score-display {
-                font-size: 2.2em;
-                top: 20px;
-                left: 20px;
-            }
-            #character {
-                width: 140px;
-                height: 140px;
-                bottom: 40px;
-            }
-            .rola {
-                width: 90px;
-                height: 90px;
+                width: 120px;
+                height: 120px;
             }
         }
     </style>
@@ -227,9 +236,9 @@
 
         // URLs das imagens dos objetos "rolas"
         const ROLA_IMAGES = [
-            'https://files.catbox.moe/n39c1e.png',
-            'https://files.catbox.moe/b9dyhd.png',
-            'https://files.catbox.moe/qkukmd.png'
+            'https://files.catbox.moe/n39c1e.png', // Rola 1
+            'https://files.catbox.moe/b9dyhd.png', // Rola 2
+            'https://files.catbox.moe/qkukmd.png'  // Rola 3
         ];
         // URLs das imagens do personagem (boca aberta e fechada)
         const CHARACTER_MOUTH_OPEN_IMAGE = 'https://files.catbox.moe/5dz13l.png';
@@ -274,8 +283,8 @@
             gameRunning = true; // Define o estado do jogo como rodando
             initializeCharacterPosition(); // Garante que o personagem esteja no centro
             gameLoop(); // Inicia o loop principal do jogo
-            // Inicia a geração de novas rolas a cada 1.0 segundos (um pouco mais rápido)
-            rolaGenerationInterval = setInterval(createRola, 1000);
+            // Inicia a geração de novas rolas a cada 900ms (mais rápido para mais desafio)
+            rolaGenerationInterval = setInterval(createRola, 900);
         }
 
         // Adiciona um ouvinte de evento para o botão de iniciar
@@ -287,7 +296,7 @@
 
             const characterWidth = character.offsetWidth;
             const gameContainerWidth = gameContainer.offsetWidth;
-            const moveSpeed = 30; // Velocidade de movimento do personagem para teclado
+            const moveSpeed = 35; // Velocidade de movimento do personagem para teclado
 
             if (e.key === 'ArrowLeft' || e.key === 'a') {
                 characterX = Math.max(0, characterX - moveSpeed);
@@ -335,7 +344,7 @@
             rola.style.backgroundImage = `url(${ROLA_IMAGES[Math.floor(Math.random() * ROLA_IMAGES.length)]})`;
 
             // Largura da rola (usa o valor do CSS ou padrão)
-            const rolaWidth = rola.offsetWidth || 130;
+            const rolaWidth = rola.offsetWidth || 160;
             // Define uma posição X inicial aleatória para a rola
             rola.x = Math.random() * (gameContainer.offsetWidth - rolaWidth);
             rola.y = -rolaWidth; // Inicia a rola acima do contêiner do jogo
@@ -344,7 +353,7 @@
             rola.style.top = `${rola.y}px`;
 
             // Define uma velocidade de queda aleatória para cada rola
-            rola.speed = 5 + Math.random() * 2; // Velocidade entre 5 e 7 (ainda mais rápido)
+            rola.speed = 6 + Math.random() * 2; // Velocidade entre 6 e 8 (ainda mais rápido)
 
             gameContainer.appendChild(rola); // Adiciona a rola ao contêiner do jogo
             rolas.push(rola); // Adiciona a rola ao array de rolas ativas
@@ -358,7 +367,7 @@
             const gameContainerHeight = gameContainer.offsetHeight;
             const characterHeight = character.offsetHeight;
             const characterWidth = character.offsetWidth;
-            const characterBottom = gameContainerHeight - 60; // Posição inferior do personagem (ajustada pela bottom do CSS)
+            const characterBottom = gameContainerHeight - 70; // Posição inferior do personagem (ajustada pela bottom do CSS)
             const characterTop = characterBottom - characterHeight; // Posição superior do personagem
 
             // Itera sobre as rolas de trás para frente para evitar problemas ao remover elementos
@@ -370,9 +379,9 @@
                 // --- Detecção de Colisão ---
                 // Obtém as dimensões e posições da rola
                 const rolaLeft = rola.x;
-                const rolaRight = rola.x + (rola.offsetWidth || 130); // Usa o offsetWidth ou padrão
+                const rolaRight = rola.x + (rola.offsetWidth || 160); // Usa o offsetWidth ou padrão
                 const rolaTop = rola.y;
-                const rolaBottom = rola.y + (rola.offsetHeight || 130); // Usa o offsetHeight ou padrão
+                const rolaBottom = rola.y + (rola.offsetHeight || 160); // Usa o offsetHeight ou padrão
 
                 // Detecção de colisão AABB (Axis-Aligned Bounding Box)
                 if (rolaRight > characterX &&
@@ -392,7 +401,7 @@
                     setTimeout(() => {
                         character.style.backgroundImage = `url(${CHARACTER_MOUTH_CLOSED_IMAGE})`; // Fecha a boca
                         character.classList.remove('character-eating'); // Remove classe do efeito de "salto"
-                    }, 200); // Boca aberta e efeito por 200ms
+                    }, 300); // Duração da animação de boca aberta e salto
                 }
 
                 // Remove a rola se ela sair da tela (atingir a parte inferior)
@@ -420,7 +429,7 @@
 
             // Ajusta a posição das rolas se elas ficarem fora dos limites horizontais após o redimensionamento
             rolas.forEach(rola => {
-                const rolaWidth = rola.offsetWidth || 130; // Usa o offsetWidth ou padrão
+                const rolaWidth = rola.offsetWidth || 160; // Usa o offsetWidth ou padrão
                 if (rola.x + rolaWidth > gameContainer.offsetWidth) {
                     rola.x = gameContainer.offsetWidth - rolaWidth;
                     rola.style.left = `${rola.x}px`;
