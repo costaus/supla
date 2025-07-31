@@ -1,868 +1,433 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="">
-
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supla Brazil - Ganhe Dinheiro com Suas Redes Sociais</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <link rel="icon" href="https://iili.io/FlyBJF1.png" type="image/png">
-
+    <title>Comedor de Rolas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-
-/*
-██████╗ █████╗ ███╗   ██╗
-██╔══██╗██╔══██╗████╗  ██║
-██║  ██║███████║██╔██╗ ██║
-██║  ██║██╔══██║██║╚██╗██║
-██████╔╝██║  ██║██║ ╚████║
-╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝
-*/
-
-        
-        html { scroll-behavior: smooth; }
-        body { 
-            transition: background-color 0.3s, color 0.3s, padding-top 0.3s;
-        }
-        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-        header, main, footer { position: relative; z-index: 1; }
-
-        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.02); } }
-        @keyframes gift-pulse { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(75, 131, 60, 0.7); } 70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(75, 131, 60, 0); } }
-
-        #promo-banner {
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 100;
-            background-image: linear-gradient(to right, #5a9547, #4b833c);
-            padding: 10px 0; animation: pulse 4s infinite ease-in-out;
-            color: white; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-        }
-        .timer-container { display: flex; align-items: center; justify-content: center; gap: 1rem; }
-        .timer-text { font-weight: 700; font-size: 0.9rem; }
-        .timer-block { display: flex; align-items: center; gap: 0.5rem; }
-        .timer-unit { background: rgba(0, 0, 0, 0.2); border-radius: 8px; padding: 0.5rem 0.75rem; text-align: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2); }
-        .timer-unit .number { font-size: 1.75rem; font-weight: 900; line-height: 1; }
-        .timer-unit .label { font-size: 0.6rem; text-transform: uppercase; opacity: 0.8; letter-spacing: 0.5px; }
-
-        #header {
-            position: fixed; left: 0; right: 0; z-index: 50;
-            background-color: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-            transition: top 0.3s ease-in-out;
-        }
-        .dark #header {
-            background-color: rgba(30, 41, 59, 0.8);
-            box-shadow: 0 4px 6px -1px rgba(100, 116, 139, 0.1), 0 2px 4px -2px rgba(100, 116, 139, 0.1);
-        }
-
-        #theme-toggle-switch {
-            position: relative;
-            width: 60px;
-            height: 32px;
-            background-color: #e2e8f0;
-            border-radius: 9999px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .dark #theme-toggle-switch {
-            background-color: #334155;
-        }
-        .thumb {
-            position: absolute;
-            top: 2px;
-            left: 2px;
-            width: 28px;
-            height: 28px;
-            background-color: #334155;
-            border-radius: 50%;
+        /* Estilos gerais do corpo da página */
+        body {
+            margin: 0;
+            overflow: hidden; /* Esconde as barras de rolagem */
             display: flex;
-            align-items: center;
             justify-content: center;
-            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.3s ease;
-            overflow: hidden;
-        }
-        .dark .thumb {
-            transform: translateX(28px);
-            background-color: #e2e8f0;
-        }
-        .thumb svg, .thumb img {
-            position: absolute;
-            width: 18px;
-            height: 18px;
-            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-        }
-        #theme-icon-sun {
-            color: #f59e0b;
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .dark #theme-icon-sun {
-            opacity: 0;
-            transform: translateY(100%);
-        }
-        #theme-icon-moon-img {
-            opacity: 0;
-            transform: translateY(-100%);
-        }
-        .dark #theme-icon-moon-img {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        #notification-container { position: fixed; bottom: 1.5rem; left: 1.5rem; z-index: 100; display: flex; flex-direction: column; gap: 0.75rem; }
-        .notification-popup {
-            display: flex; align-items: center; gap: 0.75rem; background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(8px); padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid #e2e8f0;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-            opacity: 0; transform: translateY(30px); transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .dark .notification-popup { background-color: rgba(30, 41, 59, 0.8); border-color: #475569; }
-        .notification-popup.show { opacity: 1; transform: translateY(0); }
-        .notification-popup.hide { opacity: 0; transform: translateY(30px); }
-        .notification-icon { display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; }
-        .notification-icon svg { width: 100%; height: 100%; }
-        .notification-text { font-size: 0.9rem; color: #2d3748; }
-        .dark .notification-text { color: #cbd5e1; }
-        .notification-text strong { font-weight: 600; color: #0b451f; }
-        .dark .notification-text strong { color: #6ee7b7; }
-
-        #flash-offer-trigger {
-            position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 100;
-            background-color: #4b833c; color: white;
-            width: 60px; height: 60px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            cursor: pointer; transition: transform 0.3s;
-            animation: gift-pulse 2s infinite;
-        }
-        #flash-offer-trigger:hover { transform: scale(1.1); }
-        #flash-offer-modal-backdrop {
-            position: fixed; inset: 0; background-color: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px); z-index: 110;
-            opacity: 0; transition: opacity 0.3s; pointer-events: none;
-        }
-        #flash-offer-modal-backdrop.visible { opacity: 1; pointer-events: all; }
-        #flash-offer-modal {
-            position: fixed; top: 50%; left: 50%;
-            transform: translate(-50%, -50%) scale(0.95);
-            z-index: 120;
-            width: 90%; max-width: 400px;
-            background-color: white; border-radius: 16px;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
-            opacity: 0; transition: all 0.3s; pointer-events: none;
-            overflow: hidden;
-        }
-        .dark #flash-offer-modal { background-color: #1e293b; }
-        #flash-offer-modal.visible { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: all; }
-        .flash-modal-header {
-            background: linear-gradient(to right, #5a9547, #4b833c);
-            padding: 1rem;
-            display: flex;
             align-items: center;
-            justify-content: center;
-        }
-        .flash-modal-icon-wrapper {
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            padding: 0.75rem;
-        }
-        .flash-modal-icon {
+            min-height: 100vh; /* Garante que o corpo ocupe a altura total da viewport */
+            background: linear-gradient(135deg, #6a0572 0%, #ab00c2 100%); /* Gradiente de fundo roxo/rosa */
+            font-family: 'Inter', sans-serif; /* Fonte moderna e limpa */
             color: white;
-            width: 32px;
-            height: 32px;
+            flex-direction: column; /* Organiza os elementos verticalmente */
+            position: relative;
         }
-        .flash-timer { background: #f1f5f9; color: #0b451f; }
-        .dark .flash-timer { background: #334155; color: #a3e635; }
-        .flash-button:disabled { background-color: #9ca3af; cursor: not-allowed; }
-        .dark .flash-button:disabled { background-color: #4b5563; }
 
+        /* Estilos do contêiner principal do jogo */
+        #game-container {
+            position: relative;
+            width: 95%; /* Largura responsiva, maior para celular */
+            max-width: 850px; /* Largura máxima para tablets/desktops */
+            height: 700px; /* Altura fixa da área do jogo, maior */
+            background-color: #333; /* Fundo escuro para o jogo */
+            border-radius: 25px; /* Cantos mais arredondados */
+            overflow: hidden; /* Importante para que os objetos caindo não saiam da área visível */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7); /* Sombra mais pronunciada */
+            border: 10px solid #8d009e; /* Borda mais grossa e roxa */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            /* Fundo do jogo com a imagem fornecida */
+            background-image: url('https://iili.io/FUu2yhv.jpg'); /* Link do cenário atualizado */
+            background-size: cover; /* Garante que a imagem cubra todo o contêiner */
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Estilos da tela de início do jogo */
+        #start-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95); /* Fundo mais escuro e semi-transparente */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100; /* Garante que fique acima de outros elementos */
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        /* Estilos do título na tela de início */
+        #start-screen h1 {
+            font-size: 4.5em; /* Título maior */
+            margin-bottom: 40px;
+            color: #FFD700; /* Cor dourada */
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8); /* Sombra mais forte no texto */
+            letter-spacing: 3px; /* Espaçamento entre letras */
+            text-transform: uppercase;
+        }
+
+        /* Estilos do botão de iniciar */
+        #start-button {
+            padding: 25px 50px; /* Botão maior */
+            font-size: 2.8em; /* Texto maior no botão */
+            background: linear-gradient(145deg, #e91e63, #ff4081); /* Gradiente de rosa vibrante */
+            color: white;
+            border: none;
+            border-radius: 20px; /* Cantos mais arredondados */
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease; /* Transição suave para efeitos de hover */
+            text-transform: uppercase; /* Texto em maiúsculas */
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        /* Efeito de hover no botão de iniciar */
+        #start-button:hover {
+            transform: translateY(-7px); /* Move o botão ligeiramente para cima */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7); /* Sombra maior */
+            background: linear-gradient(145deg, #ff4081, #e91e63); /* Inverte o gradiente no hover */
+        }
+
+        /* Estilos do display de pontuação */
+        #score-display {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            font-size: 3.2em; /* Pontuação maior */
+            font-weight: bold;
+            color: #FFD700; /* Cor dourada para a pontuação */
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
+            z-index: 10;
+        }
+
+        /* Estilos do personagem principal */
+        #character {
+            position: absolute;
+            bottom: 60px; /* Posição do personagem na parte inferior, mais acima */
+            width: 180px; /* Largura do personagem aumentada */
+            height: 180px; /* Altura do personagem aumentada */
+            background-size: contain; /* Ajusta a imagem para caber no elemento */
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: background-image 0.1s ease-in-out, transform 0.1s ease-out; /* Transição para imagem e transformação */
+            z-index: 5;
+            cursor: grab; /* Indica que o elemento pode ser arrastado */
+        }
+
+        /* Classe para a animação de comer (efeito de "salto") */
+        .character-eating {
+            transform: scale(1.1); /* Aumenta ligeiramente o tamanho ao comer */
+        }
+
+        /* Estilos para os objetos "rola" caindo */
+        .rola {
+            position: absolute;
+            width: 130px; /* Largura da rola aumentada */
+            height: 130px; /* Altura da rola aumentada */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            z-index: 4;
+            animation: rotate 3s linear infinite; /* Animação de rotação mais lenta */
+        }
+
+        /* Animação de rotação para as rolas */
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Oculta os controles móveis (setas) que não são mais necessários */
+        #mobile-controls {
+            display: none;
+        }
+
+        /* Ajustes responsivos para telas menores (tablets) */
         @media (max-width: 768px) {
-            .timer-container { flex-direction: column; gap: 0.5rem; }
-            .timer-text { font-size: 0.8rem; }
-            .timer-unit .number { font-size: 1.25rem; }
-            #notification-container { left: 1rem; bottom: 6rem; }
+            #game-container {
+                width: 95%;
+                height: 600px; /* Altura ligeiramente menor para dispositivos móveis */
+            }
+            #start-screen h1 {
+                font-size: 4em;
+            }
+            #start-button {
+                padding: 20px 40px;
+                font-size: 2.2em;
+            }
+            #score-display {
+                font-size: 2.8em;
+            }
+            #character {
+                width: 160px;
+                height: 160px;
+                bottom: 50px;
+            }
+            .rola {
+                width: 110px;
+                height: 110px;
+            }
+        }
+
+        /* Ajustes responsivos para telas muito pequenas (smartphones) */
+        @media (max-width: 480px) {
+            #game-container {
+                height: 550px;
+                border-radius: 15px;
+            }
+            #start-screen h1 {
+                font-size: 3.5em;
+            }
+            #start-button {
+                padding: 18px 35px;
+                font-size: 1.8em;
+            }
+            #score-display {
+                font-size: 2.2em;
+                top: 20px;
+                left: 20px;
+            }
+            #character {
+                width: 140px;
+                height: 140px;
+                bottom: 40px;
+            }
+            .rola {
+                width: 90px;
+                height: 90px;
+            }
         }
     </style>
 </head>
-
-<body class="bg-brand-bg dark:bg-slate-900 text-brand-dark dark:text-slate-200">
-
-    <div id="promo-banner">
-        <div class="timer-container">
-            <span class="timer-text hidden md:inline">VAGAS LIMITADAS! A PROMOÇÃO ACABA EM:</span>
-            <span class="timer-text md:hidden">PROMOÇÃO ACABA EM:</span>
-            <div class="timer-block">
-                <div class="timer-unit"><div id="days" class="number">00</div><div class="label">Dias</div></div>
-                <div class="timer-unit"><div id="hours" class="number">00</div><div class="label">Horas</div></div>
-                <div class="timer-unit"><div id="minutes" class="number">00</div><div class="label">Min</div></div>
-                <div class="timer-unit"><div id="seconds" class="number">00</div><div class="label">Seg</div></div>
-            </div>
+<body>
+    <div id="game-container">
+        <!-- Tela de início do jogo -->
+        <div id="start-screen">
+            <h1>Comedor de Rolas</h1>
+            <button id="start-button">Iniciar Jogo</button>
         </div>
+        <!-- Display de pontuação -->
+        <div id="score-display">Rolas: 0</div>
+        <!-- Personagem principal -->
+        <div id="character"></div>
     </div>
 
-    <div id="particles-js"></div>
-
-    <header id="header">
-        <div class="container mx-auto px-6 h-20 flex justify-between items-center relative">
-            <a href="#" class="absolute left-1/2 -translate-x-1/2 md:left-6 md:translate-x-0 top-0 -mt-2 z-10" aria-label="Página Inicial Supla Brazil">
-                <img src="https://iili.io/FlyBJF1.png" alt="Logo Supla Brazil" class="h-28 w-auto drop-shadow-lg">
-            </a>
-            <nav id="main-nav" class="hidden md:flex space-x-8 w-full justify-center items-center" aria-label="Navegação Principal">
-                <a href="#como-funciona" class="text-brand-dark dark:text-slate-200 hover:text-brand-primary dark:hover:text-green-400 transition duration-300">Como Funciona</a>
-                <a href="#beneficios" class="text-brand-dark dark:text-slate-200 hover:text-brand-primary dark:hover:text-green-400 transition duration-300">Benefícios</a>
-                <a href="#faq" class="text-brand-dark dark:text-slate-200 hover:text-brand-primary dark:hover:text-green-400 transition duration-300">FAQ</a>
-            </nav>
-            <div class="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-4">
-                <div id="theme-toggle-switch" aria-label="Alternar tema" role="switch" aria-checked="false">
-                    <div class="thumb">
-                        <svg id="theme-icon-sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.106a.75.75 0 010 1.06l-1.591 1.59a.75.75 0 11-1.06-1.06l1.59-1.59a.75.75 0 011.06 0zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5h2.25a.75.75 0 01.75.75zM17.803 17.803a.75.75 0 01-1.06 0l-1.59-1.591a.75.75 0 111.06-1.06l1.59 1.59a.75.75 0 010 1.06zM12 21a.75.75 0 01-.75-.75v-2.25a.75.75 0 011.5 0v2.25a.75.75 0 01-.75.75zM5.197 17.803a.75.75 0 010-1.06l1.59-1.591a.75.75 0 011.06 1.06l-1.59 1.59a.75.75 0 01-1.06 0zM3 12a.75.75 0 01.75-.75h2.25a.75.75 0 010 1.5H3.75A.75.75 0 013 12zM6.106 5.197a.75.75 0 011.06 0l1.59 1.591a.75.75 0 01-1.06 1.06l-1.59-1.59a.75.75 0 010-1.06z"></path></svg>
-                        <img id="theme-icon-moon-img" src="https://iili.io/FGCHFKx.png" alt="Lua">
-                    </div>
-                </div>
-                <a href="#cadastro" class="hidden md:block bg-brand-primary text-white font-bold py-2 px-6 rounded-lg hover:bg-brand-secondary transition duration-300 shadow-lg">
-                    Comece Agora
-                </a>
-            </div>
-            <button id="mobile-menu-button" class="md:hidden text-brand-dark dark:text-slate-200 focus:outline-none" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
-                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            </button>
-        </div>
-        <div id="mobile-menu" class="hidden md:hidden bg-white/95 dark:bg-slate-800/95 backdrop-blur-lg px-6 pt-2 pb-4">
-            <a href="#como-funciona" class="block text-center py-2 text-brand-dark dark:text-slate-200 hover:text-brand-primary">Como Funciona</a>
-            <a href="#beneficios" class="block text-center py-2 text-brand-dark dark:text-slate-200 hover:text-brand-primary">Benefícios</a>
-            <a href="#faq" class="block text-center py-2 text-brand-dark dark:text-slate-200 hover:text-brand-primary">FAQ</a>
-            <a href="#cadastro" class="block mt-4 bg-brand-primary text-white text-center font-bold py-2 px-6 rounded-lg hover:bg-brand-secondary transition duration-300">Comece Agora</a>
-        </div>
-    </header>
-
-    <main>
-        <section id="hero" class="pt-40 pb-20 bg-transparent">
-            <div class="container mx-auto px-6 text-center">
-                <div class="max-w-4xl mx-auto">
-                    <h1 class="text-4xl md:text-6xl font-extrabold text-brand-dark dark:text-white mb-4 leading-tight">
-                        Transforme suas Redes Sociais em uma <span class="text-brand-primary dark:text-green-400">Fonte de Renda</span>
-                    </h1>
-                    <p class="text-lg md:text-xl text-gray-600 dark:text-slate-300 mb-8">
-                        Junte-se à Supla Brazil e ganhe <span class="font-bold text-brand-secondary dark:text-green-400">US$ 1,00 a cada 10 cliques</span> no seu link de divulgação. Promova nossa marca com seus vídeos, sem vender e sem complicação.
-                    </p>
-                    <a href="#cadastro" class="bg-brand-secondary text-white font-bold py-4 px-10 rounded-lg hover:bg-brand-primary transition duration-300 text-lg shadow-xl inline-block">
-                        Quero ser um Influenciador
-                    </a>
-                </div>
-                <div id="stats-container" class="fade-in mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-2xl dark:shadow-slate-700/50 border border-gray-100 dark:border-slate-700">
-                        <p class="text-gray-500 dark:text-slate-400 text-lg mb-2">Pedidos de Parceria</p>
-                        <p id="requests-counter" class="counter-value text-5xl md:text-6xl font-bold text-brand-primary dark:text-green-400" data-initial="16478">0</p>
-                    </div>
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-2xl dark:shadow-slate-700/50 border border-gray-100 dark:border-slate-700">
-                        <p class="text-gray-500 dark:text-slate-400 text-lg mb-2">Influenciadores Ativos</p>
-                        <p id="influencers-counter" class="counter-value text-5xl md:text-6xl font-bold text-brand-primary dark:text-green-400" data-initial="482">0</p>
-                    </div>
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-6 rounded-2xl shadow-2xl dark:shadow-slate-700/50 border border-gray-100 dark:border-slate-700">
-                        <p class="text-gray-500 dark:text-slate-400 text-lg mb-2">Total Pago (USD)</p>
-                        <p id="payments-counter" class="counter-value text-5xl md:text-6xl font-bold text-brand-primary dark:text-green-400" data-initial="112540">0</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="como-funciona" class="py-20 bg-transparent">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12 fade-in">
-                    <h2 class="text-4xl font-bold text-brand-dark dark:text-white">Como Funciona?</h2>
-                    <p class="text-lg text-gray-600 dark:text-slate-300 mt-2">Ganhar dinheiro é simples. Siga estes 3 passos:</p>
-                </div>
-                <div class="grid md:grid-cols-3 gap-10">
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-xl shadow-lg dark:shadow-slate-700/50 text-center fade-in" style="transition-delay: 100ms;">
-                        <div class="bg-brand-light dark:bg-green-400/20 h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-3xl font-bold text-brand-primary dark:text-green-400">1</span></div>
-                        <h3 class="text-2xl font-bold text-brand-dark dark:text-white mb-3">Cadastre-se</h3>
-                        <p class="text-gray-600 dark:text-slate-300">Preencha o formulário abaixo para se tornar um parceiro oficial da Supla Brazil. É 100% gratuito.</p>
-                    </div>
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-xl shadow-lg dark:shadow-slate-700/50 text-center fade-in" style="transition-delay: 200ms;">
-                        <div class="bg-brand-light dark:bg-green-400/20 h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-3xl font-bold text-brand-primary dark:text-green-400">2</span></div>
-                        <h3 class="text-2xl font-bold text-brand-dark dark:text-white mb-3">Divulgue</h3>
-                        <p class="text-gray-600 dark:text-slate-300">Receba seu link exclusivo. Crie e poste vídeos sobre nossa marca nas suas redes sociais (TikTok, Instagram, etc.).</p>
-                    </div>
-                    <div class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-8 rounded-xl shadow-lg dark:shadow-slate-700/50 text-center fade-in" style="transition-delay: 300ms;">
-                        <div class="bg-brand-light dark:bg-green-400/20 h-16 w-16 rounded-full flex items-center justify-center mx-auto mb-6"><span class="text-3xl font-bold text-brand-primary dark:text-green-400">3</span></div>
-                        <h3 class="text-2xl font-bold text-brand-dark dark:text-white mb-3">Ganhe Dinheiro</h3>
-                        <p class="text-gray-600 dark:text-slate-300">Você ganha <span class="font-bold">US$ 1,00 a cada 10 cliques</span> que seu link receber. Acompanhe seus ganhos em tempo real.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="beneficios" class="py-20 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12 fade-in"><h2 class="text-4xl font-bold text-brand-dark dark:text-white">Seus Benefícios</h2><p class="text-lg text-gray-600 dark:text-slate-300 mt-2">Veja por que ser um parceiro Supla Brazil vale a pena.</p></div>
-                <div class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1" aria-hidden="true">✓</div><div><h3 class="text-xl font-semibold text-brand-dark dark:text-white">Renda Extra Garantida</h3><p class="text-gray-600 dark:text-slate-300">Uma forma comprovada de monetizar sua presença online sem precisar vender nada.</p></div></div>
-                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1" aria-hidden="true">✓</div><div><h3 class="text-xl font-semibold text-brand-dark dark:text-white">Flexibilidade Total</h3><p class="text-gray-600 dark:text-slate-300">Trabalhe quando e de onde quiser. Você define seus horários e sua rotina de postagens.</p></div></div>
-                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1" aria-hidden="true">✓</div><div><h3 class="text-xl font-semibold text-brand-dark dark:text-white">Pagamentos Rápidos</h3><p class="text-gray-600 dark:text-slate-300">Receba seus ganhos de forma segura e pontual, diretamente na sua conta.</p></div></div>
-                    <div class="flex items-start space-x-4 fade-in"><div class="bg-brand-primary text-white rounded-full h-8 w-8 flex-shrink-0 flex items-center justify-center mt-1" aria-hidden="true">✓</div><div><h3 class="text-xl font-semibold text-brand-dark dark:text-white">Suporte Dedicado</h3><p class="text-gray-600 dark:text-slate-300">Nossa equipe está pronta para te ajudar com dicas e materiais para maximizar seus resultados.</p></div></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="faq" class="py-20 bg-transparent">
-            <div class="container mx-auto px-6">
-                <div class="text-center mb-12 fade-in"><h2 class="text-4xl font-bold text-brand-dark dark:text-white">Perguntas Frequentes</h2></div>
-                <div class="max-w-3xl mx-auto bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-6 rounded-lg shadow-md dark:shadow-slate-700/50">
-                    <div class="border-b border-brand-light dark:border-slate-600 py-4 fade-in">
-                        <h3><button class="faq-toggle w-full text-left flex justify-between items-center focus:outline-none" aria-expanded="false" aria-controls="faq1-content"><span class="text-xl font-semibold text-brand-dark dark:text-white">Preciso vender algum produto?</span><span class="faq-icon text-2xl text-brand-primary dark:text-green-400" aria-hidden="true">+</span></button></h3>
-                        <div id="faq1-content" class="faq-content mt-2 text-gray-600 dark:text-slate-300 hidden">Não! Sua única função é divulgar a marca Supla Brazil através de vídeos. Nós cuidamos de todo o resto. Você não precisa se preocupar com vendas, estoque ou clientes.</div>
-                    </div>
-                    <div class="border-b border-brand-light dark:border-slate-600 py-4 fade-in">
-                         <h3><button class="faq-toggle w-full text-left flex justify-between items-center focus:outline-none" aria-expanded="false" aria-controls="faq2-content"><span class="text-xl font-semibold text-brand-dark dark:text-white">Quanto posso ganhar?</span><span class="faq-icon text-2xl text-brand-primary dark:text-green-400" aria-hidden="true">+</span></button></h3>
-                        <div id="faq2-content" class="faq-content mt-2 text-gray-600 dark:text-slate-300 hidden">Seu potencial de ganho é ilimitado! Depende diretamente do seu engajamento e da sua capacidade de gerar cliques. Um vídeo que viraliza pode render centenas ou até milhares de dólares.</div>
-                    </div>
-                    <div class="py-4 fade-in">
-                         <h3><button class="faq-toggle w-full text-left flex justify-between items-center focus:outline-none" aria-expanded="false" aria-controls="faq3-content"><span class="text-xl font-semibold text-brand-dark dark:text-white">Preciso ter muitos seguidores?</span><span class="faq-icon text-2xl text-brand-primary dark:text-green-400" aria-hidden="true">+</span></button></h3>
-                        <div id="faq3-content" class="faq-content mt-2 text-gray-600 dark:text-slate-300 hidden">Não necessariamente. O mais importante é a criatividade e a qualidade do seu conteúdo. Um bom vídeo pode alcançar muitas pessoas, mesmo em um perfil com poucos seguidores.</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="cadastro" class="py-20 bg-brand-dark dark:bg-slate-900">
-            <div class="container mx-auto px-6 text-center fade-in">
-                <h2 class="text-4xl font-bold text-white">Seja um Influenciador Supla Brazil</h2>
-                <p class="text-xl text-brand-light dark:text-slate-300 mb-8 max-w-2xl mx-auto">Preencha o formulário abaixo para entrar na nossa lista de parceiros. O cadastro é gratuito e leva menos de um minuto!</p>
-                <div id="form-wrapper">
-                    <form id="contact-form" class="max-w-md mx-auto text-left">
-                        <input type="hidden" name="access_key" value="3b848480-c4c7-4269-81a4-42a83b82a924"><input type="hidden" name="subject" value="Novo Cadastro - Influenciador Supla Brazil">
-                        <div class="mb-4">
-                            <label for="name" class="block text-brand-light dark:text-slate-300 mb-2">Nome Completo</label>
-                            <input type="text" name="name" id="name" required class="w-full px-4 py-2 rounded-lg bg-gray-800/50 dark:bg-slate-700 border border-brand-secondary dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-light dark:focus:ring-green-400 text-white">
-                        </div>
-                        <div class="mb-4">
-                            <label for="email" class="block text-brand-light dark:text-slate-300 mb-2">Seu Melhor E-mail</label>
-                            <input type="email" name="email" id="email" required class="w-full px-4 py-2 rounded-lg bg-gray-800/50 dark:bg-slate-700 border border-brand-secondary dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-light dark:focus:ring-green-400 text-white">
-                        </div>
-                        <div class="mb-6">
-                            <label for="social" class="block text-brand-light dark:text-slate-300 mb-2">Link do seu Perfil (TikTok, Instagram, etc.)</label>
-                            <input type="url" name="social" id="social" required class="w-full px-4 py-2 rounded-lg bg-gray-800/50 dark:bg-slate-700 border border-brand-secondary dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-brand-light dark:focus:ring-green-400 text-white" placeholder="https://www.tiktok.com/@seu_usuario">
-                        </div>
-                        <div class="text-center">
-                            <button id="submit-button" type="submit" class="bg-white text-brand-secondary font-bold py-3 px-10 rounded-lg hover:bg-gray-200 transition duration-300 text-lg shadow-xl inline-block">Enviar Cadastro</button>
-                        </div>
-                    </form>
-                    <div id="form-feedback"></div>
-                </div>
-                <div id="success-message" class="hidden max-w-md mx-auto bg-green-100 border-l-4 border-green-500 text-green-700 p-6 rounded-md" role="alert">
-                    <p class="font-bold text-xl">Cadastro enviado com sucesso!</p>
-                    <p class="mt-2">Recebemos suas informações. Entraremos em contato em breve. Obrigado por se juntar à Supla Brazil!</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm py-8">
-        <div class="container mx-auto px-6 text-center text-gray-600 dark:text-slate-300">
-            <img src="https://iili.io/FlyBJF1.png" alt="Logo Supla Brazil" class="h-16 w-auto mx-auto mb-4">
-            <p class="font-bold text-brand-dark dark:text-white text-lg">Supla Brazil</p>
-            <p class="mt-4">&copy; <span id="year"></span> Supla Brazil. Todos os direitos reservados.</p>
-            <p class="text-sm mt-2">Construindo oportunidades na América do Sul.</p>
-        </div>
-    </footer>
-
-    <div id="notification-container"></div>
-
-    <button id="flash-offer-trigger" aria-label="Abrir oferta relâmpago">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5 5a3 3 0 015.252-2.121l.738.738a.75.75 0 01-1.06 1.06l-.738-.738A1.5 1.5 0 005 5zm4.242-2.121a3 3 0 014.243 4.242l-6.22 6.22a.75.75 0 01-1.06-1.06l6.22-6.22z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M3.105 8.35a.75.75 0 011.06-.02l.02.02 6.22 6.22a.75.75 0 01-1.06 1.06l-6.22-6.22a.75.75 0 01.02-1.06zM14.5 5a1.5 1.5 0 00-2.121-2.121l-.738.738a.75.75 0 01-1.06-1.06l.738-.738A3 3 0 0114.5 5z" clip-rule="evenodd" /></svg>
-    </button>
-
-    <div id="flash-offer-modal-backdrop">
-        <div id="flash-offer-modal" role="dialog" aria-modal="true" aria-labelledby="flash-offer-title">
-            <div class="flash-modal-header">
-                <div id="flash-icon-wrapper" class="flash-modal-icon-wrapper">
-                    <svg id="flash-icon-initial" class="flash-modal-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                    </svg>
-                </div>
-            </div>
-            <div id="flash-modal-content" class="p-6 text-center">
-                <h2 id="flash-offer-title" class="text-2xl font-bold text-brand-dark dark:text-white mt-2">Oferta VIP por Tempo Limitado!</h2>
-                <p id="flash-offer-text" class="text-gray-600 dark:text-slate-300 mt-2 mb-4">Entre no nosso <strong>Grupo VIP exclusivo</strong> e receba dicas de monetização antes de todo mundo. As vagas acabam em:</p>
-                <div id="flash-timer-container" class="flash-timer font-mono text-3xl font-bold p-3 rounded-lg my-4 inline-block">
-                    <span id="flash-minutes">07</span>:<span id="flash-seconds">00</span>
-                </div>
-                <button id="flash-offer-button" class="w-full bg-brand-secondary text-white font-bold py-3 px-10 rounded-lg hover:bg-brand-primary transition duration-300 text-lg shadow-xl">
-                    Quero Acesso VIP Agora!
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] }, colors: { 'brand-primary': '#4b833c', 'brand-secondary': '#5a9547', 'brand-light': '#abca8c', 'brand-dark': '#0b451f', 'brand-bg': '#f7fafc' } } } }
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer></script>
-    
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics.js";
-        import { getFirestore, doc, onSnapshot, updateDoc, increment, setDoc } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+        // Obtém referências aos elementos HTML
+        const gameContainer = document.getElementById('game-container');
+        const character = document.getElementById('character');
+        const scoreDisplay = document.getElementById('score-display');
+        const startScreen = document.getElementById('start-screen');
+        const startButton = document.getElementById('start-button');
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBqQO5AP6go1uPXX2VhB9xW6baqUazPpto",
-            authDomain: "supla-90570.firebaseapp.com",
-            projectId: "supla-90570",
-            storageBucket: "supla-90570.appspot.com",
-            messagingSenderId: "480812476139",
-            appId: "1:480812476139:web:83fc97923d0371adb6c0ae",
-            measurementId: "G-6MQHBZGJ56"
-        };
+        // URLs das imagens dos objetos "rolas"
+        const ROLA_IMAGES = [
+            'https://files.catbox.moe/n39c1e.png',
+            'https://files.catbox.moe/b9dyhd.png',
+            'https://files.catbox.moe/qkukmd.png'
+        ];
+        // URLs das imagens do personagem (boca aberta e fechada)
+        const CHARACTER_MOUTH_OPEN_IMAGE = 'https://files.catbox.moe/5dz13l.png';
+        const CHARACTER_MOUTH_CLOSED_IMAGE = 'https://files.catbox.moe/hjspq9.png';
 
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getFirestore(app);
+        let score = 0; // Pontuação inicial
+        let characterX = 0; // Posição X inicial do personagem (será calculada no load)
+        let rolas = []; // Array para armazenar os objetos "rola" caindo
+        let rolaGenerationInterval; // Variável para o intervalo de geração de rolas
+        let gameRunning = false; // Flag para controlar se o jogo está rodando
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const docEl = document.documentElement;
-            const body = document.body;
-            const header = document.getElementById('header');
-            const promoBanner = document.getElementById('promo-banner');
-            const themeToggle = document.getElementById('theme-toggle-switch');
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
+        // Variáveis para o controle de arrastar
+        let isDragging = false;
+        let touchStartX = 0;
+        let initialCharacterX = 0;
 
-            function adjustHeaderPosition() {
-                if (!promoBanner || !header) return;
-                const bannerHeight = promoBanner.offsetHeight;
-                header.style.top = `${bannerHeight}px`;
-                body.style.paddingTop = `${bannerHeight}px`;
+        // --- Funções de Inicialização ---
+
+        // Função para inicializar a posição do personagem
+        function initializeCharacterPosition() {
+            // Garante que o character.offsetWidth esteja disponível
+            // Se ainda não estiver renderizado, tenta novamente após um pequeno atraso
+            if (character.offsetWidth === 0) {
+                setTimeout(initializeCharacterPosition, 50);
+                return;
             }
+            characterX = (gameContainer.offsetWidth / 2) - (character.offsetWidth / 2);
+            character.style.left = `${characterX}px`;
+            character.style.backgroundImage = `url(${CHARACTER_MOUTH_CLOSED_IMAGE})`;
+        }
 
-            function setupTheme() {
-                const isDark = localStorage.getItem('theme') === 'dark' ||
-                               (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
-                
-                updateTheme(isDark);
+        // --- Início e Loop do Jogo ---
 
-                themeToggle.addEventListener('click', () => {
-                    const newIsDark = !docEl.classList.contains('dark');
-                    updateTheme(newIsDark);
-                    localStorage.setItem('theme', newIsDark ? 'dark' : 'light');
-                });
+        function startGame() {
+            score = 0; // Reseta a pontuação
+            scoreDisplay.textContent = `Rolas: ${score}`; // Atualiza o display da pontuação
+            rolas = []; // Limpa quaisquer rolas existentes
+            // Remove todos os elementos .rola do DOM, caso existam de uma partida anterior
+            document.querySelectorAll('.rola').forEach(rola => rola.remove());
+
+            startScreen.style.display = 'none'; // Esconde a tela de início
+            gameRunning = true; // Define o estado do jogo como rodando
+            initializeCharacterPosition(); // Garante que o personagem esteja no centro
+            gameLoop(); // Inicia o loop principal do jogo
+            // Inicia a geração de novas rolas a cada 1.0 segundos (um pouco mais rápido)
+            rolaGenerationInterval = setInterval(createRola, 1000);
+        }
+
+        // Adiciona um ouvinte de evento para o botão de iniciar
+        startButton.addEventListener('click', startGame);
+
+        // --- Controles de Teclado (para desktop) ---
+        document.addEventListener('keydown', (e) => {
+            if (!gameRunning) return;
+
+            const characterWidth = character.offsetWidth;
+            const gameContainerWidth = gameContainer.offsetWidth;
+            const moveSpeed = 30; // Velocidade de movimento do personagem para teclado
+
+            if (e.key === 'ArrowLeft' || e.key === 'a') {
+                characterX = Math.max(0, characterX - moveSpeed);
+            } else if (e.key === 'ArrowRight' || e.key === 'd') {
+                characterX = Math.min(gameContainerWidth - characterWidth, characterX + moveSpeed);
             }
+            character.style.left = `${characterX}px`;
+        });
 
-            function updateTheme(isDark) {
-                docEl.classList.toggle('dark', isDark);
-                themeToggle.setAttribute('aria-checked', isDark);
-                initParticles(isDark);
-            }
+        // --- Controles de Toque (para celular) ---
+        character.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Previne o comportamento padrão do toque (ex: rolagem)
+            if (!gameRunning) return;
+            isDragging = true;
+            touchStartX = e.touches[0].clientX;
+            initialCharacterX = characterX; // Armazena a posição inicial do personagem ao iniciar o arrasto
+        }, { passive: false }); // Usar { passive: false } para permitir preventDefault
 
-            function setupNavigation() {
-                mobileMenuButton.addEventListener('click', () => {
-                    const isExpanded = mobileMenu.classList.toggle('hidden');
-                    mobileMenuButton.setAttribute('aria-expanded', !isExpanded);
-                });
+        character.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (!isDragging || !gameRunning) return;
 
-                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                    anchor.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        const targetId = this.getAttribute('href');
-                        
-                        if (targetId === '#') {
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                            return;
-                        }
-                        
-                        const targetElement = document.querySelector(targetId);
-                        if (targetElement) {
-                            const headerHeight = header.offsetHeight;
-                            const bannerHeight = promoBanner.offsetHeight;
-                            const elementPosition = targetElement.getBoundingClientRect().top;
-                            const offsetPosition = elementPosition + window.pageYOffset - headerHeight - bannerHeight;
+            const currentTouchX = e.touches[0].clientX;
+            const deltaX = currentTouchX - touchStartX; // Calcula a diferença do arrasto
+            let newCharacterX = initialCharacterX + deltaX; // Aplica a diferença à posição inicial do personagem
 
-                            window.scrollTo({
-                                top: offsetPosition,
-                                behavior: 'smooth'
-                            });
-                            
-                            if (!mobileMenu.classList.contains('hidden')) {
-                                mobileMenu.classList.add('hidden');
-                                mobileMenuButton.setAttribute('aria-expanded', 'false');
-                            }
-                        }
-                    });
-                });
-            }
+            const characterWidth = character.offsetWidth;
+            const gameContainerWidth = gameContainer.offsetWidth;
 
-            function startMainCountdown() {
-                const countdownDate = new Date('2025-07-13T19:22:43-03:00').getTime();
-                const interval = setInterval(() => {
-                    const now = new Date().getTime();
-                    const distance = countdownDate - now;
+            // Limita o movimento do personagem dentro dos limites do contêiner do jogo
+            characterX = Math.max(0, Math.min(gameContainerWidth - characterWidth, newCharacterX));
+            character.style.left = `${characterX}px`;
+        }, { passive: false });
 
-                    if (distance < 0) {
-                        clearInterval(interval);
-                        promoBanner.innerHTML = "<div class='text-center text-lg font-bold p-3'>PROMOÇÃO ENCERRADA</div>";
-                        adjustHeaderPosition();
-                        return;
-                    }
-                    document.getElementById('days').textContent = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
-                    document.getElementById('hours').textContent = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-                    document.getElementById('minutes').textContent = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-                    document.getElementById('seconds').textContent = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
-                }, 1000);
-            }
+        character.addEventListener('touchend', () => {
+            isDragging = false;
+        });
 
-            function setupSocialProof() {
-                const icons = {
-                    signup: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full text-green-600"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.5 22.5a12.318 12.318 0 01-6.25-3.265z" /></svg>`,
-                    payout: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full text-brand-primary"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.826-1.106-2.156 0-2.982l.879-.659m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>`,
-                    milestone: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full text-amber-500"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9a9.75 9.75 0 01-9-9.75v-1.5a9.75 9.75 0 019-9.75h9a9.75 9.75 0 019 9.75v1.5a9.75 9.75 0 01-9 9.75z" /></svg>`,
-                    vip: `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-full h-full text-violet-500"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.572L16.5 21.75l-.398-1.178a3.375 3.375 0 00-2.986-2.986L12 17.25l1.178-.398a3.375 3.375 0 002.986-2.986L16.5 12.75l.398 1.178a3.375 3.375 0 002.986 2.986L21 17.25l-1.178.398a3.375 3.375 0 00-2.986 2.986z" /></svg>`,
-                };
+        // --- Criação de Rolas ---
 
-                const names = ["Amanda F.", "Lucas P.", "Mariana S.", "Beatriz L.", "Rafael M.", "Juliana C.", "Fernando G."];
-                const locations = ["de São Paulo", "do Rio de Janeiro", "de Minas Gerais", "da Bahia", "de Pernambuco"];
-                const actions = [
-                    { template: "acabou de se cadastrar", type: "signup", icon: icons.signup }, 
-                    { template: "sacou US$ {value}", type: "payout", icon: icons.payout },
-                    { template: "atingiu a meta de 100 cliques", type: "milestone", icon: icons.milestone },
-                    { template: "acaba de se tornar VIP", type: "vip", icon: icons.vip }
-                ];
-                
-                setInterval(() => {
-                    const name = names[Math.floor(Math.random() * names.length)];
-                    const location = locations[Math.floor(Math.random() * locations.length)];
-                    let action = actions[Math.floor(Math.random() * actions.length)];
-                    let messageText = action.template;
-                    
-                    if (action.type === "payout") {
-                        const value = (Math.random() * (250 - 20) + 20).toFixed(2);
-                        messageText = messageText.replace('{value}', `<strong>${value}</strong>`);
-                    }
-                    
-                    const fullMessage = `<div class="notification-icon">${action.icon}</div><span class="notification-text"><strong>${name}</strong> ${location} ${messageText}</span>`;
-                    const container = document.getElementById('notification-container');
-                    const notification = document.createElement('div');
-                    notification.className = 'notification-popup';
-                    notification.innerHTML = fullMessage;
-                    
-                    container.appendChild(notification);
-                    setTimeout(() => notification.classList.add('show'), 100);
-                    setTimeout(() => { notification.classList.remove('show'); notification.classList.add('hide'); }, 5000);
-                    setTimeout(() => notification.remove(), 5500);
-                }, Math.random() * 6000 + 8000);
-            }
+        function createRola() {
+            const rola = document.createElement('div'); // Cria um novo elemento div
+            rola.classList.add('rola'); // Adiciona a classe 'rola' para aplicar os estilos CSS
+            // Define a imagem de fundo da rola aleatoriamente a partir das URLs fornecidas
+            rola.style.backgroundImage = `url(${ROLA_IMAGES[Math.floor(Math.random() * ROLA_IMAGES.length)]})`;
 
-            function setupFlashOffer() {
-                const flashTrigger = document.getElementById('flash-offer-trigger');
-                const flashBackdrop = document.getElementById('flash-offer-modal-backdrop');
-                const flashModal = document.getElementById('flash-offer-modal');
-                const flashButton = document.getElementById('flash-offer-button');
-                const flashOfferTitle = document.getElementById('flash-offer-title');
-                const flashOfferText = document.getElementById('flash-offer-text');
-                const flashTimerContainer = document.getElementById('flash-timer-container');
-                const flashIconWrapper = document.getElementById('flash-icon-wrapper');
-                let flashInterval;
+            // Largura da rola (usa o valor do CSS ou padrão)
+            const rolaWidth = rola.offsetWidth || 130;
+            // Define uma posição X inicial aleatória para a rola
+            rola.x = Math.random() * (gameContainer.offsetWidth - rolaWidth);
+            rola.y = -rolaWidth; // Inicia a rola acima do contêiner do jogo
 
-                function updateFlashTimer() {
-                    const endTime = localStorage.getItem('flashOfferEndTime');
-                    if (!endTime) return;
-                    const distance = +endTime - new Date().getTime();
-                    
-                    if (distance < 0) {
-                        clearInterval(flashInterval);
-                        document.getElementById('flash-minutes').textContent = "00";
-                        document.getElementById('flash-seconds').textContent = "00";
-                        flashButton.disabled = true;
-                        flashButton.textContent = "Oferta Expirada";
-                        flashOfferText.innerHTML = "Infelizmente o tempo acabou. Fique de olho para futuras oportunidades!";
-                        return;
-                    }
-                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                    document.getElementById('flash-minutes').textContent = String(minutes).padStart(2, '0');
-                    document.getElementById('flash-seconds').textContent = String(seconds).padStart(2, '0');
-                }
+            rola.style.left = `${rola.x}px`;
+            rola.style.top = `${rola.y}px`;
 
-                function openFlashModal() {
-                    let endTime = localStorage.getItem('flashOfferEndTime');
-                    if (!endTime || +endTime < new Date().getTime()) {
-                        endTime = new Date().getTime() + 7 * 60 * 1000;
-                        localStorage.setItem('flashOfferEndTime', endTime);
-                    }
-                    flashBackdrop.classList.add('visible');
-                    flashModal.classList.add('visible');
-                    clearInterval(flashInterval);
-                    updateFlashTimer();
-                    flashInterval = setInterval(updateFlashTimer, 1000);
-                    trapFocus(flashModal);
-                }
+            // Define uma velocidade de queda aleatória para cada rola
+            rola.speed = 5 + Math.random() * 2; // Velocidade entre 5 e 7 (ainda mais rápido)
 
-                function closeFlashModal() {
-                    flashBackdrop.classList.remove('visible');
-                    flashModal.classList.remove('visible');
-                    clearInterval(flashInterval);
-                    releaseFocus();
-                }
+            gameContainer.appendChild(rola); // Adiciona a rola ao contêiner do jogo
+            rolas.push(rola); // Adiciona a rola ao array de rolas ativas
+        }
 
-                flashTrigger.addEventListener('click', openFlashModal);
-                flashBackdrop.addEventListener('click', (e) => {
-                    if (e.target === flashBackdrop) {
-                        closeFlashModal();
-                    }
-                });
-                
-                flashButton.addEventListener('click', () => {
-                    flashButton.disabled = true;
-                    flashButton.textContent = 'Confirmando...';
+        // --- Loop Principal do Jogo ---
+
+        function gameLoop() {
+            if (!gameRunning) return; // Se o jogo não estiver rodando, para o loop
+
+            const gameContainerHeight = gameContainer.offsetHeight;
+            const characterHeight = character.offsetHeight;
+            const characterWidth = character.offsetWidth;
+            const characterBottom = gameContainerHeight - 60; // Posição inferior do personagem (ajustada pela bottom do CSS)
+            const characterTop = characterBottom - characterHeight; // Posição superior do personagem
+
+            // Itera sobre as rolas de trás para frente para evitar problemas ao remover elementos
+            for (let i = rolas.length - 1; i >= 0; i--) {
+                const rola = rolas[i];
+                rola.y += rola.speed; // Atualiza a posição Y da rola (faz ela cair)
+                rola.style.top = `${rola.y}px`; // Atualiza a posição da rola no DOM
+
+                // --- Detecção de Colisão ---
+                // Obtém as dimensões e posições da rola
+                const rolaLeft = rola.x;
+                const rolaRight = rola.x + (rola.offsetWidth || 130); // Usa o offsetWidth ou padrão
+                const rolaTop = rola.y;
+                const rolaBottom = rola.y + (rola.offsetHeight || 130); // Usa o offsetHeight ou padrão
+
+                // Detecção de colisão AABB (Axis-Aligned Bounding Box)
+                if (rolaRight > characterX &&
+                    rolaLeft < (characterX + characterWidth) &&
+                    rolaBottom > characterTop &&
+                    rolaTop < characterBottom) {
+                    // Colisão detectada!
+                    score++; // Incrementa a pontuação
+                    scoreDisplay.textContent = `Rolas: ${score}`; // Atualiza o display da pontuação
+                    rola.remove(); // Remove a rola do DOM
+                    rolas.splice(i, 1); // Remove a rola do array
+
+                    // Animação da boca do personagem e efeito de "salto"
+                    character.style.backgroundImage = `url(${CHARACTER_MOUTH_OPEN_IMAGE})`; // Abre a boca
+                    character.classList.add('character-eating'); // Adiciona classe para o efeito de "salto"
 
                     setTimeout(() => {
-                        flashIconWrapper.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="flash-modal-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`;
-                        flashOfferTitle.textContent = "Acesso VIP Garantido!";
-                        flashOfferText.innerHTML = "Ótima escolha! Fique de olho no seu e-mail de cadastro para receber as instruções exclusivas.";
-                        flashTimerContainer.style.display = 'none';
-                        flashButton.style.display = 'none';
+                        character.style.backgroundImage = `url(${CHARACTER_MOUTH_CLOSED_IMAGE})`; // Fecha a boca
+                        character.classList.remove('character-eating'); // Remove classe do efeito de "salto"
+                    }, 200); // Boca aberta e efeito por 200ms
+                }
 
-                        setTimeout(closeFlashModal, 3000);
-                    }, 500);
-                });
-            }
-            
-            let lastFocusedElement;
-            function trapFocus(element) {
-                const focusableEls = element.querySelectorAll('a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])');
-                const firstFocusableEl = focusableEls[0];
-                const lastFocusableEl = focusableEls[focusableEls.length - 1];
-                lastFocusedElement = document.activeElement;
-                
-                element.addEventListener('keydown', function(e) {
-                    const isTabPressed = (e.key === 'Tab' || e.keyCode === 9);
-                    if (!isTabPressed) return;
-
-                    if (e.shiftKey) { 
-                        if (document.activeElement === firstFocusableEl) {
-                            lastFocusableEl.focus();
-                            e.preventDefault();
-                        }
-                    } else {
-                        if (document.activeElement === lastFocusableEl) {
-                            firstFocusableEl.focus();
-                            e.preventDefault();
-                        }
-                    }
-                });
-                if (firstFocusableEl) {
-                    firstFocusableEl.focus();
+                // Remove a rola se ela sair da tela (atingir a parte inferior)
+                if (rola.y > gameContainerHeight) {
+                    rola.remove(); // Remove do DOM
+                    rolas.splice(i, 1); // Remove do array
+                    // Opcional: Adicionar lógica de "Game Over" aqui se rolas escaparem
                 }
             }
 
-            function releaseFocus() {
-                if(lastFocusedElement) lastFocusedElement.focus();
-            }
-            
-            function setupAnimatedLiveCounters() {
-                const statsContainer = document.getElementById('stats-container');
-                if (!statsContainer) return;
+            // Solicita o próximo quadro de animação (loop contínuo)
+            requestAnimationFrame(gameLoop);
+        }
 
-                const countersRef = doc(db, "supla_stats", "live_counters");
-                const requestsCounterEl = document.getElementById('requests-counter');
-                const influencersCounterEl = document.getElementById('influencers-counter');
-                const paymentsCounterEl = document.getElementById('payments-counter');
+        // --- Eventos de Carregamento e Redimensionamento ---
 
-                let latestStats = {
-                    requests: 0,
-                    influencers: 0,
-                    payments: 0
-                };
-                
-                let hasAnimated = false;
-                let incrementsStarted = false;
-
-                function animateCounter(element, start, end, duration, isCurrency) {
-                    let startTime = null;
-                    const step = (timestamp) => {
-                        if (!startTime) startTime = timestamp;
-                        const progress = Math.min((timestamp - startTime) / duration, 1);
-                        const currentValue = Math.floor(progress * (end - start) + start);
-                        element.textContent = (isCurrency ? 'US$ ' : '') + currentValue.toLocaleString('pt-BR');
-                        if (progress < 1) {
-                            requestAnimationFrame(step);
-                        } else {
-                           element.textContent = (isCurrency ? 'US$ ' : '') + end.toLocaleString('pt-BR');
-                        }
-                    };
-                    requestAnimationFrame(step);
-                }
-
-                function startFirestoreIncrements() {
-                    if (incrementsStarted) return;
-                    incrementsStarted = true;
-
-                    setInterval(() => {
-                        const incrementValue = Math.floor(Math.random() * 2) + 1;
-                        updateDoc(countersRef, { requests: increment(incrementValue) }).catch(()=>{});
-                    }, Math.random() * 15000 + 15000); 
-
-                    setInterval(() => {
-                        updateDoc(countersRef, { influencers: increment(1) }).catch(()=>{});
-                    }, Math.random() * 30000 + 30000);
-
-                    setInterval(() => {
-                        const incrementValue = Math.random() * 30 + 20;
-                        updateDoc(countersRef, { payments: increment(incrementValue) }).catch(()=>{});
-                    }, Math.random() * 15000 + 10000);
-                }
-
-                onSnapshot(countersRef, (docSnap) => {
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        latestStats.requests = Math.floor(data.requests);
-                        latestStats.influencers = Math.floor(data.influencers);
-                        latestStats.payments = Math.floor(data.payments);
-
-                        if (hasAnimated) {
-                            requestsCounterEl.textContent = latestStats.requests.toLocaleString('pt-BR');
-                            influencersCounterEl.textContent = latestStats.influencers.toLocaleString('pt-BR');
-                            paymentsCounterEl.textContent = 'US$ ' + latestStats.payments.toLocaleString('pt-BR');
-                        }
-                    } else {
-                        const initialData = {
-                            requests: parseInt(requestsCounterEl.dataset.initial, 10),
-                            influencers: parseInt(influencersCounterEl.dataset.initial, 10),
-                            payments: parseInt(paymentsCounterEl.dataset.initial, 10)
-                        };
-                        setDoc(countersRef, initialData).catch(e => console.error("Error creating counters doc:", e));
-                    }
-                }, (error) => {
-                    console.error("Error listening to Firestore:", error);
-                });
-
-                const observer = new IntersectionObserver((entries, obs) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting && !hasAnimated) {
-                            hasAnimated = true;
-                            
-                            animateCounter(requestsCounterEl, 0, latestStats.requests, 2000, false);
-                            animateCounter(influencersCounterEl, 0, latestStats.influencers, 2000, false);
-                            animateCounter(paymentsCounterEl, 0, latestStats.payments, 2000, true);
-                            
-                            startFirestoreIncrements();
-                            obs.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.5 });
-
-                observer.observe(statsContainer);
-            }
-
-            function setupFaq() {
-                const faqContainer = document.querySelector('#faq');
-                if (!faqContainer) return;
-
-                faqContainer.addEventListener('click', (e) => {
-                    const toggle = e.target.closest('.faq-toggle');
-                    if (!toggle) return;
-
-                    const content = document.getElementById(toggle.getAttribute('aria-controls'));
-                    const icon = toggle.querySelector('.faq-icon');
-                    const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-
-                    faqContainer.querySelectorAll('.faq-toggle').forEach(otherToggle => {
-                        if (otherToggle !== toggle) {
-                            document.getElementById(otherToggle.getAttribute('aria-controls')).classList.add('hidden');
-                            otherToggle.setAttribute('aria-expanded', 'false');
-                            otherToggle.querySelector('.faq-icon').textContent = '+';
-                        }
-                    });
-
-                    content.classList.toggle('hidden');
-                    toggle.setAttribute('aria-expanded', !isExpanded);
-                    icon.textContent = !isExpanded ? '−' : '+';
-                });
-            }
-
-            function setupForm() {
-                const form = document.getElementById('contact-form');
-                if (!form) return;
-
-                form.addEventListener('submit', function (e) {
-                    e.preventDefault();
-                    const submitButton = document.getElementById('submit-button');
-                    const formWrapper = document.getElementById('form-wrapper');
-                    const successMessage = document.getElementById('success-message');
-                    const feedbackContainer = document.getElementById('form-feedback');
-                    
-                    submitButton.textContent = 'Enviando...';
-                    submitButton.disabled = true;
-                    
-                    const formData = new FormData(form);
-                    const object = Object.fromEntries(formData);
-                    const json = JSON.stringify(object);
-                    feedbackContainer.innerHTML = '';
-
-                    fetch('https://api.web3forms.com/submit', { 
-                        method: 'POST', 
-                        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, 
-                        body: json 
-                    })
-                    .then(async (response) => {
-                        let jsonResponse = await response.json();
-                        if (response.status == 200) {
-                            formWrapper.classList.add('hidden');
-                            successMessage.classList.remove('hidden');
-                        } else {
-                            feedbackContainer.innerHTML = `<p class="text-red-400 mt-4">${jsonResponse.message || 'Algo deu errado. Tente novamente.'}</p>`;
-                            submitButton.textContent = 'Enviar Cadastro';
-                            submitButton.disabled = false;
-                        }
-                    })
-                    .catch(error => {
-                        feedbackContainer.innerHTML = `<p class="text-red-400 mt-4">Ocorreu um erro de conexão. Verifique sua internet e tente novamente.</p>`;
-                        submitButton.textContent = 'Enviar Cadastro';
-                        submitButton.disabled = false;
-                    });
-                });
-            }
-
-            function initParticles(isDark) {
-                if (typeof particlesJS === 'undefined') return;
-                const particleColor = isDark ? "#6ee7b7" : "#5a9547";
-                const lineColor = isDark ? "#334155" : "#abca8c";
-                particlesJS('particles-js', { particles: { number: { value: 60 }, color: { value: particleColor }, shape: { type: "circle" }, opacity: { value: 0.5, random: false }, size: { value: 3, random: true }, line_linked: { enable: true, distance: 150, color: lineColor, opacity: 0.4, width: 1 }, move: { enable: true, speed: 2, direction: "none", out_mode: "out" } }, interactivity: { detect_on: "canvas", events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: true, mode: "push" }, resize: true }, modes: { grab: { distance: 140, line_linked: { opacity: 1 } }, push: { particles_nb: 4 } } }, retina_detect: true });
-            }
-
-            function init() {
-                adjustHeaderPosition();
-                setupTheme();
-                setupNavigation();
-                startMainCountdown();
-                setupSocialProof();
-                setupFlashOffer();
-                setupAnimatedLiveCounters();
-                setupFaq();
-                setupForm();
-                document.getElementById('year').textContent = new Date().getFullYear();
-                
-                const fadeInObserver = new IntersectionObserver((entries, obs) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('visible');
-                            obs.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.1 });
-                document.querySelectorAll('.fade-in').forEach(el => fadeInObserver.observe(el));
-                
-                window.addEventListener('resize', adjustHeaderPosition);
-            }
-
-            init();
+        // Inicializa a posição do personagem após o carregamento da janela
+        window.addEventListener('load', () => {
+            initializeCharacterPosition();
         });
-    </script>
 
+        // Lida com o redimensionamento da janela para manter o jogo responsivo
+        window.addEventListener('resize', () => {
+            initializeCharacterPosition(); // Recalcula a posição do personagem
+
+            // Ajusta a posição das rolas se elas ficarem fora dos limites horizontais após o redimensionamento
+            rolas.forEach(rola => {
+                const rolaWidth = rola.offsetWidth || 130; // Usa o offsetWidth ou padrão
+                if (rola.x + rolaWidth > gameContainer.offsetWidth) {
+                    rola.x = gameContainer.offsetWidth - rolaWidth;
+                    rola.style.left = `${rola.x}px`;
+                }
+            });
+        });
+
+    </script>
 </body>
 </html>
