@@ -3,799 +3,443 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comedor de Rolas</title>
+    <title>Pica-Man</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <!-- Tone.js para geração de áudio -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
     <style>
-        /* Estilos gerais do corpo da página */
         body {
             margin: 0;
-            overflow: hidden; /* Esconde as barras de rolagem */
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Garante que o corpo ocupe a altura total da viewport */
-            background: linear-gradient(135deg, #4b0082 0%, #8a2be2 100%); /* Gradiente de fundo roxo escuro */
-            font-family: 'Inter', sans-serif; /* Fonte moderna e limpa */
+            /* Usar 100dvh para garantir que a altura da viewport dinâmica seja usada,
+               considerando as barras de navegação do navegador */
+            min-height: 100dvh; 
+            background: linear-gradient(135deg, #0a0a2a 0%, #3a3a7a 100%);
+            font-family: 'Inter', sans-serif;
             color: white;
-            flex-direction: column; /* Organiza os elementos verticalmente */
-            position: relative;
+            flex-direction: column;
+            overflow: hidden; /* Evita barras de rolagem */
         }
 
-        /* Estilos do contêiner principal do jogo */
         #game-container {
             position: relative;
-            width: 95%; /* Largura responsiva, maior para celular */
-            max-width: 900px; /* Largura máxima para tablets/desktops */
-            height: 900px; /* Altura da área do jogo AUMENTADA */
-            background-color: #333; /* Fundo escuro para o jogo */
-            border-radius: 30px; /* Cantos mais arredondados */
-            overflow: hidden; /* Importante para que os objetos caindo não saiam da área visível */
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); /* Sombra mais pronunciada e escura */
-            border: 12px solid #ff69b4; /* Borda grossa e rosa choque */
+            background-color: #000; /* Fundo do labirinto */
+            border: 5px solid #fff; /* Borda do jogo */
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5); /* Sombra neon azul */
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
-            /* Fundo do jogo com a imagem fornecida */
-            background-image: url('https://iili.io/FUu2yhv.jpg'); /* Link do cenário atualizado */
-            background-size: cover; /* Garante que a imagem cubra todo o contêiner */
-            background-position: center;
-            background-repeat: no-repeat;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            box-sizing: border-box;
+            max-width: 90%; /* Largura máxima responsiva */
+            /* Altura ajustada para caber na tela, subtraindo espaço para o score */
+            height: calc(100dvh - 80px); 
         }
 
-        /* Estilos da tela de início do jogo */
+        canvas {
+            background-color: #000;
+            display: block;
+            border-radius: 5px;
+            touch-action: none; /* Desabilita o comportamento padrão de toque para evitar rolagem */
+        }
+
+        #score-display {
+            font-size: 2em;
+            font-weight: bold;
+            color: #FFD700;
+            margin-top: 10px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+            white-space: nowrap;
+        }
+
         #start-screen {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.98); /* Fundo quase opaco */
+            background-color: rgba(0, 0, 0, 0.95);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 100; /* Garante que fique acima de outros elementos */
-            border-radius: 25px;
+            z-index: 100;
+            border-radius: 10px;
             text-align: center;
         }
 
-        /* Estilos do título na tela de início */
         #start-screen h1 {
-            font-size: 5em; /* Título ainda maior */
-            margin-bottom: 50px;
-            color: #FFD700; /* Cor dourada */
-            text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.9); /* Sombra mais forte no texto */
-            letter-spacing: 4px; /* Espaçamento entre letras */
-            text-transform: uppercase;
-            font-weight: 900; /* Mais negrito */
-        }
-
-        /* Estilos do botão de iniciar */
-        #start-button {
-            padding: 30px 60px; /* Botão ainda maior */
-            font-size: 3em; /* Texto maior no botão */
-            background: linear-gradient(145deg, #ff1493, #ff69b4); /* Gradiente de rosa profundo */
-            color: white;
-            border: none;
-            border-radius: 25px; /* Cantos mais arredondados */
-            cursor: pointer;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
-            transition: all 0.3s ease; /* Transição suave para efeitos de hover */
-            text-transform: uppercase; /* Texto em maiúsculas */
-            letter-spacing: 2px;
-            font-weight: bold;
-        }
-
-        /* Efeito de hover no botão de iniciar */
-        #start-button:hover {
-            transform: translateY(-10px); /* Move o botão ligeiramente para cima */
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); /* Sombra maior */
-            background: linear-gradient(145deg, #ff69b4, #ff1493); /* Inverte o gradiente no hover */
-        }
-
-        /* Estilos do display de pontuação */
-        #score-display {
-            position: absolute;
-            top: 35px;
-            left: 35px;
-            font-size: 3.5em; /* Pontuação ainda maior */
-            font-weight: bold;
-            color: #FFD700; /* Cor dourada para a pontuação */
-            text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
-            z-index: 10;
-        }
-
-        /* Estilos do display de vidas */
-        #lives-display {
-            position: absolute;
-            top: 35px;
-            right: 35px;
-            font-size: 3.5em; /* Vidas ainda maior */
-            font-weight: bold;
-            color: #FFD700; /* Cor dourada para as vidas */
-            text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.8);
-            z-index: 10;
-        }
-
-        /* Estilos do personagem principal */
-        #character {
-            position: absolute;
-            bottom: 70px; /* Posição do personagem na parte inferior, mais acima */
-            width: 150px; /* Largura do personagem DIMINUIDA */
-            height: 150px; /* Altura do personagem DIMINUIDA */
-            background-size: contain; /* Ajusta a imagem para caber no elemento */
-            background-repeat: no-repeat;
-            background-position: center;
-            /* Transição para imagem e transformação (para o efeito de "salto") */
-            transition: background-image 0.1s ease-in-out, transform 0.15s ease-out;
-            z-index: 5; /* Personagem acima dos objetos caindo */
-            cursor: grab; /* Indica que o elemento pode ser arrastado */
-        }
-
-        /* Animação para o efeito de "comer" (salto e leve escala) */
-        @keyframes eatAnimation {
-            0% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-5px) scale(1.01); } /* Salta menos e aumenta bem pouco */
-            100% { transform: translateY(0) scale(1); }
-        }
-
-        /* Classe para ativar a animação de comer */
-        .character-eating {
-            animation: eatAnimation 0.3s ease-out; /* Duração da animação de comer */
-        }
-
-        /* Estilos para os objetos "rola" caindo */
-        .rola {
-            position: absolute;
-            width: 100px; /* Largura da rola DIMINUIDA */
-            height: 100px; /* Altura da rola DIMINUIDA */
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            z-index: 4; /* Rolas abaixo do personagem */
-            animation: rotate 3s linear infinite; /* Animação de rotação mais lenta */
-        }
-
-        /* Estilos para o novo objeto de penalidade */
-        .penalty-object {
-            position: absolute;
-            width: 100px; /* Mesma largura das rolas DIMINUIDA */
-            height: 100px; /* Mesma altura das rolas DIMINUIDA */
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            z-index: 4; /* Objeto de penalidade abaixo do personagem */
-            animation: rotate 3s linear infinite; /* Animação de rotação */
-            filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.7)); /* Sombra vermelha para destacar perigo */
-        }
-
-        /* Animação de rotação para os objetos */
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* Oculta os controles móveis (setas) que não são mais necessários */
-        #mobile-controls {
-            display: none;
-        }
-
-        /* Estilos da tela de fim de jogo */
-        #game-over-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.98); /* Fundo quase opaco */
-            display: none; /* Escondido por padrão */
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 101; /* Acima de tudo */
-            border-radius: 25px;
-            text-align: center;
-        }
-
-        #game-over-screen h2 {
             font-size: 4em;
             margin-bottom: 30px;
-            color: #FFD700;
-            text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.9);
-            letter-spacing: 4px;
+            color: #00FFFF; /* Ciano neon */
+            text-shadow: 0 0 15px #00FFFF, 0 0 25px #00FFFF; /* Efeito neon */
+            letter-spacing: 3px;
             text-transform: uppercase;
             font-weight: 900;
         }
 
-        #game-over-screen p {
-            font-size: 2.5em;
-            color: white;
-            margin-bottom: 40px;
-        }
-
-        #restart-button {
+        #start-button {
             padding: 20px 40px;
-            font-size: 2.5em;
-            background: linear-gradient(145deg, #ff1493, #ff69b4);
-            color: white;
+            font-size: 2em;
+            background: linear-gradient(145deg, #00FFFF, #00BFFF); /* Gradiente azul-ciano */
+            color: #0a0a2a; /* Texto escuro para contraste */
             border: none;
-            border-radius: 25px;
+            border-radius: 15px;
             cursor: pointer;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
+            box-shadow: 0 8px 20px rgba(0, 255, 255, 0.5);
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             font-weight: bold;
         }
 
-        #restart-button:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
-            background: linear-gradient(145deg, #ff69b4, #ff1493);
+        #start-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 255, 255, 0.7);
+            background: linear-gradient(145deg, #00BFFF, #00FFFF);
         }
 
-        /* Estilos da tela de seleção de jogo */
-        #main-menu {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.98);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 102; /* Acima de tudo */
-            border-radius: 25px;
-            text-align: center;
+        /* Controles de toque para mobile (REMOVIDOS DO HTML, então estes estilos não são mais necessários) */
+        #mobile-controls {
+            display: none; 
         }
 
-        #main-menu h1 {
-            font-size: 4em;
-            margin-bottom: 60px;
-            color: #FFD700;
-            text-shadow: 5px 5px 10px rgba(0, 0, 0, 0.9);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-weight: 900;
-        }
-
-        .menu-button {
-            padding: 25px 50px;
-            font-size: 2.5em;
-            background: linear-gradient(145deg, #ff1493, #ff69b4);
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-weight: bold;
-            margin: 20px;
-            min-width: 300px; /* Garante largura mínima para os botões */
-        }
-
-        .menu-button:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7);
-            background: linear-gradient(145deg, #ff69b4, #ff1493);
-        }
-
-        /* Oculta o wrapper do jogo por padrão, será exibido via JS */
-        #cai-rola-game-wrapper {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* Ajustes responsivos para telas menores (tablets) */
+        /* Ajustes responsivos */
         @media (max-width: 768px) {
             #game-container {
-                width: 95%;
-                height: 80vh; /* Altura responsiva para tablets */
+                padding: 5px;
+                height: calc(100dvh - 60px); /* Ajuste para tablets */
             }
             #start-screen h1 {
-                font-size: 3.5em;
-            }
-            #start-button {
-                padding: 18px 35px;
-                font-size: 1.8em;
-            }
-            #score-display, #lives-display {
-                font-size: 2.2em;
-                top: 20px; /* Ajuste a posição para telas menores */
-            }
-            #character {
-                width: 120px; /* Reduzido para tablets */
-                height: 120px; /* Reduzido para tablets */
-                bottom: 50px;
-            }
-            .rola, .penalty-object {
-                width: 80px; /* Reduzido para tablets */
-                height: 80px; /* Reduzido para tablets */
-            }
-            #game-over-screen h2 {
                 font-size: 3em;
             }
-            #game-over-screen p {
-                font-size: 1.8em;
-            }
-            #restart-button {
-                padding: 12px 25px;
-                font-size: 1.8em;
-            }
-            #main-menu h1 {
-                font-size: 3em;
-            }
-            .menu-button {
-                padding: 20px 40px;
-                font-size: 2em;
-                min-width: 250px;
-            }
-        }
-
-        /* Ajustes responsivos para telas muito pequenas (smartphones) */
-        @media (max-width: 480px) {
-            #game-container {
-                height: 85vh; /* Altura responsiva para smartphones */
-                border-radius: 20px;
-            }
-            #start-screen h1 {
-                font-size: 2.8em;
-            }
             #start-button {
-                padding: 12px 25px;
+                padding: 15px 30px;
                 font-size: 1.5em;
             }
             #score-display {
-                font-size: 1.5em; /* Fonte menor para caber na tela */
-                top: 15px;
-                left: 15px;
+                font-size: 1.5em;
             }
-            #lives-display {
-                font-size: 1.5em; /* Fonte menor para caber na tela */
-                top: 15px;
-                right: 15px;
+        }
+
+        @media (max-width: 480px) {
+            #game-container {
+                width: 98%;
+                height: calc(100dvh - 40px); /* Mais agressivo para smartphones */
             }
-            #character {
-                width: 90px; /* Reduzido para smartphones */
-                height: 90px; /* Reduzido para smartphones */
-                bottom: 30px;
-            }
-            .rola, .penalty-object {
-                width: 60px; /* Reduzido para smartphones */
-                height: 60px; /* Reduzido para smartphones */
-            }
-            #game-over-screen h2 {
+            #start-screen h1 {
                 font-size: 2.5em;
             }
-            #game-over-screen p {
-                font-size: 1.2em;
-            }
-            #restart-button {
+            #start-button {
                 padding: 10px 20px;
                 font-size: 1.2em;
             }
-            #main-menu h1 {
-                font-size: 2.5em;
-            }
-            .menu-button {
-                padding: 15px 30px;
-                font-size: 1.5em;
-                min-width: 200px;
+            #score-display {
+                font-size: 1.2em;
             }
         }
     </style>
 </head>
 <body>
     <div id="game-container">
-        <!-- Tela de seleção de jogo (Menu Principal) -->
-        <div id="main-menu">
-            <h1>Escolha seu Jogo</h1>
-            <button id="cai-rola-button" class="menu-button">CAI ROLA</button>
-            <button id="pica-man-button" class="menu-button">PICA-MAN (Em Breve)</button>
+        <canvas id="gameCanvas"></canvas>
+        <div id="score-display">Pontos: 0</div>
+
+        <!-- Tela de início -->
+        <div id="start-screen">
+            <h1>Pica-Man</h1>
+            <button id="start-button">Iniciar Jogo</button>
         </div>
 
-        <!-- Wrapper para o jogo "CAI ROLA" -->
-        <div id="cai-rola-game-wrapper">
-            <!-- Tela de início do jogo "CAI ROLA" -->
-            <div id="start-screen">
-                <h1>Comedor de Rolas</h1>
-                <button id="start-button">Iniciar Jogo</button>
-            </div>
-            <!-- Display de pontuação -->
-            <div id="score-display">Rolas: 0</div>
-            <!-- Display de vidas -->
-            <div id="lives-display">Vidas: 3</div>
-            <!-- Personagem principal -->
-            <div id="character"></div>
-            <!-- Tela de Fim de Jogo -->
-            <div id="game-over-screen">
-                <h2>Fim de Jogo!</h2>
-                <p id="final-score">Sua Pontuação Final: 0</p>
-                <button id="restart-button">Jogar Novamente</button>
-            </div>
-        </div>
+        <!-- Controles de toque para mobile (REMOVIDOS) -->
+        <!-- <div id="mobile-controls">
+            <div class="mobile-button" id="up-button">⬆️</div>
+            <div class="mobile-button" id="left-button">⬅️</div>
+            <div class="mobile-button" id="down-button">⬇️</div>
+            <div class="mobile-button" id="right-button">➡️</div>
+        </div> -->
     </div>
 
     <script>
-        // --- Referências aos Elementos HTML ---
-        const gameContainer = document.getElementById('game-container');
-        const character = document.getElementById('character');
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
         const scoreDisplay = document.getElementById('score-display');
-        const livesDisplay = document.getElementById('lives-display');
-        const startScreen = document.getElementById('start-screen'); // Tela de início do Cai Rola
+        const startScreen = document.getElementById('start-screen');
         const startButton = document.getElementById('start-button');
-        const gameOverScreen = document.getElementById('game-over-screen');
-        const finalScoreDisplay = document.getElementById('final-score');
-        const restartButton = document.getElementById('restart-button');
 
-        // Elementos do Menu Principal
-        const mainMenu = document.getElementById('main-menu');
-        const caiRolaButton = document.getElementById('cai-rola-button');
-        const picaManButton = document.getElementById('pica-man-button');
-        const caiRolaGameWrapper = document.getElementById('cai-rola-game-wrapper');
+        const TILE_SIZE = 40; // Tamanho de cada célula do labirinto (em pixels)
+        const MOVEMENT_SPEED = 4; // Velocidade de movimento do Pica-Man (pixels por frame)
 
-        // --- URLs das Imagens ---
-        const ROLA_IMAGES = [
-            'https://files.catbox.moe/n39c1e.png', // Rola 1
-            'https://files.catbox.moe/qkukmd.png'  // Rola 3
-        ];
-        const PENALTY_IMAGE_URL = 'https://files.catbox.moe/0c0ea9.png'; // NOVA IMAGEM DE PENALIDADE
-
-        const CHARACTER_MOUTH_OPEN_IMAGE = 'https://files.catbox.moe/5dz13l.png';
-        const CHARACTER_MOUTH_CLOSED_IMAGE = 'https://files.catbox.moe/hjspq9.png';
-
-        // --- Variáveis de Jogo ---
-        let score = 0;
-        let lives = 3;
-        let characterX = 0;
-        let rolas = []; // Array para armazenar os objetos caindo (incluindo penalidades)
-        let rolaGenerationInterval;
         let gameRunning = false;
-        let gameOver = false;
+        let score = 0;
 
-        // Variáveis para o controle de arrastar
-        let isDragging = false;
+        // Definição do labirinto (0 = caminho, 1 = parede, 2 = ponto)
+        // Labirinto mais complexo para permitir viradas
+        const maze = [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1],
+            [1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1],
+            [1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1],
+            [1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1],
+            [1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1],
+            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+        ];
+
+        // Pica-Man properties
+        let picaMan = {
+            x: 1 * TILE_SIZE + TILE_SIZE / 2, // Posição X em pixels (centro da célula)
+            y: 1 * TILE_SIZE + TILE_SIZE / 2, // Posição Y em pixels (centro da célula)
+            gridX: 1, // Posição X na grade do labirinto
+            gridY: 1, // Posição Y na grade do labirinto
+            currentDirX: 0, // Direção de movimento X atual
+            currentDirY: 0, // Direção de movimento Y atual
+            nextDirX: 0, // Próxima direção desejada pelo jogador (fila)
+            nextDirY: 0, // Próxima direção desejada pelo jogador (fila)
+            radius: TILE_SIZE / 2 - 5, // Raio do Pica-Man
+            color: 'yellow'
+        };
+
+        // Variáveis para controle de toque
         let touchStartX = 0;
-        let initialCharacterX = 0;
+        let touchStartY = 0;
 
-        // --- Configuração de Áudio com Tone.js ---
-        let collectSynth;
-        let penaltySynth;
-
-        function setupAudio() {
-            // Sintetizador para o som de coleta (gemido suave)
-            collectSynth = new Tone.Synth({
-                oscillator: {
-                    type: "sine"
-                },
-                envelope: {
-                    attack: 0.5, // Ataque suave
-                    decay: 0.1,
-                    sustain: 0.8, // Sustenta o som
-                    release: 0.5 // Liberação suave
-                },
-                volume: -10 // Volume um pouco mais baixo
-            }).toDestination();
-
-            // Adiciona um vibrato sutil
-            const vibrato = new Tone.LFO(2, -0.5, 0.5); // Frequência de 2Hz, profundidade de 0.5 semitons
-            vibrato.connect(collectSynth.detune);
-            vibrato.start();
-
-            // Sintetizador para o som de penalidade (som mais abrupto/negativo)
-            penaltySynth = new Tone.Synth({
-                oscillator: {
-                    type: "sawtooth" // Onda dente de serra para um som mais áspero
-                },
-                envelope: {
-                    attack: 0.01, // Ataque rápido
-                    decay: 0.2,
-                    sustain: 0.1,
-                    release: 0.3
-                },
-                volume: -8 // Volume um pouco mais alto
-            }).toDestination();
+        // Função para ajustar o tamanho do canvas com base no labirinto
+        function resizeCanvas() {
+            canvas.width = maze[0].length * TILE_SIZE;
+            canvas.height = maze.length * TILE_SIZE;
+            // Ajusta o tamanho do contêiner para centralizar o canvas e acomodar o score
+            const container = document.getElementById('game-container');
+            // A altura do container agora é calculada para caber todo o conteúdo do canvas + score
+            container.style.width = `${canvas.width + 20}px`; 
+            container.style.height = `${canvas.height + scoreDisplay.offsetHeight + 30}px`; 
         }
 
-        // Função para tocar o som de coleta
-        function playCollectSound() {
-            if (Tone.context.state !== 'running') {
-                Tone.start(); // Inicia o contexto de áudio na primeira interação do usuário
+        // Função para verificar se um movimento é válido (não é parede)
+        function isValidMove(gridX, gridY, dirX, dirY) {
+            const nextGridX = gridX + dirX;
+            const nextGridY = gridY + dirY;
+
+            // Verifica limites do labirinto
+            if (nextGridX < 0 || nextGridX >= maze[0].length || nextGridY < 0 || nextGridY >= maze.length) {
+                return false;
             }
-            collectSynth.triggerAttackRelease("C4", "0.8"); // Toca uma nota C4 por 0.8 segundos
+            // Verifica se a próxima célula é uma parede
+            return maze[nextGridY][nextGridX] !== 1;
         }
 
-        // Função para tocar o som de penalidade
-        function playPenaltySound() {
-            if (Tone.context.state !== 'running') {
-                Tone.start(); // Inicia o contexto de áudio na primeira interação do usuário
+        // Função para desenhar o labirinto
+        function drawMaze() {
+            for (let row = 0; row < maze.length; row++) {
+                for (let col = 0; col < maze[row].length; col++) {
+                    const x = col * TILE_SIZE;
+                    const y = row * TILE_SIZE;
+
+                    if (maze[row][col] === 1) { // Parede
+                        ctx.fillStyle = 'blue';
+                        ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
+                    } else if (maze[row][col] === 2) { // Ponto
+                        ctx.fillStyle = 'white';
+                        ctx.beginPath();
+                        ctx.arc(x + TILE_SIZE / 2, y + TILE_SIZE / 2, TILE_SIZE / 8, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
             }
-            penaltySynth.triggerAttackRelease(["F3", "C#3"], "0.5"); // Toca um acorde dissonante por 0.5 segundos
         }
 
-        // --- Funções de Inicialização ---
-
-        // Função para inicializar a posição do personagem
-        function initializeCharacterPosition() {
-            if (character.offsetWidth === 0) {
-                setTimeout(initializeCharacterPosition, 50);
-                return;
-            }
-            characterX = (gameContainer.offsetWidth / 2) - (character.offsetWidth / 2);
-            character.style.left = `${characterX}px`;
-            character.style.backgroundImage = `url(${CHARACTER_MOUTH_CLOSED_IMAGE})`;
+        // Função para desenhar o Pica-Man
+        function drawPicaMan() {
+            ctx.fillStyle = picaMan.color;
+            ctx.beginPath();
+            ctx.arc(picaMan.x, picaMan.y, picaMan.radius, 0, Math.PI * 2);
+            ctx.fill();
         }
 
-        // --- Gerenciamento de Telas ---
-        function showMainMenu() {
-            mainMenu.style.display = 'flex';
-            caiRolaGameWrapper.style.display = 'none';
-            gameOverScreen.style.display = 'none';
-            startScreen.style.display = 'none'; // Garante que a tela de início do jogo esteja escondida
+        // Função para desenhar a pontuação
+        function drawScore() {
+            scoreDisplay.textContent = `Pontos: ${score}`;
         }
 
-        function showCaiRolaGame() {
-            mainMenu.style.display = 'none';
-            caiRolaGameWrapper.style.display = 'block'; // Mostra o wrapper do jogo
-            startScreen.style.display = 'flex'; // Mostra a tela de início do jogo Cai Rola
-            gameOverScreen.style.display = 'none'; // Garante que a tela de fim de jogo esteja escondida
-        }
-
-        // --- Início e Loop do Jogo "CAI ROLA" ---
-
-        function startCaiRolaGame() {
-            score = 0; // Reseta a pontuação
-            lives = 3; // Reseta as vidas
-            scoreDisplay.textContent = `Rolas: ${score}`; // Atualiza o display da pontuação
-            livesDisplay.textContent = `Vidas: ${lives}`; // Atualiza o display de vidas
-            rolas = []; // Limpa quaisquer objetos existentes
-            // Remove todos os elementos .rola e .penalty-object do DOM, caso existam de uma partida anterior
-            document.querySelectorAll('.rola, .penalty-object').forEach(obj => obj.remove());
-
-            startScreen.style.display = 'none'; // Esconde a tela de início
-            gameOverScreen.style.display = 'none'; // Esconde a tela de fim de jogo
-            gameRunning = true; // Define o estado do jogo como rodando
-            gameOver = false; // Reseta o estado de fim de jogo
-            initializeCharacterPosition(); // Garante que o personagem esteja no centro
-            gameLoop(); // Inicia o loop principal do jogo
-            // Inicia a geração de novos objetos a cada 1200ms (mais lento)
-            rolaGenerationInterval = setInterval(createFallingObject, 1200);
-        }
-
-        // --- Event Listeners para Botões ---
-        caiRolaButton.addEventListener('click', () => {
-            showCaiRolaGame();
-            // Inicializa o áudio aqui, na primeira interação do usuário
-            if (!collectSynth) { // Garante que o setup seja feito apenas uma vez
-                setupAudio();
-            }
-        });
-        picaManButton.addEventListener('click', () => {
-            alert('PICA-MAN está em desenvolvimento! Volte em breve.'); // Substituir por uma tela real no futuro
-        });
-
-        startButton.addEventListener('click', startCaiRolaGame);
-        restartButton.addEventListener('click', startCaiRolaGame);
-
-        // --- Controles de Teclado (para desktop) ---
-        document.addEventListener('keydown', (e) => {
+        // Função principal de atualização do jogo
+        function update() {
             if (!gameRunning) return;
 
-            const characterWidth = character.offsetWidth;
-            const gameContainerWidth = gameContainer.offsetWidth;
-            const moveSpeed = 35; // Velocidade de movimento do personagem para teclado
+            // Calcula a posição do Pica-Man na grade
+            picaMan.gridX = Math.floor(picaMan.x / TILE_SIZE);
+            picaMan.gridY = Math.floor(picaMan.y / TILE_SIZE);
 
-            if (e.key === 'ArrowLeft' || e.key === 'a') {
-                characterX = Math.max(0, characterX - moveSpeed);
-            } else if (e.key === 'ArrowRight' || e.key === 'd') {
-                characterX = Math.min(gameContainerWidth - characterWidth, characterX + moveSpeed);
+            // Tenta virar na próxima direção desejada se o Pica-Man estiver no centro de uma célula
+            // e a nova direção for válida
+            if (picaMan.nextDirX !== 0 || picaMan.nextDirY !== 0) {
+                const targetX = picaMan.gridX * TILE_SIZE + TILE_SIZE / 2;
+                const targetY = picaMan.gridY * TILE_SIZE + TILE_SIZE / 2;
+
+                // Se o Pica-Man está perto do centro da célula
+                if (Math.abs(picaMan.x - targetX) < MOVEMENT_SPEED && Math.abs(picaMan.y - targetY) < MOVEMENT_SPEED) {
+                    if (isValidMove(picaMan.gridX, picaMan.gridY, picaMan.nextDirX, picaMan.nextDirY)) {
+                        // Alinha o Pica-Man ao centro da célula antes de virar
+                        picaMan.x = targetX;
+                        picaMan.y = targetY;
+                        picaMan.currentDirX = picaMan.nextDirX;
+                        picaMan.currentDirY = picaMan.nextDirY;
+                        picaMan.nextDirX = 0; // Limpa a próxima direção
+                        picaMan.nextDirY = 0;
+                    }
+                }
             }
-            character.style.left = `${characterX}px`;
-        });
 
-        // --- Controles de Toque (para celular) ---
-        character.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Previne o comportamento padrão do toque (ex: rolagem)
-            if (!gameRunning) return;
-            isDragging = true;
-            touchStartX = e.touches[0].clientX;
-            initialCharacterX = characterX; // Armazena a posição inicial do personagem ao iniciar o arrasto
-        }, { passive: false });
+            // Move o Pica-Man na direção atual
+            let nextPixelX = picaMan.x + picaMan.currentDirX * MOVEMENT_SPEED;
+            let nextPixelY = picaMan.y + picaMan.currentDirY * MOVEMENT_SPEED;
 
-        character.addEventListener('touchmove', (e) => {
-            e.preventDefault();
-            if (!isDragging || !gameRunning) return;
+            // Calcula a próxima célula da grade para verificar colisão com parede
+            let nextGridX = Math.floor(nextPixelX / TILE_SIZE);
+            let nextGridY = Math.floor(nextPixelY / TILE_SIZE);
 
-            const currentTouchX = e.touches[0].clientX;
-            const deltaX = currentTouchX - touchStartX; // Calcula a diferença do arrasto
-            let newCharacterX = initialCharacterX + deltaX; // Aplica a diferença à posição inicial do personagem
-
-            const characterWidth = character.offsetWidth;
-            const gameContainerWidth = gameContainer.offsetWidth;
-
-            // Limita o movimento do personagem dentro dos limites do contêiner do jogo
-            characterX = Math.max(0, Math.min(gameContainerWidth - characterWidth, newCharacterX));
-            character.style.left = `${characterX}px`;
-        }, { passive: false });
-
-        character.addEventListener('touchend', () => {
-            isDragging = false;
-        });
-
-        // --- Criação de Objetos Caindo (Rolas ou Penalidades) ---
-
-        function createFallingObject() {
-            const obj = document.createElement('div'); // Cria um novo elemento div
-
-            // Decide aleatoriamente se será uma "rola" ou um "objeto de penalidade"
-            const isPenalty = Math.random() < 0.25; // 25% de chance de ser um objeto de penalidade
-
-            if (isPenalty) {
-                obj.classList.add('penalty-object'); // Adiciona a classe para estilos de penalidade
-                obj.style.backgroundImage = `url(${PENALTY_IMAGE_URL})`;
+            // Verifica se o próximo movimento é válido (não é parede)
+            // Considera a célula para onde o Pica-Man está se movendo
+            if (isValidMove(picaMan.gridX, picaMan.gridY, picaMan.currentDirX, picaMan.currentDirY)) {
+                picaMan.x = nextPixelX;
+                picaMan.y = nextPixelY;
             } else {
-                obj.classList.add('rola'); // Adiciona a classe 'rola' para aplicar os estilos CSS
-                // Define a imagem de fundo da rola aleatoriamente a partir das URLs fornecidas
-                obj.style.backgroundImage = `url(${ROLA_IMAGES[Math.floor(Math.random() * ROLA_IMAGES.length)]})`;
+                // Se colidir com parede, para o Pica-Man e alinha-o ao centro da célula atual
+                picaMan.currentDirX = 0;
+                picaMan.currentDirY = 0;
+                picaMan.x = picaMan.gridX * TILE_SIZE + TILE_SIZE / 2;
+                picaMan.y = picaMan.gridY * TILE_SIZE + TILE_SIZE / 2;
             }
 
-            // Largura do objeto (usa o valor do CSS ou padrão)
-            const objWidth = obj.offsetWidth || 100; // Usar o novo tamanho padrão
-            // Define uma posição X inicial aleatória para o objeto
-            obj.x = Math.random() * (gameContainer.offsetWidth - objWidth);
-            obj.y = -objWidth; // Inicia o objeto acima do contêiner do jogo
-
-            obj.style.left = `${obj.x}px`;
-            obj.style.top = `${obj.y}px`;
-
-            // Define uma velocidade de queda aleatória para cada objeto (mais lento)
-            obj.speed = 4 + Math.random() * 2; // Velocidade entre 4 e 6
-
-            obj.mouthOpenTriggered = false; // Flag para controlar se a boca já abriu para este objeto
-
-            gameContainer.appendChild(obj); // Adiciona o objeto ao contêiner do jogo
-            rolas.push(obj); // Adiciona o objeto ao array de objetos ativos
+            // Coleta de pontos
+            if (maze[picaMan.gridY][picaMan.gridX] === 2) {
+                maze[picaMan.gridY][picaMan.gridX] = 0; // Remove o ponto
+                score++;
+                drawScore();
+            }
         }
 
-        // --- Loop Principal do Jogo ---
-
+        // Loop principal do jogo
         function gameLoop() {
-            if (!gameRunning || gameOver) return; // Se o jogo não estiver rodando ou for game over, para o loop
+            ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpa o canvas
+            drawMaze();
+            drawPicaMan();
 
-            const gameContainerHeight = gameContainer.offsetHeight;
-            const characterHeight = character.offsetHeight;
-            const characterWidth = character.offsetWidth;
-            const characterBottom = gameContainerHeight - 70; // Posição inferior do personagem (ajustada pela bottom do CSS)
-            const characterTop = characterBottom - characterHeight; // Posição superior do personagem
-
-            // Distância para a boca abrir antes da colisão (ajustado para o efeito de "camadas")
-            const mouthOpenTriggerDistance = 80; // Aumentado para que a boca abra mais cedo
-            const zIndexBehindCharacter = 3; // Z-index para objetos atrás do personagem
-            const zIndexInFrontOfCharacter = 6; // Z-index para objetos na frente do personagem
-
-            // Itera sobre os objetos de trás para frente para evitar problemas ao remover elementos
-            for (let i = rolas.length - 1; i >= 0; i--) {
-                const obj = rolas[i];
-                obj.y += obj.speed; // Atualiza a posição Y do objeto (faz ele cair)
-                obj.style.top = `${obj.y}px`; // Atualiza a posição do objeto no DOM
-
-                // Obtém as dimensões e posições do objeto
-                const objLeft = obj.x;
-                const objRight = obj.x + (obj.offsetWidth || 100);
-                const objTop = obj.y;
-                const objBottom = obj.y + (obj.offsetHeight || 100);
-
-                // Lógica para abrir a boca antes da colisão e controlar o z-index
-                if (objBottom > (characterTop - mouthOpenTriggerDistance) &&
-                    objBottom < characterTop + (characterHeight / 2) && // Garante que esteja acima do meio do personagem
-                    objRight > characterX &&
-                    objLeft < (characterX + characterWidth)) {
-
-                    // Se a boca ainda não foi acionada para este objeto, aciona a animação
-                    if (!obj.mouthOpenTriggered) {
-                        character.style.backgroundImage = `url(${CHARACTER_MOUTH_OPEN_IMAGE})`; // Abre a boca
-                        character.classList.add('character-eating'); // Adiciona classe para o efeito de "salto"
-                        obj.mouthOpenTriggered = true; // Marca que a boca foi acionada para este objeto
-                    }
-                    // Quando o objeto está na área de "comer", coloca-o atrás do personagem
-                    obj.style.zIndex = zIndexBehindCharacter;
-                } else {
-                    // Se não estiver na área de "comer", garante que esteja na frente (z-index normal)
-                    obj.style.zIndex = zIndexInFrontOfCharacter; // Ou 4, o z-index padrão para rolas/penalidades
-                }
-
-
-                // --- Detecção de Colisão Efetiva ---
-                if (objRight > characterX &&
-                    objLeft < (characterX + characterWidth) &&
-                    objBottom > characterTop &&
-                    objTop < characterBottom) {
-                    // Colisão detectada!
-                    
-                    if (obj.classList.contains('rola')) {
-                        score++; // Incrementa a pontuação para rolas
-                        playCollectSound(); // Toca o som de coleta
-                    } else if (obj.classList.contains('penalty-object')) {
-                        score -= 30; // Diminui a pontuação em 30
-                        lives--; // Perde 1 vida
-                        livesDisplay.textContent = `Vidas: ${lives}`; // Atualiza o display de vidas
-                        playPenaltySound(); // Toca o som de penalidade
-
-                        if (lives <= 0) {
-                            endGame(); // Chama a função de fim de jogo se as vidas acabarem
-                            return; // Sai do loop para evitar processamento adicional
-                        }
-                    }
-                    scoreDisplay.textContent = `Rolas: ${score}`; // Atualiza o display da pontuação
-                    obj.remove(); // Remove o objeto do DOM
-                    rolas.splice(i, 1); // Remove o objeto do array
-
-                    // Reseta a animação da boca após um curto atraso
-                    setTimeout(() => {
-                        character.style.backgroundImage = `url(${CHARACTER_MOUTH_CLOSED_IMAGE})`; // Fecha a boca
-                        character.classList.remove('character-eating'); // Remove classe do efeito de "salto"
-                    }, 300); // Duração da animação de boca aberta e salto
-                }
-
-                // Remove o objeto se ele sair da tela (atingir a parte inferior)
-                if (obj.y > gameContainerHeight) {
-                    obj.remove(); // Remove do DOM
-                    rolas.splice(i, 1); // Remove do array
-                    // Não há penalidade por deixar cair, apenas por pegar o errado
-                }
-            }
-
-            // Solicita o próximo quadro de animação (loop contínuo)
+            update();
             requestAnimationFrame(gameLoop);
         }
 
-        // --- Função de Fim de Jogo ---
-        function endGame() {
-            gameRunning = false;
-            gameOver = true;
-            clearInterval(rolaGenerationInterval); // Para a geração de novos objetos
-            // Remove todos os objetos caindo atualmente na tela
-            rolas.forEach(obj => obj.remove());
-            rolas = []; // Limpa o array de objetos
+        // --- Controles de Teclado (ainda funcionam para desktop) ---
+        document.addEventListener('keydown', (e) => {
+            if (!gameRunning) return;
 
-            finalScoreDisplay.textContent = `Sua Pontuação Final: ${score}`; // Exibe a pontuação final
-            gameOverScreen.style.display = 'flex'; // Mostra a tela de fim de jogo
-        }
-
-        // --- Eventos de Carregamento e Redimensionamento ---
-
-        // Inicializa o menu principal ao carregar a janela
-        window.addEventListener('load', () => {
-            showMainMenu();
-        });
-
-        // Lida com o redimensionamento da janela para manter o jogo responsivo
-        window.addEventListener('resize', () => {
-            if (gameRunning) { // Apenas recalcula se o jogo estiver rodando
-                initializeCharacterPosition(); // Recalcula a posição do personagem
-
-                // Ajusta a posição dos objetos se eles ficarem fora dos limites horizontais após o redimensionamento
-                rolas.forEach(obj => {
-                    const objWidth = obj.offsetWidth || 100; // Usar o novo tamanho padrão
-                    if (obj.x + objWidth > gameContainer.offsetWidth) {
-                        obj.x = gameContainer.offsetWidth - objWidth;
-                        obj.style.left = `${obj.x}px`;
-                    }
-                });
+            if (e.key === 'ArrowUp' || e.key === 'w') {
+                picaMan.nextDirX = 0; picaMan.nextDirY = -1;
+            } else if (e.key === 'ArrowDown' || e.key === 's') {
+                picaMan.nextDirX = 0; picaMan.nextDirY = 1;
+            } else if (e.key === 'ArrowLeft' || e.key === 'a') {
+                picaMan.nextDirX = -1; picaMan.nextDirY = 0;
+            } else if (e.key === 'ArrowRight' || e.key === 'd') {
+                picaMan.nextDirX = 1; picaMan.nextDirY = 0;
             }
         });
 
+        // --- Controles de Toque (Swipe) ---
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Previne rolagem da página
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            if (!gameRunning) return;
+
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+
+            const swipeThreshold = 20; // Mínimo de pixels para considerar um swipe
+
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > swipeThreshold) {
+                // Swipe horizontal
+                if (deltaX > 0) {
+                    picaMan.nextDirX = 1; picaMan.nextDirY = 0; // Direita
+                } else {
+                    picaMan.nextDirX = -1; picaMan.nextDirY = 0; // Esquerda
+                }
+            } else if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > swipeThreshold) {
+                // Swipe vertical
+                if (deltaY > 0) {
+                    picaMan.nextDirX = 0; picaMan.nextDirY = 1; // Baixo
+                } else {
+                    picaMan.nextDirX = 0; picaMan.nextDirY = -1; // Cima
+                }
+            }
+        }, { passive: false });
+
+
+        // --- Início do Jogo ---
+        function startGame() {
+            startScreen.style.display = 'none';
+            gameRunning = true;
+            score = 0;
+            drawScore();
+            
+            // Reinicia a posição do Pica-Man e a direção
+            picaMan.x = 1 * TILE_SIZE + TILE_SIZE / 2;
+            picaMan.y = 1 * TILE_SIZE + TILE_SIZE / 2;
+            picaMan.gridX = 1;
+            picaMan.gridY = 1;
+            picaMan.currentDirX = 0; // Pica-Man começa parado
+            picaMan.currentDirY = 0;
+            picaMan.nextDirX = 0;
+            picaMan.nextDirY = 0;
+
+            // Reinicia os pontos no labirinto (cria uma cópia limpa do labirinto original)
+            // Para um labirinto dinâmico, você precisaria de uma função para resetar os pontos
+            for (let r = 0; r < maze.length; r++) {
+                for (let c = 0; c < maze[r].length; c++) {
+                    // Se a célula não é parede e não é a posição inicial do Pica-Man, adiciona um ponto
+                    if (maze[r][c] === 0 || maze[r][c] === 2) { 
+                        maze[r][c] = 2; // Garante que todos os caminhos tenham pontos
+                    }
+                }
+            }
+
+            gameLoop();
+        }
+
+        startButton.addEventListener('click', startGame);
+
+        // Inicializa o tamanho do canvas e desenha o labirinto ao carregar a página
+        window.addEventListener('load', () => {
+            resizeCanvas();
+            drawMaze();
+            drawPicaMan();
+            drawScore();
+        });
+
+        // Ajusta o canvas ao redimensionar a janela
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            if (!gameRunning) { // Redesenha apenas se o jogo não estiver rodando
+                drawMaze();
+                drawPicaMan();
+                drawScore();
+            }
+        });
     </script>
 </body>
 </html>
