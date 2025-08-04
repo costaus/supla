@@ -36,7 +36,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            position: relative;
+            position: relative; /* Necessário para posicionamento absoluto de elementos internos */
         }
         /* Telas de seleção de personagem e jogo */
         #character-selection, #game-screen {
@@ -46,18 +46,18 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            position: absolute;
-            top: 0;
-            left: 0;
+            /* Removido: position: absolute; top: 0; left: 0; para melhor fluxo de layout */
         }
         #game-screen {
             display: none; /* A tela do jogo fica oculta por padrão */
+            position: relative; /* Mantém o posicionamento relativo para seus filhos absolutos (barras de vida, modal) */
         }
         /* Estilos para o canvas do Phaser */
         canvas {
             border-radius: 1rem; /* Cantos arredondados para o canvas */
             width: 100% !important; /* Garante que o canvas ocupe 100% da largura do pai */
             height: 100% !important; /* Garante que o canvas ocupe 100% da altura do pai */
+            display: block; /* Remove espaço extra abaixo do canvas */
         }
         /* Estilos para os cards de seleção de personagem */
         .character-card {
@@ -74,6 +74,10 @@
         }
         .animate-pulse {
             animation: pulse 1.5s infinite;
+        }
+        /* Fundo para o contêiner do Phaser (para depuração) */
+        #phaser-game {
+            background-color: #000; /* Fundo preto padrão, o Phaser desenhará sobre ele */
         }
     </style>
 </head>
@@ -276,7 +280,12 @@
                     update: update    // Função chamada a cada frame do jogo
                 }
             };
-            gameInstance = new Phaser.Game(config); // Cria a instância do jogo Phaser
+            try {
+                gameInstance = new Phaser.Game(config); // Cria a instância do jogo Phaser
+                console.log("Instância do jogo Phaser criada.");
+            } catch (error) {
+                console.error("Erro ao criar a instância do jogo Phaser:", error);
+            }
             setupAudio(); // Inicia o áudio quando o jogo começa
         }
 
@@ -298,10 +307,12 @@
             // Destrói a instância atual do jogo Phaser para reiniciar completamente
             if (gameInstance) {
                 gameInstance.destroy(true);
+                gameInstance = null; // Limpa a instância
             }
             // Para a música de fundo
             if (backgroundMusic) {
                 backgroundMusic.stop();
+                Tone.Transport.stop(); // Para o transporte do Tone.js
             }
         });
 
@@ -330,7 +341,13 @@
          * Chamada uma vez quando a cena é criada, para configurar o jogo.
          */
         function create() {
+            console.log("Função Phaser create chamada!"); // Log de depuração
             this.cameras.main.setBackgroundColor('#34495e'); // Cor de fundo do jogo (azul-acinzentado)
+
+            // Depuração: Adiciona um simples retângulo verde para confirmar a renderização
+            this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, 100, 100, 0x00ff00).setOrigin(0.5);
+
+
             this.physics.world.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT); // Define os limites do mundo da física
 
             // Chão (plataforma estática)
@@ -512,6 +529,7 @@
             gameOverModal.style.display = 'flex'; // Exibe o modal
             if (backgroundMusic) {
                 backgroundMusic.stop(); // Para a música de fundo
+                Tone.Transport.stop(); // Para o transporte do Tone.js
             }
         }
     </script>
