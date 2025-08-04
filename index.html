@@ -3,443 +3,517 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pica-Man</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Jogo de Luta Épico</title>
+    <!-- Carrega o Tailwind CSS para estilização rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carrega a biblioteca Phaser para o desenvolvimento do jogo 2D -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+    <!-- Carrega a biblioteca Tone.js para manipulação de áudio -->
+    <script src="https://cdn.jsdelivr.net/npm/@tonejs/tone@14.7.77/build/Tone.min.js"></script>
     <style>
+        /* Estilos globais para o corpo da página */
         body {
-            margin: 0;
+            font-family: 'Inter', sans-serif; /* Fonte Inter para uma aparência moderna */
+            background-color: #1a202c; /* Cor de fundo escura (Tailwind gray-900) */
+            color: #e2e8f0; /* Cor do texto clara (Tailwind gray-200) */
             display: flex;
             justify-content: center;
             align-items: center;
-            /* Usar 100dvh para garantir que a altura da viewport dinâmica seja usada,
-               considerando as barras de navegação do navegador */
-            min-height: 100dvh; 
-            background: linear-gradient(135deg, #0a0a2a 0%, #3a3a7a 100%);
-            font-family: 'Inter', sans-serif;
-            color: white;
-            flex-direction: column;
+            min-height: 100vh; /* Ocupa a altura total da viewport */
+            margin: 0;
             overflow: hidden; /* Evita barras de rolagem */
         }
-
+        /* Contêiner principal do jogo */
         #game-container {
-            position: relative;
-            background-color: #000; /* Fundo do labirinto */
-            border: 5px solid #fff; /* Borda do jogo */
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5); /* Sombra neon azul */
+            width: 100%;
+            max-width: 1024px; /* Largura máxima para a área do jogo */
+            height: auto;
+            aspect-ratio: 16 / 9; /* Mantém a proporção 16:9 para o jogo */
+            background-color: #000; /* Fundo preto para o jogo */
+            border-radius: 1rem; /* Cantos arredondados */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2); /* Sombra para profundidade */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 10px;
-            box-sizing: border-box;
-            max-width: 90%; /* Largura máxima responsiva */
-            /* Altura ajustada para caber na tela, subtraindo espaço para o score */
-            height: calc(100dvh - 80px); 
+            position: relative;
         }
-
-        canvas {
-            background-color: #000;
-            display: block;
-            border-radius: 5px;
-            touch-action: none; /* Desabilita o comportamento padrão de toque para evitar rolagem */
-        }
-
-        #score-display {
-            font-size: 2em;
-            font-weight: bold;
-            color: #FFD700;
-            margin-top: 10px;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
-            white-space: nowrap;
-        }
-
-        #start-screen {
+        /* Telas de seleção de personagem e jogo */
+        #character-selection, #game-screen {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            border-radius: 10px;
-            text-align: center;
         }
-
-        #start-screen h1 {
-            font-size: 4em;
-            margin-bottom: 30px;
-            color: #00FFFF; /* Ciano neon */
-            text-shadow: 0 0 15px #00FFFF, 0 0 25px #00FFFF; /* Efeito neon */
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-weight: 900;
+        #game-screen {
+            display: none; /* A tela do jogo fica oculta por padrão */
         }
-
-        #start-button {
-            padding: 20px 40px;
-            font-size: 2em;
-            background: linear-gradient(145deg, #00FFFF, #00BFFF); /* Gradiente azul-ciano */
-            color: #0a0a2a; /* Texto escuro para contraste */
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(0, 255, 255, 0.5);
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: bold;
+        /* Estilos para o canvas do Phaser */
+        canvas {
+            border-radius: 1rem; /* Cantos arredondados para o canvas */
+            width: 100% !important; /* Garante que o canvas ocupe 100% da largura do pai */
+            height: 100% !important; /* Garante que o canvas ocupe 100% da altura do pai */
         }
-
-        #start-button:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 30px rgba(0, 255, 255, 0.7);
-            background: linear-gradient(145deg, #00BFFF, #00FFFF);
+        /* Estilos para os cards de seleção de personagem */
+        .character-card {
+            transition: transform 0.3s ease-in-out, border-color 0.3s ease-in-out; /* Transições suaves */
         }
-
-        /* Controles de toque para mobile (REMOVIDOS DO HTML, então estes estilos não são mais necessários) */
-        #mobile-controls {
-            display: none; 
+        .character-card:hover {
+            transform: scale(1.02); /* Pequeno zoom ao passar o mouse */
         }
-
-        /* Ajustes responsivos */
-        @media (max-width: 768px) {
-            #game-container {
-                padding: 5px;
-                height: calc(100dvh - 60px); /* Ajuste para tablets */
-            }
-            #start-screen h1 {
-                font-size: 3em;
-            }
-            #start-button {
-                padding: 15px 30px;
-                font-size: 1.5em;
-            }
-            #score-display {
-                font-size: 1.5em;
-            }
+        /* Animação para o texto de Game Over */
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
         }
-
-        @media (max-width: 480px) {
-            #game-container {
-                width: 98%;
-                height: calc(100dvh - 40px); /* Mais agressivo para smartphones */
-            }
-            #start-screen h1 {
-                font-size: 2.5em;
-            }
-            #start-button {
-                padding: 10px 20px;
-                font-size: 1.2em;
-            }
-            #score-display {
-                font-size: 1.2em;
-            }
+        .animate-pulse {
+            animation: pulse 1.5s infinite;
         }
     </style>
 </head>
 <body>
-    <div id="game-container">
-        <canvas id="gameCanvas"></canvas>
-        <div id="score-display">Pontos: 0</div>
-
-        <!-- Tela de início -->
-        <div id="start-screen">
-            <h1>Pica-Man</h1>
-            <button id="start-button">Iniciar Jogo</button>
+    <div id="game-container" class="p-4 sm:p-6 md:p-8">
+        <!-- Tela de Seleção de Personagem -->
+        <div id="character-selection" class="space-y-6">
+            <h1 class="text-4xl font-bold text-center mb-8">Escolha seu Lutador!</h1>
+            <div class="flex flex-col sm:flex-row gap-8 justify-center items-center">
+                <!-- Card do Lutador 1 -->
+                <div id="char1-card" class="character-card bg-gray-800 p-6 rounded-lg shadow-lg cursor-pointer">
+                    <img src="https://placehold.co/150x150/FF0000/FFFFFF?text=Lutador+1" alt="Lutador 1" class="w-32 h-32 mx-auto mb-4 rounded-full border-4 border-red-500">
+                    <h2 class="text-xl font-semibold text-center">O Punho de Ferro</h2>
+                    <p class="text-sm text-gray-400 text-center">Um guerreiro robusto com ataques poderosos.</p>
+                    <button data-char="char1" class="select-button mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200">Selecionar</button>
+                </div>
+                <!-- Card do Lutador 2 -->
+                <div id="char2-card" class="character-card bg-gray-800 p-6 rounded-lg shadow-lg cursor-pointer">
+                    <img src="https://placehold.co/150x150/0000FF/FFFFFF?text=Lutador+2" alt="Lutador 2" class="w-32 h-32 mx-auto mb-4 rounded-full border-4 border-blue-500">
+                    <h2 class="text-xl font-semibold text-center">A Sombra Veloz</h2>
+                    <p class="text-sm text-gray-400 text-center">Um ninja ágil com movimentos rápidos.</p>
+                    <button data-char="char2" class="select-button mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200">Selecionar</button>
+                </div>
+            </div>
         </div>
 
-        <!-- Controles de toque para mobile (REMOVIDOS) -->
-        <!-- <div id="mobile-controls">
-            <div class="mobile-button" id="up-button">⬆️</div>
-            <div class="mobile-button" id="left-button">⬅️</div>
-            <div class="mobile-button" id="down-button">⬇️</div>
-            <div class="mobile-button" id="right-button">➡️</div>
-        </div> -->
+        <!-- Tela do Jogo -->
+        <div id="game-screen" class="relative">
+            <!-- Barras de Vida -->
+            <div id="health-bars" class="absolute top-4 left-0 right-0 flex justify-between px-8 z-10">
+                <div class="flex flex-col items-start w-1/2 pr-4">
+                    <span id="player1-name" class="text-lg font-bold text-red-400 mb-1">Lutador 1</span>
+                    <div class="w-full bg-gray-700 rounded-full h-4">
+                        <div id="player1-health" class="bg-red-500 h-4 rounded-full transition-all duration-100 ease-out" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-end w-1/2 pl-4">
+                    <span id="player2-name" class="text-lg font-bold text-blue-400 mb-1">Lutador 2</span>
+                    <div class="w-full bg-gray-700 rounded-full h-4">
+                        <div id="player2-health" class="bg-blue-500 h-4 rounded-full transition-all duration-100 ease-out" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Contêiner para o canvas do Phaser -->
+            <div id="phaser-game" class="w-full h-full"></div>
+            <!-- Modal de Fim de Jogo -->
+            <div id="game-over-modal" class="hidden absolute inset-0 bg-black bg-opacity-80 flex flex-col justify-center items-center rounded-xl z-20">
+                <h2 id="game-over-text" class="text-5xl font-extrabold text-white mb-6 animate-pulse"></h2>
+                <button id="restart-button" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full text-xl shadow-lg transition-colors duration-200">Jogar Novamente</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const scoreDisplay = document.getElementById('score-display');
-        const startScreen = document.getElementById('start-screen');
-        const startButton = document.getElementById('start-button');
+        // Variáveis globais para configuração do Firebase (não usadas neste jogo, mas mantidas conforme instrução)
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
-        const TILE_SIZE = 40; // Tamanho de cada célula do labirinto (em pixels)
-        const MOVEMENT_SPEED = 4; // Velocidade de movimento do Pica-Man (pixels por frame)
+        // Configurações do jogo
+        const GAME_WIDTH = 960;  // Largura do jogo em pixels (Phaser)
+        const GAME_HEIGHT = 540; // Altura do jogo em pixels (Phaser)
 
-        let gameRunning = false;
-        let score = 0;
-
-        // Definição do labirinto (0 = caminho, 1 = parede, 2 = ponto)
-        // Labirinto mais complexo para permitir viradas
-        const maze = [
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-            [1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1],
-            [1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1],
-            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-            [1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1],
-            [1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1],
-            [1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1],
-            [1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1],
-            [1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 1, 1],
-            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-            [1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1],
-            [1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1],
-            [1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1],
-            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-        ];
-
-        // Pica-Man properties
-        let picaMan = {
-            x: 1 * TILE_SIZE + TILE_SIZE / 2, // Posição X em pixels (centro da célula)
-            y: 1 * TILE_SIZE + TILE_SIZE / 2, // Posição Y em pixels (centro da célula)
-            gridX: 1, // Posição X na grade do labirinto
-            gridY: 1, // Posição Y na grade do labirinto
-            currentDirX: 0, // Direção de movimento X atual
-            currentDirY: 0, // Direção de movimento Y atual
-            nextDirX: 0, // Próxima direção desejada pelo jogador (fila)
-            nextDirY: 0, // Próxima direção desejada pelo jogador (fila)
-            radius: TILE_SIZE / 2 - 5, // Raio do Pica-Man
-            color: 'yellow'
+        // Propriedades dos personagens
+        const characters = {
+            char1: {
+                name: "O Punho de Ferro",
+                color: 0xff0000, // Vermelho
+                health: 100,
+                attackPower: 10,
+                speed: 150,
+                jumpForce: 300
+            },
+            char2: {
+                name: "A Sombra Veloz",
+                color: 0x0000ff, // Azul
+                health: 100,
+                attackPower: 12,
+                speed: 180,
+                jumpForce: 320
+            }
         };
 
-        // Variáveis para controle de toque
-        let touchStartX = 0;
-        let touchStartY = 0;
+        let player1Char = null; // Personagem selecionado para o Jogador 1
+        let player2Char = null; // Personagem selecionado para o Jogador 2
 
-        // Função para ajustar o tamanho do canvas com base no labirinto
-        function resizeCanvas() {
-            canvas.width = maze[0].length * TILE_SIZE;
-            canvas.height = maze.length * TILE_SIZE;
-            // Ajusta o tamanho do contêiner para centralizar o canvas e acomodar o score
-            const container = document.getElementById('game-container');
-            // A altura do container agora é calculada para caber todo o conteúdo do canvas + score
-            container.style.width = `${canvas.width + 20}px`; 
-            container.style.height = `${canvas.height + scoreDisplay.offsetHeight + 30}px`; 
-        }
+        // Referências aos elementos da UI
+        const characterSelectionScreen = document.getElementById('character-selection');
+        const gameScreen = document.getElementById('game-screen');
+        const player1NameDisplay = document.getElementById('player1-name');
+        const player2NameDisplay = document.getElementById('player2-name');
+        const player1HealthBar = document.getElementById('player1-health');
+        const player2HealthBar = document.getElementById('player2-health');
+        const gameOverModal = document.getElementById('game-over-modal');
+        const gameOverText = document.getElementById('game-over-text');
+        const restartButton = document.getElementById('restart-button');
 
-        // Função para verificar se um movimento é válido (não é parede)
-        function isValidMove(gridX, gridY, dirX, dirY) {
-            const nextGridX = gridX + dirX;
-            const nextGridY = gridY + dirY;
+        // Variáveis para áudio (Tone.js)
+        let hitSound, jumpSound, backgroundMusic;
+        let gameInstance = null; // Para armazenar a instância do jogo Phaser
 
-            // Verifica limites do labirinto
-            if (nextGridX < 0 || nextGridX >= maze[0].length || nextGridY < 0 || nextGridY >= maze.length) {
-                return false;
-            }
-            // Verifica se a próxima célula é uma parede
-            return maze[nextGridY][nextGridX] !== 1;
-        }
+        /**
+         * Configura e carrega os sons do jogo usando Tone.js.
+         */
+        async function setupAudio() {
+            try {
+                await Tone.start(); // Inicia o contexto de áudio do Tone.js
+                console.log("Contexto de áudio iniciado.");
 
-        // Função para desenhar o labirinto
-        function drawMaze() {
-            for (let row = 0; row < maze.length; row++) {
-                for (let col = 0; col < maze[row].length; col++) {
-                    const x = col * TILE_SIZE;
-                    const y = row * TILE_SIZE;
-
-                    if (maze[row][col] === 1) { // Parede
-                        ctx.fillStyle = 'blue';
-                        ctx.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-                    } else if (maze[row][col] === 2) { // Ponto
-                        ctx.fillStyle = 'white';
-                        ctx.beginPath();
-                        ctx.arc(x + TILE_SIZE / 2, y + TILE_SIZE / 2, TILE_SIZE / 8, 0, Math.PI * 2);
-                        ctx.fill();
+                // Som de impacto (soco/ataque)
+                hitSound = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: "sine" },
+                    envelope: {
+                        attack: 0.001,
+                        decay: 0.1,
+                        sustain: 0.01,
+                        release: 0.1
                     }
-                }
-            }
-        }
+                }).toDestination();
 
-        // Função para desenhar o Pica-Man
-        function drawPicaMan() {
-            ctx.fillStyle = picaMan.color;
-            ctx.beginPath();
-            ctx.arc(picaMan.x, picaMan.y, picaMan.radius, 0, Math.PI * 2);
-            ctx.fill();
-        }
-
-        // Função para desenhar a pontuação
-        function drawScore() {
-            scoreDisplay.textContent = `Pontos: ${score}`;
-        }
-
-        // Função principal de atualização do jogo
-        function update() {
-            if (!gameRunning) return;
-
-            // Calcula a posição do Pica-Man na grade
-            picaMan.gridX = Math.floor(picaMan.x / TILE_SIZE);
-            picaMan.gridY = Math.floor(picaMan.y / TILE_SIZE);
-
-            // Tenta virar na próxima direção desejada se o Pica-Man estiver no centro de uma célula
-            // e a nova direção for válida
-            if (picaMan.nextDirX !== 0 || picaMan.nextDirY !== 0) {
-                const targetX = picaMan.gridX * TILE_SIZE + TILE_SIZE / 2;
-                const targetY = picaMan.gridY * TILE_SIZE + TILE_SIZE / 2;
-
-                // Se o Pica-Man está perto do centro da célula
-                if (Math.abs(picaMan.x - targetX) < MOVEMENT_SPEED && Math.abs(picaMan.y - targetY) < MOVEMENT_SPEED) {
-                    if (isValidMove(picaMan.gridX, picaMan.gridY, picaMan.nextDirX, picaMan.nextDirY)) {
-                        // Alinha o Pica-Man ao centro da célula antes de virar
-                        picaMan.x = targetX;
-                        picaMan.y = targetY;
-                        picaMan.currentDirX = picaMan.nextDirX;
-                        picaMan.currentDirY = picaMan.nextDirY;
-                        picaMan.nextDirX = 0; // Limpa a próxima direção
-                        picaMan.nextDirY = 0;
+                // Som de pulo
+                jumpSound = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: "triangle" },
+                    envelope: {
+                        attack: 0.005,
+                        decay: 0.1,
+                        sustain: 0.05,
+                        release: 0.2
                     }
+                }).toDestination();
+
+                // Música de fundo simples (looping)
+                backgroundMusic = new Tone.Loop(time => {
+                    Tone.Transport.bpm.value = 100; // Define o BPM
+                    const synth = new Tone.Synth().toDestination();
+                    synth.triggerAttackRelease("C4", "8n", time);
+                    synth.triggerAttackRelease("E4", "8n", time + 0.25);
+                    synth.triggerAttackRelease("G4", "8n", time + 0.5);
+                    synth.dispose(); // Libera o synth após o uso
+                }, "1n").start(0); // Inicia o loop imediatamente
+                Tone.Transport.start(); // Inicia o transporte para que o loop toque
+                console.log("Configuração de áudio completa.");
+            } catch (error) {
+                console.error("Erro ao configurar áudio:", error);
+            }
+        }
+
+        // --- Lógica de Seleção de Personagem ---
+        document.querySelectorAll('.select-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const charId = button.dataset.char;
+                if (!player1Char) {
+                    // Seleciona o personagem para o Jogador 1
+                    player1Char = characters[charId];
+                    player1NameDisplay.textContent = player1Char.name;
+                    button.closest('.character-card').classList.add('border-green-500', 'scale-105');
+                    button.textContent = 'Selecionado (P1)';
+                    button.disabled = true; // Desabilita o botão do personagem selecionado
+                    // Garante que o outro personagem esteja selecionável para o P2
+                    const otherCharButton = document.querySelector(`.select-button[data-char="${charId === 'char1' ? 'char2' : 'char1'}"]`);
+                    if (otherCharButton) otherCharButton.disabled = false;
+                } else if (!player2Char && charId !== (player1Char === characters.char1 ? 'char1' : 'char2')) {
+                    // Seleciona o personagem para o Jogador 2 (deve ser diferente do P1)
+                    player2Char = characters[charId];
+                    player2NameDisplay.textContent = player2Char.name;
+                    button.closest('.character-card').classList.add('border-green-500', 'scale-105');
+                    button.textContent = 'Selecionado (P2)';
+                    button.disabled = true; // Desabilita o botão do personagem selecionado
+                    startGame(); // Inicia o jogo após a seleção dos dois personagens
+                } else if (player1Char && charId === (player1Char === characters.char1 ? 'char1' : 'char2')) {
+                    // Mensagem de aviso se tentar selecionar o mesmo personagem
+                    console.log("Este personagem já foi selecionado pelo Jogador 1. Por favor, escolha um diferente para o Jogador 2.");
                 }
-            }
-
-            // Move o Pica-Man na direção atual
-            let nextPixelX = picaMan.x + picaMan.currentDirX * MOVEMENT_SPEED;
-            let nextPixelY = picaMan.y + picaMan.currentDirY * MOVEMENT_SPEED;
-
-            // Calcula a próxima célula da grade para verificar colisão com parede
-            let nextGridX = Math.floor(nextPixelX / TILE_SIZE);
-            let nextGridY = Math.floor(nextPixelY / TILE_SIZE);
-
-            // Verifica se o próximo movimento é válido (não é parede)
-            // Considera a célula para onde o Pica-Man está se movendo
-            if (isValidMove(picaMan.gridX, picaMan.gridY, picaMan.currentDirX, picaMan.currentDirY)) {
-                picaMan.x = nextPixelX;
-                picaMan.y = nextPixelY;
-            } else {
-                // Se colidir com parede, para o Pica-Man e alinha-o ao centro da célula atual
-                picaMan.currentDirX = 0;
-                picaMan.currentDirY = 0;
-                picaMan.x = picaMan.gridX * TILE_SIZE + TILE_SIZE / 2;
-                picaMan.y = picaMan.gridY * TILE_SIZE + TILE_SIZE / 2;
-            }
-
-            // Coleta de pontos
-            if (maze[picaMan.gridY][picaMan.gridX] === 2) {
-                maze[picaMan.gridY][picaMan.gridX] = 0; // Remove o ponto
-                score++;
-                drawScore();
-            }
-        }
-
-        // Loop principal do jogo
-        function gameLoop() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpa o canvas
-            drawMaze();
-            drawPicaMan();
-
-            update();
-            requestAnimationFrame(gameLoop);
-        }
-
-        // --- Controles de Teclado (ainda funcionam para desktop) ---
-        document.addEventListener('keydown', (e) => {
-            if (!gameRunning) return;
-
-            if (e.key === 'ArrowUp' || e.key === 'w') {
-                picaMan.nextDirX = 0; picaMan.nextDirY = -1;
-            } else if (e.key === 'ArrowDown' || e.key === 's') {
-                picaMan.nextDirX = 0; picaMan.nextDirY = 1;
-            } else if (e.key === 'ArrowLeft' || e.key === 'a') {
-                picaMan.nextDirX = -1; picaMan.nextDirY = 0;
-            } else if (e.key === 'ArrowRight' || e.key === 'd') {
-                picaMan.nextDirX = 1; picaMan.nextDirY = 0;
-            }
+            });
         });
 
-        // --- Controles de Toque (Swipe) ---
-        canvas.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Previne rolagem da página
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-        }, { passive: false });
-
-        canvas.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            if (!gameRunning) return;
-
-            const touchEndX = e.changedTouches[0].clientX;
-            const touchEndY = e.changedTouches[0].clientY;
-
-            const deltaX = touchEndX - touchStartX;
-            const deltaY = touchEndY - touchStartY;
-
-            const swipeThreshold = 20; // Mínimo de pixels para considerar um swipe
-
-            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > swipeThreshold) {
-                // Swipe horizontal
-                if (deltaX > 0) {
-                    picaMan.nextDirX = 1; picaMan.nextDirY = 0; // Direita
-                } else {
-                    picaMan.nextDirX = -1; picaMan.nextDirY = 0; // Esquerda
-                }
-            } else if (Math.abs(deltaY) > Math.abs(deltaX) && Math.abs(deltaY) > swipeThreshold) {
-                // Swipe vertical
-                if (deltaY > 0) {
-                    picaMan.nextDirX = 0; picaMan.nextDirY = 1; // Baixo
-                } else {
-                    picaMan.nextDirX = 0; picaMan.nextDirY = -1; // Cima
-                }
-            }
-        }, { passive: false });
-
-
-        // --- Início do Jogo ---
+        /**
+         * Inicia o jogo, transicionando da tela de seleção para a tela do jogo.
+         */
         function startGame() {
-            startScreen.style.display = 'none';
-            gameRunning = true;
-            score = 0;
-            drawScore();
-            
-            // Reinicia a posição do Pica-Man e a direção
-            picaMan.x = 1 * TILE_SIZE + TILE_SIZE / 2;
-            picaMan.y = 1 * TILE_SIZE + TILE_SIZE / 2;
-            picaMan.gridX = 1;
-            picaMan.gridY = 1;
-            picaMan.currentDirX = 0; // Pica-Man começa parado
-            picaMan.currentDirY = 0;
-            picaMan.nextDirX = 0;
-            picaMan.nextDirY = 0;
+            characterSelectionScreen.style.display = 'none'; // Oculta a tela de seleção
+            gameScreen.style.display = 'flex'; // Exibe a tela do jogo
 
-            // Reinicia os pontos no labirinto (cria uma cópia limpa do labirinto original)
-            // Para um labirinto dinâmico, você precisaria de uma função para resetar os pontos
-            for (let r = 0; r < maze.length; r++) {
-                for (let c = 0; c < maze[r].length; c++) {
-                    // Se a célula não é parede e não é a posição inicial do Pica-Man, adiciona um ponto
-                    if (maze[r][c] === 0 || maze[r][c] === 2) { 
-                        maze[r][c] = 2; // Garante que todos os caminhos tenham pontos
+            // Configuração do jogo Phaser
+            const config = {
+                type: Phaser.AUTO, // Detecta automaticamente WebGL ou Canvas
+                width: GAME_WIDTH,
+                height: GAME_HEIGHT,
+                parent: 'phaser-game', // ID do elemento HTML onde o canvas será inserido
+                physics: {
+                    default: 'arcade', // Usa o sistema de física Arcade
+                    arcade: {
+                        gravity: { y: 600 }, // Gravidade para simular pulos
+                        debug: false // Defina como true para ver as caixas de colisão
                     }
+                },
+                scene: {
+                    preload: preload, // Função para carregar assets
+                    create: create,   // Função para configurar o jogo
+                    update: update    // Função chamada a cada frame do jogo
                 }
-            }
-
-            gameLoop();
+            };
+            gameInstance = new Phaser.Game(config); // Cria a instância do jogo Phaser
+            setupAudio(); // Inicia o áudio quando o jogo começa
         }
 
-        startButton.addEventListener('click', startGame);
+        // Event listener para o botão de reiniciar
+        restartButton.addEventListener('click', () => {
+            gameOverModal.style.display = 'none'; // Oculta o modal de fim de jogo
+            player1Char = null; // Reseta a seleção de personagens
+            player2Char = null;
 
-        // Inicializa o tamanho do canvas e desenha o labirinto ao carregar a página
-        window.addEventListener('load', () => {
-            resizeCanvas();
-            drawMaze();
-            drawPicaMan();
-            drawScore();
-        });
+            // Reseta a UI de seleção de personagens
+            document.querySelectorAll('.select-button').forEach(button => {
+                button.disabled = false;
+                button.textContent = 'Selecionar';
+                button.closest('.character-card').classList.remove('border-green-500', 'scale-105');
+            });
+            gameScreen.style.display = 'none'; // Oculta a tela do jogo
+            characterSelectionScreen.style.display = 'flex'; // Exibe a tela de seleção
 
-        // Ajusta o canvas ao redimensionar a janela
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-            if (!gameRunning) { // Redesenha apenas se o jogo não estiver rodando
-                drawMaze();
-                drawPicaMan();
-                drawScore();
+            // Destrói a instância atual do jogo Phaser para reiniciar completamente
+            if (gameInstance) {
+                gameInstance.destroy(true);
+            }
+            // Para a música de fundo
+            if (backgroundMusic) {
+                backgroundMusic.stop();
             }
         });
+
+        // --- Lógica do Jogo Phaser ---
+        let player1, player2; // Objetos dos jogadores no Phaser
+        let player1Health, player2Health; // Variáveis de vida dos jogadores
+        let player1Attacking = false; // Estado de ataque do Jogador 1
+        let player2Attacking = false; // Estado de ataque do Jogador 2
+        let player1AttackCooldown = false; // Cooldown de ataque do Jogador 1
+        let player2AttackCooldown = false; // Cooldown de ataque do Jogador 2
+        let cursors; // Controles de teclado padrão do Phaser (setas)
+        let keyA, keyD, keyW, keyS; // Teclas para o Jogador 1 (A, D, W, S)
+        let keyLeft, keyRight, keyUp, keyDown; // Teclas para o Jogador 2 (setas)
+
+        /**
+         * Função de pré-carregamento do Phaser.
+         * Usada para carregar assets como imagens, spritesheets, áudio, etc.
+         * Neste exemplo, não carregamos assets, usamos formas simples.
+         */
+        function preload() {
+            // Não há assets para carregar neste exemplo (usando formas simples)
+        }
+
+        /**
+         * Função de criação do Phaser.
+         * Chamada uma vez quando a cena é criada, para configurar o jogo.
+         */
+        function create() {
+            this.cameras.main.setBackgroundColor('#34495e'); // Cor de fundo do jogo (azul-acinzentado)
+            this.physics.world.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT); // Define os limites do mundo da física
+
+            // Chão (plataforma estática)
+            this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT - 20, GAME_WIDTH, 40, 0x2c3e50).setOrigin(0.5);
+            let ground = this.physics.add.staticGroup();
+            // Cria um objeto de física invisível para o chão
+            ground.create(GAME_WIDTH / 2, GAME_HEIGHT - 20, '').setSize(GAME_WIDTH, 40).setVisible(false);
+
+            // Jogador 1
+            player1 = this.physics.add.rectangle(GAME_WIDTH * 0.25, GAME_HEIGHT - 100, 50, 100, player1Char.color);
+            player1.setCollideWorldBounds(true); // Impede que o jogador saia dos limites do mundo
+            player1.setOrigin(0.5, 1); // Define a origem no centro inferior para colisão com o chão
+            this.physics.add.collider(player1, ground); // Adiciona colisão entre o jogador e o chão
+            player1.health = player1Char.health;
+            player1.attackPower = player1Char.attackPower;
+            player1.speed = player1Char.speed;
+            player1.jumpForce = player1Char.jumpForce;
+            player1.facingRight = true; // Direção inicial do jogador 1
+
+            // Jogador 2
+            player2 = this.physics.add.rectangle(GAME_WIDTH * 0.75, GAME_HEIGHT - 100, 50, 100, player2Char.color);
+            player2.setCollideWorldBounds(true);
+            player2.setOrigin(0.5, 1);
+            this.physics.add.collider(player2, ground);
+            player2.health = player2Char.health;
+            player2.attackPower = player2Char.attackPower;
+            player2.speed = player2Char.speed;
+            player2.jumpForce = player2Char.jumpForce;
+            player2.facingRight = false; // Direção inicial do jogador 2
+
+            // Inicializa as vidas dos jogadores
+            player1Health = player1Char.health;
+            player2Health = player2Char.health;
+            updateHealthBars(); // Atualiza as barras de vida na UI
+
+            // Configura os controles do teclado
+            cursors = this.input.keyboard.createCursorKeys(); // Setas para o Jogador 2
+            keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+            keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+            keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+            keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S); // Ataque do Jogador 1
+
+            keyLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
+            keyRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+            keyUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
+            keyDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN); // Ataque do Jogador 2
+        }
+
+        /**
+         * Função de atualização do Phaser.
+         * Chamada a cada frame do jogo para lógica de movimento, ataque, etc.
+         */
+        function update() {
+            // Se a vida de algum jogador chegou a zero, o jogo acabou, para as atualizações
+            if (player1Health <= 0 || player2Health <= 0) {
+                return;
+            }
+
+            // --- Controles do Jogador 1 (A, D, W, S) ---
+            if (keyA.isDown) {
+                player1.setVelocityX(-player1.speed);
+                player1.facingRight = false;
+            } else if (keyD.isDown) {
+                player1.setVelocityX(player1.speed);
+                player1.facingRight = true;
+            } else {
+                player1.setVelocityX(0); // Para o movimento horizontal se nenhuma tecla estiver pressionada
+            }
+
+            // Pulo do Jogador 1
+            if (keyW.isDown && player1.body.touching.down) {
+                player1.setVelocityY(-player1.jumpForce);
+                if (jumpSound) jumpSound.triggerAttackRelease("C5", "8n"); // Toca som de pulo
+            }
+
+            // Ataque do Jogador 1
+            if (keyS.isDown && !player1Attacking && !player1AttackCooldown) {
+                player1Attacking = true;
+                player1AttackCooldown = true;
+                player1.setVelocityX(0); // Para o movimento durante o ataque
+                performAttack(player1, player2); // Executa a lógica de ataque
+                this.time.delayedCall(200, () => { // Duração da "animação" de ataque
+                    player1Attacking = false;
+                });
+                this.time.delayedCall(500, () => { // Cooldown do ataque
+                    player1AttackCooldown = false;
+                });
+            }
+
+            // --- Controles do Jogador 2 (Setas) ---
+            if (keyLeft.isDown) {
+                player2.setVelocityX(-player2.speed);
+                player2.facingRight = false;
+            } else if (keyRight.isDown) {
+                player2.setVelocityX(player2.speed);
+                player2.facingRight = true;
+            } else {
+                player2.setVelocityX(0);
+            }
+
+            // Pulo do Jogador 2
+            if (keyUp.isDown && player2.body.touching.down) {
+                player2.setVelocityY(-player2.jumpForce);
+                if (jumpSound) jumpSound.triggerAttackRelease("D5", "8n"); // Toca som de pulo
+            }
+
+            // Ataque do Jogador 2
+            if (keyDown.isDown && !player2Attacking && !player2AttackCooldown) {
+                player2Attacking = true;
+                player2AttackCooldown = true;
+                player2.setVelocityX(0); // Para o movimento durante o ataque
+                performAttack(player2, player1); // Executa a lógica de ataque
+                this.time.delayedCall(200, () => { // Duração da "animação" de ataque
+                    player2Attacking = false;
+                });
+                this.time.delayedCall(500, () => { // Cooldown do ataque
+                    player2AttackCooldown = false;
+                });
+            }
+
+            // Garante que os jogadores estejam sempre virados um para o outro
+            if (player1.x < player2.x) {
+                player1.facingRight = true;
+                player2.facingRight = false;
+            } else {
+                player1.facingRight = false;
+                player2.facingRight = true;
+            }
+        }
+
+        /**
+         * Lógica para realizar um ataque de um jogador no outro.
+         * @param {Phaser.Physics.Arcade.Sprite} attacker - O jogador que está atacando.
+         * @param {Phaser.Physics.Arcade.Sprite} target - O jogador que está sendo atacado.
+         */
+        function performAttack(attacker, target) {
+            const attackRange = 70; // Distância máxima para o ataque atingir o alvo
+            // Calcula a distância entre o atacante e o alvo
+            const distance = Phaser.Math.Distance.Between(attacker.x, attacker.y, target.x, target.y);
+
+            // Verifica se o alvo está dentro do alcance e na direção correta do atacante
+            if (distance < attackRange &&
+                ((attacker.facingRight && attacker.x < target.x) || (!attacker.facingRight && attacker.x > target.x))) {
+                target.health -= attacker.attackPower; // Reduz a vida do alvo
+                if (hitSound) hitSound.triggerAttackRelease("C3", "8n"); // Toca som de impacto
+
+                updateHealthBars(); // Atualiza as barras de vida na UI
+
+                // Efeito visual de "hit" no alvo (pisca branco)
+                target.setTint(0xffffff); // Cor branca
+                setTimeout(() => {
+                    // Retorna à cor original após um breve período
+                    target.setTint(target === player1 ? player1Char.color : player2Char.color);
+                }, 100);
+
+                // Verifica se o jogo acabou
+                if (target.health <= 0) {
+                    target.health = 0; // Garante que a vida não seja negativa
+                    updateHealthBars();
+                    endGame(attacker === player1 ? player1Char.name : player2Char.name); // Chama a função de fim de jogo
+                }
+            }
+        }
+
+        /**
+         * Atualiza a largura das barras de vida na UI com base na vida atual dos jogadores.
+         */
+        function updateHealthBars() {
+            player1HealthBar.style.width = `${Math.max(0, player1.health)}%`;
+            player2HealthBar.style.width = `${Math.max(0, player2.health)}%`;
+        }
+
+        /**
+         * Exibe o modal de fim de jogo com o nome do vencedor.
+         * @param {string} winnerName - O nome do personagem vencedor.
+         */
+        function endGame(winnerName) {
+            gameOverText.textContent = `${winnerName} Venceu!`; // Define o texto do vencedor
+            gameOverModal.style.display = 'flex'; // Exibe o modal
+            if (backgroundMusic) {
+                backgroundMusic.stop(); // Para a música de fundo
+            }
+        }
     </script>
 </body>
 </html>
