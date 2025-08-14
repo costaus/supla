@@ -1,561 +1,187 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jogo de Luta Épico</title>
-    <!-- Carrega o Tailwind CSS para estilização rápida e responsiva -->
+    <title>Vegas | Experiência Premium</title>
+    <!-- Inclui o Tailwind CSS para um design rápido e moderno -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Carrega a biblioteca Phaser para o desenvolvimento do jogo 2D -->
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
-    <!-- Carrega a biblioteca Tone.js para manipulação de áudio -->
-    <script src="https://cdn.jsdelivr.net/npm/@tonejs/tone@14.7.77/build/Tone.min.js"></script>
+    <!-- Carrega a fonte 'Inter' do Google Fonts para uma tipografia limpa -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Inclui Font Awesome para ícones de bandeiras -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Estilos globais para o corpo da página */
         body {
-            font-family: 'Inter', sans-serif; /* Fonte Inter para uma aparência moderna */
-            background-color: #1a202c; /* Cor de fundo escura (Tailwind gray-900) */
-            color: #e2e8f0; /* Cor do texto clara (Tailwind gray-200) */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh; /* Ocupa a altura total da viewport */
-            margin: 0;
-            overflow: hidden; /* Evita barras de rolagem */
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
         }
-        /* Contêiner principal do jogo */
-        #game-container {
-            width: 100%;
-            max-width: 1024px; /* Largura máxima para a área do jogo */
-            height: auto;
-            aspect-ratio: 16 / 9; /* Mantém a proporção 16:9 para o jogo */
-            background-color: #000; /* Fundo preto para o jogo */
-            border-radius: 1rem; /* Cantos arredondados */
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2); /* Sombra para profundidade */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            position: relative; /* Necessário para posicionamento absoluto de elementos internos */
+        /* Animação para a entrada da imagem principal */
+        .image-slide-in {
+            opacity: 0;
+            transform: translateX(-100px);
+            animation: slideIn 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
-        /* Telas de seleção de personagem e jogo */
-        #character-selection, #game-screen {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateX(0); }
         }
-        #game-screen {
-            display: none; /* A tela do jogo fica oculta por padrão */
-            position: relative; /* Mantém o posicionamento relativo para seus filhos absolutos (barras de vida, modal) */
+        /* Animação para o texto de impacto */
+        .text-fade-in {
+            opacity: 0;
+            animation: fadeIn 1.5s ease-in-out forwards;
+            animation-delay: 0.5s;
         }
-        /* Contêiner para o canvas do Phaser */
-        #phaser-game {
-            width: 100%;
-            height: 100%;
-            background-color: #333; /* Cor de fundo para depuração: se o canvas não aparecer, este fundo aparecerá */
-            display: flex; /* Garante que o canvas dentro dele possa ser centralizado se necessário */
-            justify-content: center;
-            align-items: center;
-        }
-        /* Estilos para o canvas do Phaser */
-        canvas {
-            border-radius: 1rem; /* Cantos arredondados para o canvas */
-            width: 100% !important; /* Garante que o canvas ocupe 100% da largura do pai */
-            height: 100% !important; /* Garante que o canvas ocupe 100% da altura do pai */
-            display: block; /* Remove espaço extra abaixo do canvas */
-            /* Adicionado para depuração: uma borda verde para confirmar a presença do canvas */
-            border: 2px solid transparent; /* Inicialmente transparente */
-        }
-        /* Estilos para os cards de seleção de personagem */
-        .character-card {
-            transition: transform 0.3s ease-in-out, border-color 0.3s ease-in-out; /* Transições suaves */
-        }
-        .character-card:hover {
-            transform: scale(1.02); /* Pequeno zoom ao passar o mouse */
-        }
-        /* Animação para o texto de Game Over */
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-        .animate-pulse {
-            animation: pulse 1.5s infinite;
+        @keyframes fadeIn {
+            to { opacity: 1; }
         }
     </style>
 </head>
-<body>
-    <div id="game-container" class="p-4 sm:p-6 md:p-8">
-        <!-- Tela de Seleção de Personagem -->
-        <div id="character-selection" class="space-y-6">
-            <h1 class="text-4xl font-bold text-center mb-8">Escolha seu Lutador!</h1>
-            <div class="flex flex-col sm:flex-row gap-8 justify-center items-center">
-                <!-- Card do Lutador 1 -->
-                <div id="char1-card" class="character-card bg-gray-800 p-6 rounded-lg shadow-lg cursor-pointer">
-                    <img src="https://placehold.co/150x150/FF0000/FFFFFF?text=Lutador+1" alt="Lutador 1" class="w-32 h-32 mx-auto mb-4 rounded-full border-4 border-red-500">
-                    <h2 class="text-xl font-semibold text-center">O Punho de Ferro</h2>
-                    <p class="text-sm text-gray-400 text-center">Um guerreiro robusto com ataques poderosos.</p>
-                    <button data-char="char1" class="select-button mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200">Selecionar</button>
-                </div>
-                <!-- Card do Lutador 2 -->
-                <div id="char2-card" class="character-card bg-gray-800 p-6 rounded-lg shadow-lg cursor-pointer">
-                    <img src="https://placehold.co/150x150/0000FF/FFFFFF?text=Lutador+2" alt="Lutador 2" class="w-32 h-32 mx-auto mb-4 rounded-full border-4 border-blue-500">
-                    <h2 class="text-xl font-semibold text-center">A Sombra Veloz</h2>
-                    <p class="text-sm text-gray-400 text-center">Um ninja ágil com movimentos rápidos.</p>
-                    <button data-char="char2" class="select-button mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200">Selecionar</button>
-                </div>
+<body class="bg-black text-white">
+
+    <!-- Seção de impacto inicial (Hero) -->
+    <section class="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
+        <!-- Logo e seletores de idioma no topo da tela -->
+        <div class="absolute top-8 w-full max-w-7xl px-4 flex justify-between items-center z-10">
+            <a href="#" class="text-white font-bold text-4xl" data-lang-key="logo">Vegas</a>
+            <div class="flex space-x-2">
+                <button onclick="changeLanguage('pt')" class="transform hover:scale-110 transition-transform">
+                    <span class="fi fi-br rounded-full w-8 h-8 flex items-center justify-center text-xl" title="Português">🇧🇷</span>
+                </button>
+                <button onclick="changeLanguage('en')" class="transform hover:scale-110 transition-transform">
+                    <span class="fi fi-us rounded-full w-8 h-8 flex items-center justify-center text-xl" title="English">🇺🇸</span>
+                </button>
             </div>
         </div>
 
-        <!-- Tela do Jogo -->
-        <div id="game-screen" class="relative">
-            <!-- Barras de Vida -->
-            <div id="health-bars" class="absolute top-4 left-0 right-0 flex justify-between px-8 z-10">
-                <div class="flex flex-col items-start w-1/2 pr-4">
-                    <span id="player1-name" class="text-lg font-bold text-red-400 mb-1">Lutador 1</span>
-                    <div class="w-full bg-gray-700 rounded-full h-4">
-                        <div id="player1-health" class="bg-red-500 h-4 rounded-full transition-all duration-100 ease-out" style="width: 100%;"></div>
-                    </div>
-                </div>
-                <div class="flex flex-col items-end w-1/2 pl-4">
-                    <span id="player2-name" class="text-lg font-bold text-blue-400 mb-1">Lutador 2</span>
-                    <div class="w-full bg-gray-700 rounded-full h-4">
-                        <div id="player2-health" class="bg-blue-500 h-4 rounded-full transition-all duration-100 ease-out" style="width: 100%;"></div>
-                    </div>
-                </div>
+        <!-- Conteúdo principal com imagem e texto -->
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-16 md:gap-8 p-8">
+            <!-- Imagem de impacto com fundo transparente -->
+            <div class="image-slide-in flex justify-center md:justify-start">
+                <img src="https://iili.io/FthTh91.png" alt="Produto Vegas Premium" class="w-full max-w-lg md:max-w-xl">
             </div>
-            <!-- Contêiner para o canvas do Phaser -->
-            <div id="phaser-game" class="w-full h-full"></div>
-            <!-- Modal de Fim de Jogo -->
-            <div id="game-over-modal" class="hidden absolute inset-0 bg-black bg-opacity-80 flex flex-col justify-center items-center rounded-xl z-20">
-                <h2 id="game-over-text" class="text-5xl font-extrabold text-white mb-6 animate-pulse"></h2>
-                <button id="restart-button" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-full text-xl shadow-lg transition-colors duration-200">Jogar Novamente</button>
+
+            <!-- Texto de marketing e call-to-action -->
+            <div class="text-fade-in text-center md:text-left">
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight" data-lang-key="hero-title">
+                    Vegas. Uma Nova Experiência.
+                </h1>
+                <p class="text-base md:text-xl font-light mb-8 max-w-md mx-auto md:mx-0" data-lang-key="hero-subtitle">
+                    Descubra o auge do bem-estar com nossa linha premium de produtos.
+                    Qualidade inigualável, design sofisticado.
+                </p>
+                <a href="#about" class="inline-block bg-green-500 text-black font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-green-600 transition-all transform hover:scale-105" data-lang-key="hero-cta">
+                    Saiba Mais
+                </a>
             </div>
         </div>
-    </div>
+    </section>
 
+    <!-- Seção de navegação que aparece ao rolar -->
+    <header id="main-nav" class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-70 backdrop-blur-sm p-4 hidden border-b border-gray-800">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#" class="text-3xl font-bold text-white uppercase tracking-widest" data-lang-key="logo-nav">Vegas</a>
+            <nav class="flex space-x-8">
+                <a href="#about" class="text-lg font-medium text-gray-400 hover:text-green-400 transition-colors" data-lang-key="nav-about">A Marca</a>
+                <a href="#pods" class="text-lg font-medium text-gray-400 hover:text-green-400 transition-colors" data-lang-key="nav-pods">Produtos</a>
+                <a href="#contact" class="text-lg font-medium text-gray-400 hover:text-green-400 transition-colors" data-lang-key="nav-contact">Contato</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Conteúdo da página - Seção "Sobre a Marca" (Informações) -->
+    <main class="py-16 px-4 md:px-8 max-w-7xl mx-auto">
+        <section id="about" class="mb-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12" data-lang-key="section-about-title">A Essência da Vegas</h2>
+            <div class="max-w-4xl mx-auto text-center text-gray-300 space-y-6">
+                <p data-lang-key="about-p1">
+                    Nascida da paixão pela qualidade e inovação, a Vegas é uma marca que redefine a experiência premium.
+                    Cada um de nossos produtos é meticulosamente criado para oferecer uma jornada única de sabores e sensações.
+                </p>
+                <p data-lang-key="about-p2">
+                    Nossa missão é simples: proporcionar o que há de mais puro e potente no mercado, com um design que reflete
+                    nossa filosofia de sofisticação e excelência.
+                </p>
+                <p data-lang-key="about-p3">
+                    Junte-se a nós nesta jornada e descubra um novo patamar de prazer e bem-estar.
+                </p>
+            </div>
+        </section>
+
+        <!-- Seção de Rodapé -->
+        <footer id="contact" class="mt-24 py-12 border-t border-gray-800 text-gray-400 text-center">
+            <h3 class="text-xl font-semibold mb-4" data-lang-key="footer-title">Vegas. Seu Destino Premium.</h3>
+            <div class="flex justify-center space-x-6 mb-6">
+                <a href="#" class="text-gray-400 hover:text-green-400 transition-colors">
+                    <i class="fab fa-instagram fa-2x"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-green-400 transition-colors">
+                    <i class="fab fa-twitter fa-2x"></i>
+                </a>
+                <a href="#" class="text-gray-400 hover:text-green-400 transition-colors">
+                    <i class="fab fa-facebook-f fa-2x"></i>
+                </a>
+            </div>
+            <p class="text-sm" data-lang-key="footer-copyright">&copy; 2025 Vegas. Todos os direitos reservados.</p>
+        </footer>
+    </main>
+
+    <!-- Script para funcionalidade de tradução e menu mobile -->
     <script>
-        // Variáveis globais para configuração do Firebase (não usadas neste jogo, mas mantidas conforme instrução)
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-        // Configurações do jogo
-        const GAME_WIDTH = 960;  // Largura do jogo em pixels (Phaser)
-        const GAME_HEIGHT = 540; // Altura do jogo em pixels (Phaser)
-
-        // Propriedades dos personagens
-        const characters = {
-            char1: {
-                name: "O Punho de Ferro",
-                color: 0xff0000, // Vermelho
-                health: 100,
-                attackPower: 10,
-                speed: 150,
-                jumpForce: 300
+        const translations = {
+            'pt': {
+                'logo': 'Vegas',
+                'logo-nav': 'Vegas',
+                'nav-about': 'A Marca',
+                'nav-pods': 'Produtos',
+                'nav-contact': 'Contato',
+                'hero-title': 'Vegas. Uma Nova Experiência.',
+                'hero-subtitle': 'Descubra o auge do bem-estar com nossa linha premium de produtos. Qualidade inigualável, design sofisticado.',
+                'hero-cta': 'Saiba Mais',
+                'section-about-title': 'A Essência da Vegas',
+                'about-p1': 'Nascida da paixão pela qualidade e inovação, a Vegas é uma marca que redefine a experiência premium. Cada um de nossos produtos é meticulosamente criado para oferecer uma jornada única de sabores e sensações.',
+                'about-p2': 'Nossa missão é simples: proporcionar o que há de mais puro e potente no mercado, com um design que reflete nossa filosofia de sofisticação e excelência.',
+                'about-p3': 'Junte-se a nós nesta jornada e descubra um novo patamar de prazer e bem-estar.',
+                'footer-title': 'Vegas. Seu Destino Premium.',
+                'footer-copyright': '© 2025 Vegas. Todos os direitos reservados.'
             },
-            char2: {
-                name: "A Sombra Veloz",
-                color: 0x0000ff, // Azul
-                health: 100,
-                attackPower: 12,
-                speed: 180,
-                jumpForce: 320
+            'en': {
+                'logo': 'Vegas',
+                'logo-nav': 'Vegas',
+                'nav-about': 'The Brand',
+                'nav-pods': 'Products',
+                'nav-contact': 'Contact',
+                'hero-title': 'Vegas. A New Experience.',
+                'hero-subtitle': 'Discover the pinnacle of well-being with our premium line of products. Unmatched quality, sophisticated design.',
+                'hero-cta': 'Learn More',
+                'section-about-title': 'The Essence of Vegas',
+                'about-p1': 'Born from a passion for quality and innovation, Vegas is a brand that redefines the premium experience. Each of our products is meticulously crafted to offer a unique journey of flavors and sensations.',
+                'about-p2': 'Our mission is simple: to provide the purest and most potent products on the market, with a design that reflects our philosophy of sophistication and excellence.',
+                'about-p3': 'Join us on this journey and discover a new level of pleasure and well-being.',
+                'footer-title': 'Vegas. Your Premium Destination.',
+                'footer-copyright': '© 2025 Vegas. All rights reserved.'
             }
         };
 
-        let player1Char = null; // Personagem selecionado para o Jogador 1
-        let player2Char = null; // Personagem selecionado para o Jogador 2
-
-        // Referências aos elementos da UI
-        const characterSelectionScreen = document.getElementById('character-selection');
-        const gameScreen = document.getElementById('game-screen');
-        const player1NameDisplay = document.getElementById('player1-name');
-        const player2NameDisplay = document.getElementById('player2-name');
-        const player1HealthBar = document.getElementById('player1-health');
-        const player2HealthBar = document.getElementById('player2-health');
-        const gameOverModal = document.getElementById('game-over-modal');
-        const gameOverText = document.getElementById('game-over-text');
-        const restartButton = document.getElementById('restart-button');
-
-        // Variáveis para áudio (Tone.js)
-        let hitSound, jumpSound, backgroundMusic;
-        let gameInstance = null; // Para armazenar a instância do jogo Phaser
-
-        /**
-         * Configura e carrega os sons do jogo usando Tone.js.
-         */
-        async function setupAudio() {
-            try {
-                await Tone.start(); // Inicia o contexto de áudio do Tone.js
-                console.log("Contexto de áudio iniciado.");
-
-                // Som de impacto (soco/ataque)
-                hitSound = new Tone.PolySynth(Tone.Synth, {
-                    oscillator: { type: "sine" },
-                    envelope: {
-                        attack: 0.001,
-                        decay: 0.1,
-                        sustain: 0.01,
-                        release: 0.1
-                    }
-                }).toDestination();
-
-                // Som de pulo
-                jumpSound = new Tone.PolySynth(Tone.Synth, {
-                    oscillator: { type: "triangle" },
-                    envelope: {
-                        attack: 0.005,
-                        decay: 0.1,
-                        sustain: 0.05,
-                        release: 0.2
-                    }
-                }).toDestination();
-
-                // Música de fundo simples (looping)
-                backgroundMusic = new Tone.Loop(time => {
-                    Tone.Transport.bpm.value = 100; // Define o BPM
-                    const synth = new Tone.Synth().toDestination();
-                    synth.triggerAttackRelease("C4", "8n", time);
-                    synth.triggerAttackRelease("E4", "8n", time + 0.25);
-                    synth.triggerAttackRelease("G4", "8n", time + 0.5);
-                    synth.dispose(); // Libera o synth após o uso
-                }, "1n").start(0); // Inicia o loop imediatamente
-                Tone.Transport.start(); // Inicia o transporte para que o loop toque
-                console.log("Configuração de áudio completa.");
-            } catch (error) {
-                console.error("Erro ao configurar áudio:", error);
-            }
+        function changeLanguage(lang) {
+            const elements = document.querySelectorAll('[data-lang-key]');
+            elements.forEach(el => {
+                const key = el.getAttribute('data-lang-key');
+                el.textContent = translations[lang][key];
+            });
+            document.documentElement.lang = lang;
         }
 
-        // --- Lógica de Seleção de Personagem ---
-        document.querySelectorAll('.select-button').forEach(button => {
-            button.addEventListener('click', () => {
-                const charId = button.dataset.char;
-                if (!player1Char) {
-                    // Seleciona o personagem para o Jogador 1
-                    player1Char = characters[charId];
-                    player1NameDisplay.textContent = player1Char.name;
-                    button.closest('.character-card').classList.add('border-green-500', 'scale-105');
-                    button.textContent = 'Selecionado (P1)';
-                    button.disabled = true; // Desabilita o botão do personagem selecionado
-                    // Garante que o outro personagem esteja selecionável para o P2
-                    const otherCharButton = document.querySelector(`.select-button[data-char="${charId === 'char1' ? 'char2' : 'char1'}"]`);
-                    if (otherCharButton) otherCharButton.disabled = false;
-                } else if (!player2Char && charId !== (player1Char === characters.char1 ? 'char1' : 'char2')) {
-                    // Seleciona o personagem para o Jogador 2 (deve ser diferente do P1)
-                    player2Char = characters[charId];
-                    player2NameDisplay.textContent = player2Char.name;
-                    button.closest('.character-card').classList.add('border-green-500', 'scale-105');
-                    button.textContent = 'Selecionado (P2)';
-                    button.disabled = true; // Desabilita o botão do personagem selecionado
-                    startGame(); // Inicia o jogo após a seleção dos dois personagens
-                } else if (player1Char && charId === (player1Char === characters.char1 ? 'char1' : 'char2')) {
-                    // Mensagem de aviso se tentar selecionar o mesmo personagem
-                    console.log("Este personagem já foi selecionado pelo Jogador 1. Por favor, escolha um diferente para o Jogador 2.");
-                }
-            });
-        });
+        const mainNav = document.getElementById('main-nav');
+        let heroHeight = window.innerHeight;
 
-        /**
-         * Inicia o jogo, transicionando da tela de seleção para a tela do jogo.
-         */
-        function startGame() {
-            characterSelectionScreen.style.display = 'none'; // Oculta a tela de seleção
-            gameScreen.style.display = 'flex'; // Exibe a tela do jogo
-
-            // Configuração do jogo Phaser
-            const config = {
-                type: Phaser.AUTO, // Detecta automaticamente WebGL ou Canvas
-                width: GAME_WIDTH,
-                height: GAME_HEIGHT,
-                parent: 'phaser-game', // ID do elemento HTML onde o canvas será inserido
-                physics: {
-                    default: 'arcade', // Usa o sistema de física Arcade
-                    arcade: {
-                        gravity: { y: 600 }, // Gravidade para simular pulos
-                        debug: false // Defina como true para ver as caixas de colisão
-                    }
-                },
-                scene: {
-                    preload: preload, // Função para carregar assets
-                    create: create,   // Função para configurar o jogo
-                    update: update    // Função chamada a cada frame do jogo
-                }
-            };
-            try {
-                gameInstance = new Phaser.Game(config); // Cria a instância do jogo Phaser
-                console.log("Instância do jogo Phaser criada.");
-
-                // Adiciona um listener para quando o jogo estiver pronto e o canvas for anexado
-                gameInstance.events.on('ready', () => {
-                    console.log("Phaser game está pronto e o canvas deve estar anexado.");
-                    const phaserCanvas = document.querySelector('#phaser-game canvas');
-                    if (phaserCanvas) {
-                        console.log("Elemento canvas do Phaser encontrado:", phaserCanvas);
-                        phaserCanvas.style.border = '2px solid limegreen'; // Adiciona uma borda verde para depuração
-                    } else {
-                        console.error("Elemento canvas do Phaser NÃO encontrado!");
-                    }
-                });
-
-            } catch (error) {
-                console.error("Erro ao criar a instância do jogo Phaser:", error);
-            }
-            setupAudio(); // Inicia o áudio quando o jogo começa
-        }
-
-        // Event listener para o botão de reiniciar
-        restartButton.addEventListener('click', () => {
-            gameOverModal.style.display = 'none'; // Oculta o modal de fim de jogo
-            player1Char = null; // Reseta a seleção de personagens
-            player2Char = null;
-
-            // Reseta a UI de seleção de personagens
-            document.querySelectorAll('.select-button').forEach(button => {
-                button.disabled = false;
-                button.textContent = 'Selecionar';
-                button.closest('.character-card').classList.remove('border-green-500', 'scale-105');
-            });
-            gameScreen.style.display = 'none'; // Oculta a tela do jogo
-            characterSelectionScreen.style.display = 'flex'; // Exibe a tela de seleção
-
-            // Destrói a instância atual do jogo Phaser para reiniciar completamente
-            if (gameInstance) {
-                gameInstance.destroy(true);
-                gameInstance = null; // Limpa a instância
-            }
-            // Para a música de fundo
-            if (backgroundMusic) {
-                backgroundMusic.stop();
-                Tone.Transport.stop(); // Para o transporte do Tone.js
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > heroHeight) {
+                mainNav.classList.remove('hidden');
+            } else {
+                mainNav.classList.add('hidden');
             }
         });
-
-        // --- Lógica do Jogo Phaser ---
-        let player1, player2; // Objetos dos jogadores no Phaser
-        let player1Health, player2Health; // Variáveis de vida dos jogadores
-        let player1Attacking = false; // Estado de ataque do Jogador 1
-        let player2Attacking = false; // Estado de ataque do Jogador 2
-        let player1AttackCooldown = false; // Cooldown de ataque do Jogador 1
-        let player2AttackCooldown = false; // Cooldown de ataque do Jogador 2
-        let cursors; // Controles de teclado padrão do Phaser (setas)
-        let keyA, keyD, keyW, keyS; // Teclas para o Jogador 1 (A, D, W, S)
-        let keyLeft, keyRight, keyUp, keyDown; // Teclas para o Jogador 2 (setas)
-
-        /**
-         * Função de pré-carregamento do Phaser.
-         * Usada para carregar assets como imagens, spritesheets, áudio, etc.
-         * Neste exemplo, não carregamos assets, usamos formas simples.
-         */
-        function preload() {
-            console.log("Phaser: preload chamada.");
-        }
-
-        /**
-         * Função de criação do Phaser.
-         * Chamada uma vez quando a cena é criada, para configurar o jogo.
-         */
-        function create() {
-            console.log("Phaser: create chamada! Configurando cenário e personagens."); // Log de depuração
-            this.cameras.main.setBackgroundColor('#34495e'); // Cor de fundo do jogo (azul-acinzentado)
-
-            // Depuração: Adiciona um simples retângulo verde para confirmar a renderização
-            console.log("Phaser: Adicionando retângulo de depuração.");
-            this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT / 2, 100, 100, 0x00ff00).setOrigin(0.5);
-
-
-            this.physics.world.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT); // Define os limites do mundo da física
-
-            // Chão (plataforma estática)
-            console.log("Phaser: Criando chão.");
-            this.add.rectangle(GAME_WIDTH / 2, GAME_HEIGHT - 20, GAME_WIDTH, 40, 0x2c3e50).setOrigin(0.5);
-            let ground = this.physics.add.staticGroup();
-            // Cria um objeto de física invisível para o chão
-            ground.create(GAME_WIDTH / 2, GAME_HEIGHT - 20, '').setSize(GAME_WIDTH, 40).setVisible(false);
-
-            // Jogador 1
-            console.log("Phaser: Criando Jogador 1.");
-            player1 = this.physics.add.rectangle(GAME_WIDTH * 0.25, GAME_HEIGHT - 100, 50, 100, player1Char.color);
-            player1.setCollideWorldBounds(true); // Impede que o jogador saia dos limites do mundo
-            player1.setOrigin(0.5, 1); // Define a origem no centro inferior para colisão com o chão
-            this.physics.add.collider(player1, ground); // Adiciona colisão entre o jogador e o chão
-            player1.health = player1Char.health;
-            player1.attackPower = player1Char.attackPower;
-            player1.speed = player1Char.speed;
-            player1.jumpForce = player1Char.jumpForce;
-            player1.facingRight = true; // Direção inicial do jogador 1
-
-            // Jogador 2
-            console.log("Phaser: Criando Jogador 2.");
-            player2 = this.physics.add.rectangle(GAME_WIDTH * 0.75, GAME_HEIGHT - 100, 50, 100, player2Char.color);
-            player2.setCollideWorldBounds(true);
-            player2.setOrigin(0.5, 1);
-            this.physics.add.collider(player2, ground);
-            player2.health = player2Char.health;
-            player2.attackPower = player2Char.attackPower;
-            player2.speed = player2Char.speed;
-            player2.jumpForce = player2Char.jumpForce;
-            player2.facingRight = false; // Direção inicial do jogador 2
-
-            // Inicializa as vidas dos jogadores
-            player1Health = player1Char.health;
-            player2Health = player2Char.health;
-            updateHealthBars(); // Atualiza as barras de vida na UI
-
-            // Configura os controles do teclado
-            console.log("Phaser: Configurando controles do teclado.");
-            cursors = this.input.keyboard.createCursorKeys(); // Setas para o Jogador 2
-            keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-            keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-            keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-            keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S); // Ataque do Jogador 1
-
-            keyLeft = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
-            keyRight = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
-            keyUp = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
-            keyDown = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN); // Ataque do Jogador 2
-        }
-
-        /**
-         * Função de atualização do Phaser.
-         * Chamada a cada frame do jogo para lógica de movimento, ataque, etc.
-         */
-        function update() {
-            // Se a vida de algum jogador chegou a zero, o jogo acabou, para as atualizações
-            if (player1Health <= 0 || player2Health <= 0) {
-                return;
-            }
-
-            // --- Controles do Jogador 1 (A, D, W, S) ---
-            if (keyA.isDown) {
-                player1.setVelocityX(-player1.speed);
-                player1.facingRight = false;
-            } else if (keyD.isDown) {
-                player1.setVelocityX(player1.speed);
-                player1.facingRight = true;
-            } else {
-                player1.setVelocityX(0); // Para o movimento horizontal se nenhuma tecla estiver pressionada
-            }
-
-            // Pulo do Jogador 1
-            if (keyW.isDown && player1.body.touching.down) {
-                player1.setVelocityY(-player1.jumpForce);
-                if (jumpSound) jumpSound.triggerAttackRelease("C5", "8n"); // Toca som de pulo
-            }
-
-            // Ataque do Jogador 1
-            if (keyS.isDown && !player1Attacking && !player1AttackCooldown) {
-                player1Attacking = true;
-                player1AttackCooldown = true;
-                player1.setVelocityX(0); // Para o movimento durante o ataque
-                performAttack(player1, player2); // Executa a lógica de ataque
-                this.time.delayedCall(200, () => { // Duração da "animação" de ataque
-                    player1Attacking = false;
-                });
-                this.time.delayedCall(500, () => { // Cooldown do ataque
-                    player1AttackCooldown = false;
-                });
-            }
-
-            // --- Controles do Jogador 2 (Setas) ---
-            if (keyLeft.isDown) {
-                player2.setVelocityX(-player2.speed);
-                player2.facingRight = false;
-            } else if (keyRight.isDown) {
-                player2.setVelocityX(player2.speed);
-                player2.facingRight = true;
-            } else {
-                player2.setVelocityX(0);
-            }
-
-            // Pulo do Jogador 2
-            if (keyUp.isDown && player2.body.touching.down) {
-                player2.setVelocityY(-player2.jumpForce);
-                if (jumpSound) jumpSound.triggerAttackRelease("D5", "8n"); // Toca som de pulo
-            }
-
-            // Ataque do Jogador 2
-            if (keyDown.isDown && !player2Attacking && !player2AttackCooldown) {
-                player2Attacking = true;
-                player2AttackCooldown = true;
-                player2.setVelocityX(0); // Para o movimento durante o ataque
-                performAttack(player2, player1); // Executa a lógica de ataque
-                this.time.delayedCall(200, () => { // Duração da "animação" de ataque
-                    player2Attacking = false;
-                });
-                this.time.delayedCall(500, () => { // Cooldown do ataque
-                    player2AttackCooldown = false;
-                });
-            }
-
-            // Garante que os jogadores estejam sempre virados um para o outro
-            if (player1.x < player2.x) {
-                player1.facingRight = true;
-                player2.facingRight = false;
-            } else {
-                player1.facingRight = false;
-                player2.facingRight = true;
-            }
-        }
-
-        /**
-         * Lógica para realizar um ataque de um jogador no outro.
-         * @param {Phaser.Physics.Arcade.Sprite} attacker - O jogador que está atacando.
-         * @param {Phaser.Physics.Arcade.Sprite} target - O jogador que está sendo atacado.
-         */
-        function performAttack(attacker, target) {
-            const attackRange = 70; // Distância máxima para o ataque atingir o alvo
-            // Calcula a distância entre o atacante e o alvo
-            const distance = Phaser.Math.Distance.Between(attacker.x, attacker.y, target.x, target.y);
-
-            // Verifica se o alvo está dentro do alcance e na direção correta do atacante
-            if (distance < attackRange &&
-                ((attacker.facingRight && attacker.x < target.x) || (!attacker.facingRight && attacker.x > target.x))) {
-                target.health -= attacker.attackPower; // Reduz a vida do alvo
-                if (hitSound) hitSound.triggerAttackRelease("C3", "8n"); // Toca som de impacto
-
-                updateHealthBars(); // Atualiza as barras de vida na UI
-
-                // Efeito visual de "hit" no alvo (pisca branco)
-                target.setTint(0xffffff); // Cor branca
-                setTimeout(() => {
-                    // Retorna à cor original após um breve período
-                    target.setTint(target === player1 ? player1Char.color : player2Char.color);
-                }, 100);
-
-                // Verifica se o jogo acabou
-                if (target.health <= 0) {
-                    target.health = 0; // Garante que a vida não seja negativa
-                    updateHealthBars();
-                    endGame(attacker === player1 ? player1Char.name : player2Char.name); // Chama a função de fim de jogo
-                }
-            }
-        }
-
-        /**
-         * Atualiza a largura das barras de vida na UI com base na vida atual dos jogadores.
-         */
-        function updateHealthBars() {
-            player1HealthBar.style.width = `${Math.max(0, player1.health)}%`;
-            player2HealthBar.style.width = `${Math.max(0, player2.health)}%`;
-        }
-
-        /**
-         * Exibe o modal de fim de jogo com o nome do vencedor.
-         * @param {string} winnerName - O nome do personagem vencedor.
-         */
-        function endGame(winnerName) {
-            gameOverText.textContent = `${winnerName} Venceu!`; // Define o texto do vencedor
-            gameOverModal.style.display = 'flex'; // Exibe o modal
-            if (backgroundMusic) {
-                backgroundMusic.stop(); // Para a música de fundo
-                Tone.Transport.stop(); // Para o transporte do Tone.js
-            }
-        }
     </script>
 </body>
 </html>
