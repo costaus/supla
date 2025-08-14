@@ -1,328 +1,365 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="scroll-smooth">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vegas | Experiência Premium</title>
-    <!-- Inclui o Tailwind CSS para um design rápido e moderno -->
+    <title>Pressure Los Angeles</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Carrega as fontes 'Bebas Neue' para a logo e 'Inter' para o restante do texto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Inclui Font Awesome para ícones de bandeiras -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        /* Fontes do site original, adaptadas */
+        @font-face {
+            font-family: 'ITC Benguiat';
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+            src: url('https://pressurela.com/cdn/fonts/itc_benguiat/itcbenguiat_n4.35a6953a6b671368b3270f5251f5c1055e5462c0.woff2') format('woff2');
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #000;
+            font-family: 'Assistant', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
         }
-        /* Estilo para a logo 'Vegas' */
-        .vegas-logo {
-            font-family: 'Bebas Neue', sans-serif;
+
+        .font-itc-benguiat {
+            font-family: 'ITC Benguiat', serif;
         }
-        /* Animação para a entrada da imagem principal */
-        .image-slide-in {
-            opacity: 0;
-            transform: translateY(50px);
-            animation: slideIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+
+        .scroll-container::-webkit-scrollbar {
+            height: 8px;
         }
-        @keyframes slideIn {
-            to { opacity: 1; transform: translateY(0); }
+
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: #ffd100;
+            border-radius: 4px;
         }
-        /* Animação para o texto de impacto */
-        .text-fade-in {
-            opacity: 0;
-            animation: fadeIn 1.2s ease-in-out forwards;
-            animation-delay: 0.5s;
-        }
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-        /* Efeito de fundo animado - partículas escorrendo */
-        .animated-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(6, 78, 59, 0.3) 0%, rgba(0,0,0,0) 70%);
-            transform: scale(0);
-            opacity: 0;
-            transition: transform 1.5s ease-out, opacity 1s ease-out;
-            z-index: -1;
-        }
-        .animated-bg.active {
-            transform: scale(2.5);
-            opacity: 1;
-        }
-        /* Estilo para o seletor de idioma em formato de switch */
-        .language-switch {
-            display: flex;
-            align-items: center;
-            background-color: #1a1a1a;
-            border-radius: 9999px;
-            padding: 4px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .language-switch .flag-icon {
-            width: 2rem;
-            height: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 9999px;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 10;
-        }
-        .language-switch .slider {
-            position: absolute;
-            width: 2rem;
-            height: 2rem;
-            background-color: #3b82f6; /* Cor de destaque para o seletor */
-            border-radius: 9999px;
-            transition: transform 0.3s ease;
-        }
-        .language-switch.pt .slider {
-            transform: translateX(0);
-        }
-        .language-switch.en .slider {
-            transform: translateX(100%);
-        }
-        /* Efeito de paralaxe na seção "A Marca" */
-        .parallax-bg {
-            background-image: url('https://placehold.co/1200x800/18181b/ffffff?text=NOSSA+VISAO');
-            background-attachment: fixed;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
+
+        .scroll-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
 <body class="bg-black text-white">
 
-    <!-- Seção de impacto inicial (Hero) -->
-    <section class="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
-        <!-- Div para a animação de fundo -->
-        <div id="animated-bg" class="animated-bg"></div>
-        
-        <!-- Logo e seletores de idioma no topo da tela -->
-        <div class="absolute top-8 w-full max-w-7xl px-4 flex justify-between items-center z-20">
-            <a href="#" class="text-white font-bold text-4xl vegas-logo" data-lang-key="logo">Vegas</a>
-            
-            <!-- Novo seletor de idioma em estilo de switch -->
-            <div id="language-switch" class="language-switch pt relative">
-                <div class="slider absolute inset-y-0 left-0"></div>
-                <div class="flex">
-                    <button class="flag-icon" data-lang="pt">
-                        <span class="fi fi-br" title="Português">🇧🇷</span>
-                    </button>
-                    <button class="flag-icon" data-lang="en">
-                        <span class="fi fi-us" title="English">🇺🇸</span>
-                    </button>
-                </div>
-            </div>
-        </div>
+    <!-- Sticky Header -->
+    <header class="sticky top-0 z-50 bg-black text-white py-4 shadow-lg">
+        <div class="container mx-auto px-4 flex justify-between items-center">
+            <!-- Menu do hambúrguer para celular -->
+            <button class="md:hidden text-white focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
 
-        <!-- Conteúdo principal com imagem e texto -->
-        <div class="mt-24 md:mt-0 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-16 md:gap-8 p-8 relative z-10">
-            <!-- Imagem de impacto com fundo transparente e efeito de distorção -->
-            <div class="image-slide-in flex justify-center md:justify-start">
-                <canvas id="product-canvas" class="w-full max-w-lg md:max-w-xl"></canvas>
-            </div>
+            <!-- Menu de navegação -->
+            <nav class="hidden md:flex space-x-6 uppercase font-bold text-sm">
+                <a href="#" class="hover:text-yellow-400">DISPOSABLES</a>
+                <a href="#" class="hover:text-yellow-400">GUMMIES</a>
+                <a href="#" class="hover:text-yellow-400">CARTS</a>
+                <a href="#" class="hover:text-yellow-400">1G ACES</a>
+                <a href="#" class="hover:text-yellow-400">PRESSURE X TORCH COLLAB</a>
+                <a href="#" class="hover:text-yellow-400">BEST SELLERS</a>
+                <a href="#" class="hover:text-yellow-400">PRESSURE PACKS</a>
+            </nav>
 
-            <!-- Texto de marketing e call-to-action -->
-            <div class="text-fade-in text-center md:text-left">
-                <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight vegas-logo" data-lang-key="hero-title">
-                    Uma Nova Experiência.
-                </h1>
-                <p class="text-base md:text-xl font-light mb-8 max-w-md mx-auto md:mx-0" data-lang-key="hero-subtitle">
-                    Descubra o auge do bem-estar com nossa linha premium de produtos.
-                    Qualidade inigualável, design sofisticado.
-                </p>
-                <a href="#about" class="inline-block bg-green-500 text-black font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-green-600 transition-all transform hover:scale-105" data-lang-key="hero-cta">
-                    Saiba Mais
+            <!-- Logo -->
+            <div class="flex-grow flex justify-center md:flex-grow-0">
+                <a href="/" class="flex-shrink-0">
+                    <img src="https://pressurela.com/cdn/shop/files/pressure6g_logo.png?v=1699572975&width=600" alt="Pressure Los Angeles Logo" class="h-12 md:h-16 w-auto">
                 </a>
             </div>
-        </div>
-    </section>
 
-    <!-- Seção de navegação que aparece ao rolar -->
-    <header id="main-nav" class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-70 backdrop-blur-sm p-4 hidden border-b border-gray-800">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="#" class="text-3xl font-bold text-white uppercase tracking-widest vegas-logo" data-lang-key="logo-nav">Vegas</a>
-            <nav class="hidden md:flex space-x-8">
-                <a href="#about" class="text-lg font-medium text-gray-400 hover:text-green-400 transition-colors" data-lang-key="nav-about">A Marca</a>
-                <a href="#vision" class="text-lg font-medium text-gray-400 hover:text-green-400 transition-colors" data-lang-key="nav-vision">Nossa Visão</a>
-                <a href="#contact" class="text-lg font-medium text-gray-400 hover:text-green-400 transition-colors" data-lang-key="nav-contact">Contato</a>
-            </nav>
+            <!-- Ícones do lado direito -->
+            <div class="flex space-x-4 items-center">
+                <a href="#" class="hidden md:block">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6 text-white">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </a>
+                <a href="#" class="hidden md:block">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6 text-white">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                </a>
+                <a href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6 text-white">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.197 1.761.737 2.112A7.95 7.95 0 0012 21h0m-2.893-1.893c-.63-.63-.197-1.761.737-2.112" />
+                    </svg>
+                </a>
+            </div>
         </div>
     </header>
 
-    <!-- Conteúdo da página - Seção "A Marca" -->
-    <main class="py-16 px-4 md:px-8 max-w-7xl mx-auto">
-        <section id="about" class="mb-24">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div class="text-center md:text-left">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-6 vegas-logo" data-lang-key="section-about-title">A Essência da Vegas</h2>
-                    <p class="text-base md:text-xl font-light mb-4 text-gray-300" data-lang-key="about-p1">
-                        Nascida da paixão pela qualidade e inovação, a Vegas é uma marca que redefine a experiência premium.
-                        Cada um de nossos produtos é meticulosamente criado para oferecer uma jornada única de sabores e sensações.
-                    </p>
-                    <p class="text-base md:text-xl font-light text-gray-300" data-lang-key="about-p2">
-                        Nossa missão é simples: proporcionar o que há de mais puro e potente no mercado, com um design que reflete nossa filosofia de sofisticação e excelência.
-                    </p>
-                </div>
-                <div class="flex justify-center md:justify-end">
-                    <img src="https://placehold.co/600x400/1e293b/ffffff?text=NOSSA+VISAO" alt="Visão da Marca" class="rounded-lg shadow-xl w-full max-w-lg">
+    <main id="MainContent">
+        <!-- Seção de frete grátis -->
+        <section class="bg-yellow-400 text-black py-2 px-4 text-center">
+            <p class="font-bold text-sm md:text-base">FREE SHIPPING OVER $50</p>
+        </section>
+
+        <!-- Seção do Banner Principal -->
+        <section class="relative bg-black">
+            <img src="https://pressurela.com/cdn/shop/files/PressureLA-cover-homepage_8a58b95b-21fe-4672-9b36-6b2531551976.png?v=1715872442&width=1500" alt="Banner da página inicial" class="w-full h-auto object-cover opacity-80">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center w-full px-4">
+                <div class="bg-black bg-opacity-70 p-4 rounded-lg">
+                    <h2 class="font-itc-benguiat text-3xl md:text-5xl lg:text-7xl font-bold uppercase leading-tight">
+                        LIFES TOO SHORT FOR MIDS.
+                        <br>
+                        DOMINATE ABOVE THE REST IN TASTE AND POTENCY.
+                    </h2>
                 </div>
             </div>
         </section>
 
-        <!-- Seção de "Nossa Visão" com fundo de paralaxe -->
-        <section id="vision" class="relative h-96 flex items-center justify-center text-center parallax-bg">
-            <div class="absolute inset-0 bg-black opacity-60"></div>
-            <div class="relative z-10 p-8">
-                <h2 class="text-5xl md:text-6xl font-bold text-white vegas-logo" data-lang-key="section-vision-title">Nossa Visão</h2>
-                <p class="text-lg md:text-xl font-light text-gray-200 mt-4 max-w-2xl mx-auto" data-lang-key="section-vision-subtitle">
-                    Acreditamos em um futuro onde a qualidade e a inovação se unem para criar momentos de puro prazer.
-                </p>
+        <!-- Carrossel de Produtos: PRESSURE x TORCH COLLAB -->
+        <section class="py-12 bg-black">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-8">
+                    <h2 class="font-itc-benguiat text-4xl lg:text-5xl font-bold uppercase text-yellow-400">PRESSURE x TORCH COLLAB</h2>
+                    <p class="text-white mt-4 max-w-2xl mx-auto">
+                        Pressure Has joined forces with Torch to bring an unmatched versatility in a sleek, innovative 3g device. Switch effortlessly between Sativa and Indica with a simple slide, giving you full control of your experience. Powered by a potent THC-A VVS diamond blend, this buttonless device uses Draw Sense Technology for a smooth, reliable hit every time.
+                    </p>
+                </div>
+                <!-- Carrossel de produtos com overflow horizontal -->
+                <div class="overflow-x-auto scroll-container pb-4">
+                    <div class="flex space-x-4 min-w-max">
+                        <!-- Card do Produto 1 -->
+                        <div class="w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
+                            <img src="https://pressurela.com/cdn/shop/files/BlueberrySkunkUpdated.png?v=1750867829&width=533" alt="Blueberry Skunk x Black Cherry OG | 3g" class="w-full h-auto object-cover">
+                            <div class="p-4 text-center">
+                                <h3 class="text-lg font-bold">Blueberry Skunk x Black Cherry OG | 3g</h3>
+                                <p class="text-gray-400 mt-2">$24.99</p>
+                            </div>
+                        </div>
+                        <!-- Card do Produto 2 (vendido) -->
+                        <div class="relative w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
+                            <img src="https://pressurela.com/cdn/shop/files/PineapplePunch.png?v=1746136119&width=533" alt="Pineapple Punch x Blueberry Cookies | 3g" class="w-full h-auto object-cover opacity-50">
+                            <div class="p-4 text-center">
+                                <h3 class="text-lg font-bold">Pineapple Punch x Blueberry Cookies | 3g</h3>
+                                <p class="text-gray-400 mt-2">
+                                    <s class="text-sm">$24.99</s>
+                                    <span class="text-red-500 font-bold ml-2">Sold out</span>
+                                </p>
+                            </div>
+                            <span class="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">Sold out</span>
+                        </div>
+                        <!-- Card do Produto 3 -->
+                        <div class="w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
+                            <img src="https://pressurela.com/cdn/shop/files/PurpleHazeUpdated.png?v=1750867862&width=533" alt="Purple Haze x Blueberry Kush | 3g" class="w-full h-auto object-cover">
+                            <div class="p-4 text-center">
+                                <h3 class="text-lg font-bold">Purple Haze x Blueberry Kush | 3g</h3>
+                                <p class="text-gray-400 mt-2">$24.99</p>
+                            </div>
+                        </div>
+                        <!-- Card do Produto 4 -->
+                        <div class="w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
+                            <img src="https://pressurela.com/cdn/shop/files/SourPebblesUpdated.png?v=1750867881&width=533" alt="Sour Pebbles x Raspberry Kush | 3g" class="w-full h-auto object-cover">
+                            <div class="p-4 text-center">
+                                <h3 class="text-lg font-bold">Sour Pebbles x Raspberry Kush | 3g</h3>
+                                <p class="text-gray-400 mt-2">$24.99</p>
+                            </div>
+                        </div>
+                         <!-- Card do Produto 5 -->
+                        <div class="w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
+                            <img src="https://pressurela.com/cdn/shop/files/StrawberryBlue.png?v=1750867901&width=533" alt="Strawberry Blue x Rainbow Runtz | 3g" class="w-full h-auto object-cover">
+                            <div class="p-4 text-center">
+                                <h3 class="text-lg font-bold">Strawberry Blue x Rainbow Runtz | 3g</h3>
+                                <p class="text-gray-400 mt-2">$24.99</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Carrossel de Produtos: PRESSURE PACK DEALS -->
+        <section class="py-12 bg-black">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-8">
+                    <h2 class="font-itc-benguiat text-4xl lg:text-5xl font-bold uppercase text-yellow-400">PRESSURE PACK DEALS</h2>
+                    <p class="text-white mt-4 max-w-2xl mx-auto">
+                        Pressure Packs deliver a flavor-packed bundle featuring a mix of our best-selling products—all at one unbeatable price. Whether you’re exploring or reloading your stash, this deal hits hard.
+                    </p>
+                </div>
+                <!-- Carrossel de produtos com overflow horizontal -->
+                <div class="overflow-x-auto scroll-container pb-4">
+                    <div class="flex space-x-4 min-w-max">
+                        <!-- Card do Produto 1 (em promoção) -->
+                        <div class="relative w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
+                            <img src="https://pressurela.com/cdn/shop/files/KingCartPack_c2665c9a-e7b9-4637-841c-263622c127e1.png?v=1747324503&width=533" alt="King Cart Pack" class="w-full h-auto object-cover">
+                            <div class="p-4 text-center">
+                                <h3 class="text-lg font-bold">King Cart Pack</h3>
+                                <div class="mt-2">
+                                    <span class="text-gray-400 line-through mr-2">$140.00</span>
+                                    <span class="text-red-500 font-bold">$129.99</span>
+                                </div>
+                            </div>
+                            <span class="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">Sale</span>
+                        </div>
+                         <!-- Card do Produto 2 -->
+                         <div class="relative w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
+                            <img src="https://pressurela.com/cdn/shop/files/QueenDispoPack_56d537cd-fd28-4224-8ba6-91fa0ae4cf28.png?v=1747324420&width=533" alt="Queen Dispo Pack" class="w-full h-auto object-cover">
+                            <div class="p-4 text-center">
+                                <h3 class="text-lg font-bold">Queen Dispo Pack</h3>
+                                <div class="mt-2">
+                                    <span class="text-gray-400 line-through mr-2">$180.00</span>
+                                    <span class="text-red-500 font-bold">$159.99</span>
+                                </div>
+                            </div>
+                            <span class="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">Sale</span>
+                        </div>
+                        <!-- Card do Produto 3 -->
+                        <div class="relative w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
+                            <img src="https://pressurela.com/cdn/shop/files/TropicalEscapePack_bdf4e585-f746-415b-9c3c-f97f8de00129.png?v=1754512115&width=533" alt="Tropical Escape Pack" class="w-full h-auto object-cover">
+                            <div class="p-4 text-center">
+                                <h3 class="text-lg font-bold">Tropical Escape Pack</h3>
+                                <div class="mt-2">
+                                    <span class="text-gray-400 line-through mr-2">$124.00</span>
+                                    <span class="text-red-500 font-bold">$113.99</span>
+                                </div>
+                            </div>
+                            <span class="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">Sale</span>
+                        </div>
+                        <!-- Card do Produto 4 (vendido) -->
+                        <div class="relative w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
+                            <img src="https://pressurela.com/cdn/shop/files/BakedPack_9ad22132-b2ed-4261-8b7a-43f31dbf871c.png?v=1754511471&width=533" alt="Baked Pack" class="w-full h-auto object-cover opacity-50">
+                            <div class="p-4 text-center">
+                                <h3 class="text-lg font-bold">Baked Pack</h3>
+                                <div class="mt-2">
+                                    <span class="text-gray-400 line-through mr-2">$111.00</span>
+                                    <span class="text-red-500 font-bold">$94.99</span>
+                                </div>
+                            </div>
+                            <span class="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">Sold out</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Seção de Rodapé -->
-        <footer id="contact" class="mt-24 py-12 border-t border-gray-800 text-gray-400 text-center">
-            <h3 class="text-xl font-semibold mb-4 vegas-logo" data-lang-key="footer-title">Vegas. Seu Destino Premium.</h3>
-            <p class="text-sm mb-6" data-lang-key="footer-contact">Entre em contato para saber mais sobre nossos produtos ou para parcerias.</p>
-            <div class="flex justify-center space-x-6 mb-6">
-                <a href="#" class="text-gray-400 hover:text-green-400 transition-colors">
-                    <i class="fab fa-instagram fa-2x"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-green-400 transition-colors">
-                    <i class="fab fa-twitter fa-2x"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-green-400 transition-colors">
-                    <i class="fab fa-facebook-f fa-2x"></i>
-                </a>
+        <!-- Seção "ON DECK" -->
+        <section class="py-12 bg-black">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-8">
+                    <h2 class="font-itc-benguiat text-4xl lg:text-5xl font-bold uppercase text-yellow-400">ON DECK</h2>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Item 1 -->
+                    <div class="text-center">
+                        <img src="https://pressurela.com/cdn/shop/files/Artboard_1_1.png?v=1744049311&width=600" alt="" class="w-full h-auto rounded-md">
+                        <h3 class="font-bold text-lg mt-4">1G ACES THC-A DISPOSABLE</h3>
+                        <a href="#" class="text-yellow-400 font-bold mt-2 inline-block">COP NOW →</a>
+                    </div>
+                    <!-- Item 2 -->
+                    <div class="text-center">
+                        <img src="https://pressurela.com/cdn/shop/files/Artboard_3_2_4da7b686-242c-4bd3-bedf-e65dc5a82cdf.png?v=1744057763&width=600" alt="" class="w-full h-auto rounded-md">
+                        <h3 class="font-bold text-lg mt-4">6G THC-A DISPOSABLE</h3>
+                        <a href="#" class="text-yellow-400 font-bold mt-2 inline-block">COP NOW →</a>
+                    </div>
+                    <!-- Item 3 -->
+                    <div class="text-center">
+                        <img src="https://pressurela.com/cdn/shop/files/Honcho_Gummies.png?v=1717441407&width=600" alt="" class="w-full h-auto rounded-md">
+                        <h3 class="font-bold text-lg mt-4">16000MG HONCHO GUMMIES</h3>
+                        <a href="#" class="text-yellow-400 font-bold mt-2 inline-block">COP NOW →</a>
+                    </div>
+                    <!-- Item 4 -->
+                    <div class="text-center">
+                        <img src="https://pressurela.com/cdn/shop/files/Artboard_2_2.png?v=1744052746&width=600" alt="" class="w-full h-auto rounded-md">
+                        <h3 class="font-bold text-lg mt-4">1G ACES THC-A CART</h3>
+                        <a href="#" class="text-yellow-400 font-bold mt-2 inline-block">COP NOW →</a>
+                    </div>
+                </div>
             </div>
-            <p class="text-sm" data-lang-key="footer-copyright">&copy; 2025 Vegas. Todos os direitos reservados.</p>
-        </footer>
+        </section>
+
+        <!-- Seção "DEAL OF THE MONTH!" -->
+        <section class="py-12 bg-black">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-8">
+                    <h2 class="font-itc-benguiat text-4xl lg:text-5xl font-bold uppercase text-yellow-400">DEAL OF THE MONTH!</h2>
+                </div>
+                <div class="flex flex-col lg:flex-row items-center gap-8 bg-gray-900 rounded-md p-6 shadow-lg">
+                    <div class="flex-shrink-0">
+                        <img src="https://pressurela.com/cdn/shop/files/Artboard_14_b41ba218-7634-40c3-8518-2758fcd14d2d.png?v=1753977006&width=800" alt="" class="w-full lg:w-96 h-auto rounded-md">
+                    </div>
+                    <div class="text-center lg:text-left">
+                        <h3 class="font-bold text-2xl lg:text-3xl mt-4 text-yellow-400">FREE IKKI BATTERY DEVICE WITH PURCHASE OF 3 OR MORE 1g ACES CARTS</h3>
+                        <p class="mt-4">
+                            Mix and match any 3 or more 1g ACES carts and receive a FREE IKKI Conceal & Carry Device!
+                            Limit 1 FREE Device per order!
+                        </p>
+                        <a href="#" class="inline-block mt-6 px-6 py-3 bg-yellow-400 text-black font-bold rounded-full hover:bg-yellow-500 transition-colors">
+                            GOING FAST—GET YOURS NOW!
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Colagem de Imagens -->
+        <section class="py-12 bg-black">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="col-span-1">
+                        <img src="https://pressurela.com/cdn/shop/files/DSC08126_1.png?v=1717170432&width=600" alt="" class="w-full h-auto rounded-md">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="https://pressurela.com/cdn/shop/files/DSC07666.png?v=1717170432&width=600" alt="" class="w-full h-auto rounded-md">
+                    </div>
+                    <div class="col-span-1">
+                        <img src="https://pressurela.com/cdn/shop/files/DSC08022.png?v=1717170432&width=600" alt="" class="w-full h-auto rounded-md">
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <!-- Script para funcionalidades da página -->
-    <script>
-        const translations = {
-            'pt': {
-                'logo': 'Vegas',
-                'logo-nav': 'Vegas',
-                'nav-about': 'A Marca',
-                'nav-vision': 'Nossa Visão',
-                'nav-contact': 'Contato',
-                'hero-title': 'Uma Nova Experiência.',
-                'hero-subtitle': 'Descubra o auge do bem-estar com nossa linha premium de produtos. Qualidade inigualável, design sofisticado.',
-                'hero-cta': 'Saiba Mais',
-                'section-about-title': 'A Essência da Vegas',
-                'about-p1': 'Nascida da paixão pela qualidade e inovação, a Vegas é uma marca que redefine a experiência premium. Cada um de nossos produtos é meticulosamente criado para oferecer uma jornada única de sabores e sensações.',
-                'about-p2': 'Nossa missão é simples: proporcionar o que há de mais puro e potente no mercado, com um design que reflete nossa filosofia de sofisticação e excelência.',
-                'section-vision-title': 'Nossa Visão',
-                'section-vision-subtitle': 'Acreditamos em um futuro onde a qualidade e a inovação se unem para criar momentos de puro prazer.',
-                'footer-title': 'Vegas. Seu Destino Premium.',
-                'footer-contact': 'Entre em contato para saber mais sobre nossos produtos ou para parcerias.',
-                'footer-copyright': '© 2025 Vegas. Todos os direitos reservados.'
-            },
-            'en': {
-                'logo': 'Vegas',
-                'logo-nav': 'Vegas',
-                'nav-about': 'The Brand',
-                'nav-vision': 'Our Vision',
-                'nav-contact': 'Contact',
-                'hero-title': 'A New Experience.',
-                'hero-subtitle': 'Discover the pinnacle of well-being with our premium line of products. Unmatched quality, sophisticated design.',
-                'hero-cta': 'Learn More',
-                'section-about-title': 'The Essence of Vegas',
-                'about-p1': 'Born from a passion for quality and innovation, Vegas is a brand that redefines the premium experience. Each of our products is meticulously crafted to offer a unique journey of flavors and sensations.',
-                'about-p2': 'Our mission is simple: to provide the purest and most potent products on the market, with a design that reflects our philosophy of sophistication and excellence.',
-                'section-vision-title': 'Our Vision',
-                'section-vision-subtitle': 'We believe in a future where quality and innovation come together to create moments of pure pleasure.',
-                'footer-title': 'Vegas. Your Premium Destination.',
-                'footer-contact': 'Get in touch to learn more about our products or for partnerships.',
-                'footer-copyright': '© 2025 Vegas. All rights reserved.'
-            }
-        };
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8 px-4">
+        <div class="container mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Links Rápidos -->
+                <div>
+                    <h2 class="font-bold text-lg mb-4 text-yellow-400">QUICK LINKS</h2>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:underline">SUPPORT</a></li>
+                        <li><a href="#" class="hover:underline">COAs</a></li>
+                        <li><a href="#" class="hover:underline">BECOME AN AFFILIATE</a></li>
+                        <li><a href="#" class="hover:underline">COLLAB WITH US</a></li>
+                        <li><a href="#" class="hover:underline">STORE POLICIES</a></li>
+                        <li><a href="#" class="hover:underline">SHIPPING POLICIES</a></li>
+                        <li><a href="#" class="hover:underline">PRIVACY POLICIES</a></li>
+                        <li><a href="#" class="hover:underline">AGE VERIFICATION</a></li>
+                        <li><a href="#" class="hover:underline">WHOLESALE</a></li>
+                    </ul>
+                </div>
+                <!-- Isenção de responsabilidade -->
+                <div class="lg:col-span-2">
+                    <h2 class="font-bold text-lg mb-4 text-yellow-400">
+                        ALL PRODUCTS SHOWN ON THIS SITE ARE DERIVED FROM 100% LEGAL USA HEMP AND CONTAINS LESS THEN 0.3% DELTA9 IN ACCORDANCE WITH THE 2018 FARM BILL.
+                    </h2>
+                    <p class="text-sm text-gray-400">
+                        The products on this site are not for use by or sale to persons under the age of 21 depending on the laws of your governing state or territory. The statements made regarding these products have not been evaluated by the Food and Drug Administration. The efficacy of these products has not been confirmed by the FDA-approved research. These products are not intended to diagnose, treat, cure or prevent any disease. All information from health care practitioners. Please consult your health care professional about potential interactions or other possible complications before using any product. The Federal Food, Drug, and Cosmetic Act requires this notice. By using this site you agree to follow the Privacy Policy and all Terms & Conditions printed on this site. Void Where Prohibited By Law.
+                    </p>
+                    <div class="flex justify-center md:justify-start mt-6 space-x-4">
+                         <!-- Social media icon -->
+                        <a href="https://instagram.com/pressurebrandla" class="text-white hover:text-yellow-400" aria-label="Instagram">
+                             <svg class="icon icon-instagram h-6 w-6" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd"d="M13.23 3.492c-.84-.037-1.096-.046-3.23-.046-2.144 0-2.39.01-3.238.055-.776.027-1.195.164-1.487.273a2.4 2.4 0 0 0-.912.593 2.5 2.5 0 0 0-.602.922c-.11.282-.238.702-.274 1.486-.046.84-.046 1.095-.046 3.23s.01 2.39.046 3.229c.004.51.097 1.016.274 1.495.145.365.319.639.602.913.282.282.538.456.92.602.474.176.974.268 1.479.273.848.046 1.103.046 3.238.046s2.39-.01 3.23-.046c.784-.036 1.203-.164 1.486-.273.374-.146.648-.329.921-.602.283-.283.447-.548.602-.922.177-.476.27-.979.274-1.486.037-.84.046-1.095.046-3.23s-.01-2.39-.055-3.229c-.027-.784-.164-1.204-.274-1.495a2.4 2.4 0 0 0-.593-.913 2.6 2.6 0 0 0-.92-.602c-.284-.11-.703-.237-1.488-.273ZM6.697 2.05c.857-.036 1.131-.045 3.302-.045a63 63 0 0 1 3.302.045c.664.014 1.321.14 1.943.374a4 4 0 0 1 1.414.922c.41.397.728.88.93 1.414.23.622.354 1.279.365 1.942C18 7.56 18 7.824 18 10.005c0 2.17-.01 2.444-.046 3.292-.036.858-.173 1.442-.374 1.943-.2.53-.474.976-.92 1.423a3.9 3.9 0 0 1-1.415.922c-.51.191-1.095.337-1.943.374-.857.036-1.122.045-3.302.045-2.171 0-2.445-.009-3.302-.055-.849-.027-1.432-.164-1.943-.364a4.15 4.15 0 0 1-1.414-.922 4.1 4.1 0 0 1-.93-1.423c-.183-.51-.329-1.085-.365-1.943C2.009 12.45 2 12.167 2 10.004c0-2.161 0-2.435.055-3.302.027-.848.164-1.432.365-1.942a4.4 4.4 0 0 1 .92-1.414 4.2 4.2 0 0 1 1.415-.93c.51-.183 1.094-.33 1.943-.366Zm.427 4.806a4.105 4.105 0 1 1 5.805 5.805 4.105 4.105 0 0 1-5.805-5.805m1.882 5.371a2.668 2.668 0 1 0 2.042-4.93 2.668 2.668 0 0 0-2.042 4.93m5.922-5.942a.958.958 0 1 1-1.355-1.355.958.958 0 0 1 1.355 1.355" clip-rule="evenodd"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Direitos autorais e métodos de pagamento -->
+            <div class="border-t border-gray-700 mt-8 pt-4 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+                <small class="mb-2 md:mb-0">&copy; 2025, Pressure Los Angeles</small>
+                <small>
+                    <a target="_blank" rel="nofollow" href="https://www.shopify.com" class="hover:underline">Powered by Shopify</a>
+                </small>
+            </div>
+        </div>
+    </footer>
 
-        function changeLanguage(lang) {
-            const elements = document.querySelectorAll('[data-lang-key]');
-            elements.forEach(el => {
-                const key = el.getAttribute('data-lang-key');
-                el.textContent = translations[lang][key];
-            });
-            document.documentElement.lang = lang;
-            
-            const langSwitch = document.getElementById('language-switch');
-            langSwitch.classList.remove('pt', 'en');
-            langSwitch.classList.add(lang);
-        }
-
-        document.getElementById('language-switch').addEventListener('click', () => {
-            const currentLang = document.documentElement.lang === 'pt-BR' ? 'pt' : 'en';
-            const newLang = currentLang === 'pt' ? 'en' : 'pt';
-            changeLanguage(newLang);
-        });
-
-        const mainNav = document.getElementById('main-nav');
-        let heroHeight = window.innerHeight;
-
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > heroHeight) {
-                mainNav.classList.remove('hidden');
-            } else {
-                mainNav.classList.add('hidden');
-            }
-        });
-
-        // Adiciona a classe de animação de fundo após 1.5s
-        setTimeout(() => {
-            document.getElementById('animated-bg').classList.add('active');
-        }, 1500);
-
-        // Canvas para o efeito de distorção da imagem do produto
-        window.onload = function() {
-            const canvas = document.getElementById('product-canvas');
-            const ctx = canvas.getContext('2d');
-            const img = new Image();
-            img.crossOrigin = 'Anonymous';
-            img.src = 'https://iili.io/FthTh91.png';
-
-            img.onload = () => {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                ctx.drawImage(img, 0, 0);
-
-                const animateCanvas = () => {
-                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                    const data = imageData.data;
-
-                    for (let i = 0; i < data.length; i += 4) {
-                        const r = data[i];
-                        const g = data[i + 1];
-                        const b = data[i + 2];
-                        const a = data[i + 3];
-
-                        if (a > 0) {
-                            const distort = Math.sin(Date.now() * 0.002 + i / 100) * 2;
-                            data[i] = r + distort;
-                            data[i + 1] = g + distort;
-                            data[i + 2] = b + distort;
-                        }
-                    }
-                    ctx.putImageData(imageData, 0, 0);
-                    requestAnimationFrame(animateCanvas);
-                };
-                animateCanvas();
-            };
-        };
-    </script>
 </body>
 </html>
