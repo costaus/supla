@@ -6,10 +6,10 @@
     <title>Vegas | Experiência Premium</title>
     <!-- Inclui o Tailwind CSS para um design rápido e moderno -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Carrega a fonte 'Inter' do Google Fonts para uma tipografia limpa -->
+    <!-- Carrega as fontes 'Bebas Neue' para a logo e 'Inter' para o restante do texto -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <!-- Inclui Font Awesome para ícones de bandeiras -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -17,23 +17,87 @@
             font-family: 'Inter', sans-serif;
             background-color: #000;
         }
+        /* Estilo para a logo 'Vegas' */
+        .vegas-logo {
+            font-family: 'Bebas Neue', sans-serif;
+        }
         /* Animação para a entrada da imagem principal */
         .image-slide-in {
             opacity: 0;
-            transform: translateX(-100px);
-            animation: slideIn 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            transform: translateY(50px);
+            animation: slideIn 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
         }
         @keyframes slideIn {
-            to { opacity: 1; transform: translateX(0); }
+            to { opacity: 1; transform: translateY(0); }
         }
         /* Animação para o texto de impacto */
         .text-fade-in {
             opacity: 0;
-            animation: fadeIn 1.5s ease-in-out forwards;
+            animation: fadeIn 1.2s ease-in-out forwards;
             animation-delay: 0.5s;
         }
         @keyframes fadeIn {
             to { opacity: 1; }
+        }
+        /* Efeito de fundo animado - partículas escorrendo */
+        .animated-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(6, 78, 59, 0.3) 0%, rgba(0,0,0,0) 70%);
+            transform: scale(0);
+            opacity: 0;
+            transition: transform 1.5s ease-out, opacity 1s ease-out;
+            z-index: -1;
+        }
+        .animated-bg.active {
+            transform: scale(2.5);
+            opacity: 1;
+        }
+        /* Estilo para o seletor de idioma em formato de switch */
+        .language-switch {
+            display: flex;
+            align-items: center;
+            background-color: #1a1a1a;
+            border-radius: 9999px;
+            padding: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .language-switch .flag-icon {
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 10;
+        }
+        .language-switch .slider {
+            position: absolute;
+            width: 2rem;
+            height: 2rem;
+            background-color: #3b82f6; /* Cor de destaque para o seletor */
+            border-radius: 9999px;
+            transition: transform 0.3s ease;
+        }
+        .language-switch.pt .slider {
+            transform: translateX(0);
+        }
+        .language-switch.en .slider {
+            transform: translateX(100%);
+        }
+        /* Efeito de paralaxe na seção "A Marca" */
+        .parallax-bg {
+            background-image: url('https://placehold.co/1200x800/18181b/ffffff?text=NOSSA+VISAO');
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
         }
     </style>
 </head>
@@ -41,30 +105,38 @@
 
     <!-- Seção de impacto inicial (Hero) -->
     <section class="min-h-screen flex items-center justify-center relative overflow-hidden px-4">
+        <!-- Div para a animação de fundo -->
+        <div id="animated-bg" class="animated-bg"></div>
+        
         <!-- Logo e seletores de idioma no topo da tela -->
-        <div class="absolute top-8 w-full max-w-7xl px-4 flex justify-between items-center z-10">
-            <a href="#" class="text-white font-bold text-4xl" data-lang-key="logo">Vegas</a>
-            <div class="flex space-x-2">
-                <button onclick="changeLanguage('pt')" class="transform hover:scale-110 transition-transform">
-                    <span class="fi fi-br rounded-full w-8 h-8 flex items-center justify-center text-xl" title="Português">🇧🇷</span>
-                </button>
-                <button onclick="changeLanguage('en')" class="transform hover:scale-110 transition-transform">
-                    <span class="fi fi-us rounded-full w-8 h-8 flex items-center justify-center text-xl" title="English">🇺🇸</span>
-                </button>
+        <div class="absolute top-8 w-full max-w-7xl px-4 flex justify-between items-center z-20">
+            <a href="#" class="text-white font-bold text-4xl vegas-logo" data-lang-key="logo">Vegas</a>
+            
+            <!-- Novo seletor de idioma em estilo de switch -->
+            <div id="language-switch" class="language-switch pt relative">
+                <div class="slider absolute inset-y-0 left-0"></div>
+                <div class="flex">
+                    <button class="flag-icon" data-lang="pt">
+                        <span class="fi fi-br" title="Português">🇧🇷</span>
+                    </button>
+                    <button class="flag-icon" data-lang="en">
+                        <span class="fi fi-us" title="English">🇺🇸</span>
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- Conteúdo principal com imagem e texto -->
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-16 md:gap-8 p-8">
-            <!-- Imagem de impacto com fundo transparente -->
+        <div class="mt-24 md:mt-0 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-16 md:gap-8 p-8 relative z-10">
+            <!-- Imagem de impacto com fundo transparente e efeito de distorção -->
             <div class="image-slide-in flex justify-center md:justify-start">
-                <img src="https://iili.io/FthTh91.png" alt="Produto Vegas Premium" class="w-full max-w-lg md:max-w-xl">
+                <canvas id="product-canvas" class="w-full max-w-lg md:max-w-xl"></canvas>
             </div>
 
             <!-- Texto de marketing e call-to-action -->
             <div class="text-fade-in text-center md:text-left">
-                <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight" data-lang-key="hero-title">
-                    Vegas. Uma Nova Experiência.
+                <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight vegas-logo" data-lang-key="hero-title">
+                    Uma Nova Experiência.
                 </h1>
                 <p class="text-base md:text-xl font-light mb-8 max-w-md mx-auto md:mx-0" data-lang-key="hero-subtitle">
                     Descubra o auge do bem-estar com nossa linha premium de produtos.
@@ -80,37 +152,50 @@
     <!-- Seção de navegação que aparece ao rolar -->
     <header id="main-nav" class="fixed top-0 left-0 right-0 z-50 bg-black bg-opacity-70 backdrop-blur-sm p-4 hidden border-b border-gray-800">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="#" class="text-3xl font-bold text-white uppercase tracking-widest" data-lang-key="logo-nav">Vegas</a>
-            <nav class="flex space-x-8">
+            <a href="#" class="text-3xl font-bold text-white uppercase tracking-widest vegas-logo" data-lang-key="logo-nav">Vegas</a>
+            <nav class="hidden md:flex space-x-8">
                 <a href="#about" class="text-lg font-medium text-gray-400 hover:text-green-400 transition-colors" data-lang-key="nav-about">A Marca</a>
-                <a href="#pods" class="text-lg font-medium text-gray-400 hover:text-green-400 transition-colors" data-lang-key="nav-pods">Produtos</a>
+                <a href="#vision" class="text-lg font-medium text-gray-400 hover:text-green-400 transition-colors" data-lang-key="nav-vision">Nossa Visão</a>
                 <a href="#contact" class="text-lg font-medium text-gray-400 hover:text-green-400 transition-colors" data-lang-key="nav-contact">Contato</a>
             </nav>
         </div>
     </header>
 
-    <!-- Conteúdo da página - Seção "Sobre a Marca" (Informações) -->
+    <!-- Conteúdo da página - Seção "A Marca" -->
     <main class="py-16 px-4 md:px-8 max-w-7xl mx-auto">
         <section id="about" class="mb-24">
-            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12" data-lang-key="section-about-title">A Essência da Vegas</h2>
-            <div class="max-w-4xl mx-auto text-center text-gray-300 space-y-6">
-                <p data-lang-key="about-p1">
-                    Nascida da paixão pela qualidade e inovação, a Vegas é uma marca que redefine a experiência premium.
-                    Cada um de nossos produtos é meticulosamente criado para oferecer uma jornada única de sabores e sensações.
-                </p>
-                <p data-lang-key="about-p2">
-                    Nossa missão é simples: proporcionar o que há de mais puro e potente no mercado, com um design que reflete
-                    nossa filosofia de sofisticação e excelência.
-                </p>
-                <p data-lang-key="about-p3">
-                    Junte-se a nós nesta jornada e descubra um novo patamar de prazer e bem-estar.
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div class="text-center md:text-left">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-6 vegas-logo" data-lang-key="section-about-title">A Essência da Vegas</h2>
+                    <p class="text-base md:text-xl font-light mb-4 text-gray-300" data-lang-key="about-p1">
+                        Nascida da paixão pela qualidade e inovação, a Vegas é uma marca que redefine a experiência premium.
+                        Cada um de nossos produtos é meticulosamente criado para oferecer uma jornada única de sabores e sensações.
+                    </p>
+                    <p class="text-base md:text-xl font-light text-gray-300" data-lang-key="about-p2">
+                        Nossa missão é simples: proporcionar o que há de mais puro e potente no mercado, com um design que reflete nossa filosofia de sofisticação e excelência.
+                    </p>
+                </div>
+                <div class="flex justify-center md:justify-end">
+                    <img src="https://placehold.co/600x400/1e293b/ffffff?text=NOSSA+VISAO" alt="Visão da Marca" class="rounded-lg shadow-xl w-full max-w-lg">
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de "Nossa Visão" com fundo de paralaxe -->
+        <section id="vision" class="relative h-96 flex items-center justify-center text-center parallax-bg">
+            <div class="absolute inset-0 bg-black opacity-60"></div>
+            <div class="relative z-10 p-8">
+                <h2 class="text-5xl md:text-6xl font-bold text-white vegas-logo" data-lang-key="section-vision-title">Nossa Visão</h2>
+                <p class="text-lg md:text-xl font-light text-gray-200 mt-4 max-w-2xl mx-auto" data-lang-key="section-vision-subtitle">
+                    Acreditamos em um futuro onde a qualidade e a inovação se unem para criar momentos de puro prazer.
                 </p>
             </div>
         </section>
 
         <!-- Seção de Rodapé -->
         <footer id="contact" class="mt-24 py-12 border-t border-gray-800 text-gray-400 text-center">
-            <h3 class="text-xl font-semibold mb-4" data-lang-key="footer-title">Vegas. Seu Destino Premium.</h3>
+            <h3 class="text-xl font-semibold mb-4 vegas-logo" data-lang-key="footer-title">Vegas. Seu Destino Premium.</h3>
+            <p class="text-sm mb-6" data-lang-key="footer-contact">Entre em contato para saber mais sobre nossos produtos ou para parcerias.</p>
             <div class="flex justify-center space-x-6 mb-6">
                 <a href="#" class="text-gray-400 hover:text-green-400 transition-colors">
                     <i class="fab fa-instagram fa-2x"></i>
@@ -126,39 +211,43 @@
         </footer>
     </main>
 
-    <!-- Script para funcionalidade de tradução e menu mobile -->
+    <!-- Script para funcionalidades da página -->
     <script>
         const translations = {
             'pt': {
                 'logo': 'Vegas',
                 'logo-nav': 'Vegas',
                 'nav-about': 'A Marca',
-                'nav-pods': 'Produtos',
+                'nav-vision': 'Nossa Visão',
                 'nav-contact': 'Contato',
-                'hero-title': 'Vegas. Uma Nova Experiência.',
+                'hero-title': 'Uma Nova Experiência.',
                 'hero-subtitle': 'Descubra o auge do bem-estar com nossa linha premium de produtos. Qualidade inigualável, design sofisticado.',
                 'hero-cta': 'Saiba Mais',
                 'section-about-title': 'A Essência da Vegas',
                 'about-p1': 'Nascida da paixão pela qualidade e inovação, a Vegas é uma marca que redefine a experiência premium. Cada um de nossos produtos é meticulosamente criado para oferecer uma jornada única de sabores e sensações.',
                 'about-p2': 'Nossa missão é simples: proporcionar o que há de mais puro e potente no mercado, com um design que reflete nossa filosofia de sofisticação e excelência.',
-                'about-p3': 'Junte-se a nós nesta jornada e descubra um novo patamar de prazer e bem-estar.',
+                'section-vision-title': 'Nossa Visão',
+                'section-vision-subtitle': 'Acreditamos em um futuro onde a qualidade e a inovação se unem para criar momentos de puro prazer.',
                 'footer-title': 'Vegas. Seu Destino Premium.',
+                'footer-contact': 'Entre em contato para saber mais sobre nossos produtos ou para parcerias.',
                 'footer-copyright': '© 2025 Vegas. Todos os direitos reservados.'
             },
             'en': {
                 'logo': 'Vegas',
                 'logo-nav': 'Vegas',
                 'nav-about': 'The Brand',
-                'nav-pods': 'Products',
+                'nav-vision': 'Our Vision',
                 'nav-contact': 'Contact',
-                'hero-title': 'Vegas. A New Experience.',
+                'hero-title': 'A New Experience.',
                 'hero-subtitle': 'Discover the pinnacle of well-being with our premium line of products. Unmatched quality, sophisticated design.',
                 'hero-cta': 'Learn More',
                 'section-about-title': 'The Essence of Vegas',
                 'about-p1': 'Born from a passion for quality and innovation, Vegas is a brand that redefines the premium experience. Each of our products is meticulously crafted to offer a unique journey of flavors and sensations.',
                 'about-p2': 'Our mission is simple: to provide the purest and most potent products on the market, with a design that reflects our philosophy of sophistication and excellence.',
-                'about-p3': 'Join us on this journey and discover a new level of pleasure and well-being.',
+                'section-vision-title': 'Our Vision',
+                'section-vision-subtitle': 'We believe in a future where quality and innovation come together to create moments of pure pleasure.',
                 'footer-title': 'Vegas. Your Premium Destination.',
+                'footer-contact': 'Get in touch to learn more about our products or for partnerships.',
                 'footer-copyright': '© 2025 Vegas. All rights reserved.'
             }
         };
@@ -170,7 +259,17 @@
                 el.textContent = translations[lang][key];
             });
             document.documentElement.lang = lang;
+            
+            const langSwitch = document.getElementById('language-switch');
+            langSwitch.classList.remove('pt', 'en');
+            langSwitch.classList.add(lang);
         }
+
+        document.getElementById('language-switch').addEventListener('click', () => {
+            const currentLang = document.documentElement.lang === 'pt-BR' ? 'pt' : 'en';
+            const newLang = currentLang === 'pt' ? 'en' : 'pt';
+            changeLanguage(newLang);
+        });
 
         const mainNav = document.getElementById('main-nav');
         let heroHeight = window.innerHeight;
@@ -182,6 +281,48 @@
                 mainNav.classList.add('hidden');
             }
         });
+
+        // Adiciona a classe de animação de fundo após 1.5s
+        setTimeout(() => {
+            document.getElementById('animated-bg').classList.add('active');
+        }, 1500);
+
+        // Canvas para o efeito de distorção da imagem do produto
+        window.onload = function() {
+            const canvas = document.getElementById('product-canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.src = 'https://iili.io/FthTh91.png';
+
+            img.onload = () => {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+
+                const animateCanvas = () => {
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const data = imageData.data;
+
+                    for (let i = 0; i < data.length; i += 4) {
+                        const r = data[i];
+                        const g = data[i + 1];
+                        const b = data[i + 2];
+                        const a = data[i + 3];
+
+                        if (a > 0) {
+                            const distort = Math.sin(Date.now() * 0.002 + i / 100) * 2;
+                            data[i] = r + distort;
+                            data[i + 1] = g + distort;
+                            data[i + 2] = b + distort;
+                        }
+                    }
+                    ctx.putImageData(imageData, 0, 0);
+                    requestAnimationFrame(animateCanvas);
+                };
+                animateCanvas();
+            };
+        };
     </script>
 </body>
 </html>
