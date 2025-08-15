@@ -3,363 +3,261 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pressure Los Angeles</title>
+    <title>QUIZ LAVRAS</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='90' font-size='90'>❤️</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Define as fontes personalizadas e o estilo do corpo */
-        @font-face {
-            font-family: 'ITC Benguiat';
-            font-weight: 400;
-            font-style: normal;
-            font-display: swap;
-            src: url('https://pressurela.com/cdn/fonts/itc_benguiat/itcbenguiat_n4.35a6953a6b671368b3270f5251f5c1055e5462c0.woff2') format('woff2');
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
         body {
-            font-family: 'Assistant', sans-serif;
-            color: #ffffff;
-            background-color: #000000;
+            font-family: 'Inter', sans-serif;
+            background: #fdf2f8; /* Rosa claro para um toque de romance */
         }
-
-        .font-itc-benguiat {
-            font-family: 'ITC Benguiat', serif;
+        .container-main {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
         }
-
-        /* Efeito de paralaxe para a imagem do banner com a URL da imagem que você forneceu */
-        .parallax-bg {
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
+        .quiz-card {
+            background: #ffffff;
+            border: 2px solid #f9a8d4;
+            box-shadow: 0 10px 15px -3px rgba(244, 114, 182, 0.5), 0 4px 6px -2px rgba(244, 114, 182, 0.25);
         }
-
-        /* Estilo para a barra de rolagem dos carrosséis */
-        .scroll-container::-webkit-scrollbar {
-            height: 8px;
+        .option-button {
+            border: 2px solid #f9a8d4;
+            transition: all 0.3s ease-in-out;
         }
-
-        .scroll-container::-webkit-scrollbar-thumb {
-            background: #ffd100;
-            border-radius: 4px;
+        .option-button:hover {
+            background-color: #fce7f3;
+            transform: scale(1.02);
+            box-shadow: 0 4px 6px -1px rgba(244, 114, 182, 0.2), 0 2px 4px -1px rgba(244, 114, 182, 0.12);
         }
-
-        .scroll-container::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
+        .option-button.correct {
+            background-color: #d1fae5; /* Verde para resposta correta */
+            border-color: #34d399;
+        }
+        .option-button.wrong {
+            background-color: #fee2e2; /* Vermelho para resposta errada */
+            border-color: #f87171;
+        }
+        .start-button, .restart-button {
+            background: linear-gradient(145deg, #f9a8d4, #ec4899);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(236, 72, 153, 0.4);
+        }
+        .start-button:hover, .restart-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px -2px rgba(236, 72, 153, 0.6);
+        }
+        #quiz-container {
+            display: none;
         }
     </style>
 </head>
-<body class="bg-black text-white">
+<body class="bg-pink-50">
+    <div class="container-main">
+        <div class="quiz-card p-8 sm:p-10 rounded-3xl w-full max-w-xl text-center">
 
-    <!-- Cabeçalho fixo no topo da página -->
-    <header class="sticky top-0 z-50 bg-black text-white py-4 shadow-lg">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <!-- Botão do menu (hambúrguer) para celular -->
-            <button class="md:hidden text-white focus:outline-none">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-            </button>
+            <!-- Título do Quiz -->
+            <h1 class="text-4xl sm:text-5xl font-bold text-pink-600 mb-4">QUIZ LAVRAS</h1>
+            <p class="text-pink-500 mb-8 sm:mb-10 text-lg">Responda a estas perguntas sobre o seu relacionamento. A sinceridade é a chave!</p>
 
-            <!-- Menu de navegação inline para desktop -->
-            <nav class="hidden md:flex space-x-6 uppercase font-bold text-sm">
-                <a href="#" class="hover:text-yellow-400">DESCARTÁVEIS</a>
-                <a href="#" class="hover:text-yellow-400">GUMMIES</a>
-                <a href="#" class="hover:text-yellow-400">CARTS</a>
-                <a href="#" class="hover:text-yellow-400">1G ACES</a>
-                <a href="#" class="hover:text-yellow-400">PRESSURE X TORCH COLLAB</a>
-                <a href="#" class="hover:text-yellow-400">MAIS VENDIDOS</a>
-                <a href="#" class="hover:text-yellow-400">PACOTES PRESSURE</a>
-            </nav>
-
-            <!-- Logo centralizado -->
-            <div class="flex-grow flex justify-center md:flex-grow-0">
-                <a href="/" class="flex-shrink-0">
-                    <img src="https://pressurela.com/cdn/shop/files/pressure6g_logo.png?v=1699572975&width=600" alt="[Logo da Pressure Los Angeles]" class="h-12 md:h-16 w-auto">
-                </a>
+            <!-- Seção de Início do Quiz -->
+            <div id="start-screen">
+                <button id="start-btn" class="start-button text-white font-bold py-3 px-8 rounded-full text-xl hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-pink-300">
+                    Iniciar Quiz
+                </button>
             </div>
 
-            <!-- Ícones da pesquisa e carrinho, alinhados à direita -->
-            <div class="flex items-center space-x-4">
-                <!-- Ícone de pesquisa -->
-                <a href="#">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6 text-white">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
-                </a>
-                <!-- Ícone de carrinho -->
-                <a href="#">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6 text-white">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.197 1.761.737 2.112A7.95 7.95 0 0012 21h0m-2.893-1.893c-.63-.63-.197-1.761.737-2.112" />
-                    </svg>
-                </a>
+            <!-- Seção do Quiz (Inicialmente oculta) -->
+            <div id="quiz-container">
+                <div class="mb-6">
+                    <p class="text-xl sm:text-2xl font-semibold text-pink-700 mb-4" id="question-text">
+                        Carregando pergunta...
+                    </p>
+                </div>
+                <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Botões de opção serão inseridos aqui pelo JavaScript -->
+                </div>
             </div>
+
+            <!-- Seção de Resultado (Inicialmente oculta) -->
+            <div id="result-screen" class="hidden">
+                <h2 class="text-3xl sm:text-4xl font-bold text-pink-600 mb-4" id="result-heading"></h2>
+                <p class="text-lg text-pink-500 mb-6" id="result-message"></p>
+                <button id="restart-btn" class="restart-button text-white font-bold py-3 px-8 rounded-full text-xl hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-pink-300">
+                    Refazer Quiz
+                </button>
+            </div>
+
         </div>
-    </header>
+    </div>
 
-    <!-- Seção do Banner com efeito de paralaxe -->
-    <section class="h-[60vh] md:h-[80vh] parallax-bg"></section>
-
-    <!-- Conteúdo principal que sobrepõe o banner durante a rolagem -->
-    <main id="MainContent" class="bg-black">
-        <!-- Seção de frete grátis -->
-        <section class="bg-yellow-400 text-black py-2 px-4 text-center">
-            <p class="font-bold text-sm md:text-base">FRETE GRÁTIS ACIMA DE $50</p>
-        </section>
-
-        <!-- Carrossel de Produtos: PRESSURE x TORCH COLLAB -->
-        <section class="py-12">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-8">
-                    <h2 class="font-itc-benguiat text-4xl lg:text-5xl font-bold uppercase text-yellow-400">PRESSURE x TORCH COLLAB</h2>
-                    <p class="text-white mt-4 max-w-2xl mx-auto">
-                        A Pressure uniu forças com a Torch para trazer uma versatilidade inigualável em um dispositivo elegante e inovador de 3g. Alterne sem esforço entre Sativa e Indica com um simples deslizar, dando a você controle total de sua experiência. Alimentado por uma potente mistura de diamantes THC-A VVS, este dispositivo sem botões usa a tecnologia Draw Sense para um hit suave e confiável a cada vez.
-                    </p>
-                </div>
-                <!-- Carrossel de produtos com overflow horizontal -->
-                <div class="overflow-x-auto scroll-container pb-4">
-                    <div class="flex space-x-4 min-w-max">
-                        <!-- Card do Produto 1 -->
-                        <div class="w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
-                            <img src="https://pressurela.com/cdn/shop/files/BlueberrySkunkUpdated.png?v=1750867829&width=533" alt="[Imagem de um produto]" class="w-full h-auto object-cover">
-                            <div class="p-4 text-center">
-                                <h3 class="text-lg font-bold">Blueberry Skunk x Black Cherry OG | 3g</h3>
-                                <p class="text-gray-400 mt-2">$24.99</p>
-                            </div>
-                        </div>
-                        <!-- Card do Produto 2 (vendido) -->
-                        <div class="relative w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
-                            <img src="https://pressurela.com/cdn/shop/files/PineapplePunch.png?v=1746136119&width=533" alt="[Imagem de um produto]" class="w-full h-auto object-cover opacity-50">
-                            <div class="p-4 text-center">
-                                <h3 class="text-lg font-bold">Pineapple Punch x Blueberry Cookies | 3g</h3>
-                                <div class="mt-2">
-                                    <span class="text-gray-400 line-through mr-2">$24.99</span>
-                                    <span class="text-red-500 font-bold ml-2">Esgotado</span>
-                                </div>
-                            </div>
-                            <span class="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">Esgotado</span>
-                        </div>
-                        <!-- Outros cards de produtos... -->
-                         <div class="w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
-                            <img src="https://pressurela.com/cdn/shop/files/PurpleHazeUpdated.png?v=1750867862&width=533" alt="[Imagem de um produto]" class="w-full h-auto object-cover">
-                            <div class="p-4 text-center">
-                                <h3 class="text-lg font-bold">Purple Haze x Blueberry Kush | 3g</h3>
-                                <p class="text-gray-400 mt-2">$24.99</p>
-                            </div>
-                        </div>
-                        <div class="w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
-                            <img src="https://pressurela.com/cdn/shop/files/SourPebblesUpdated.png?v=1750867881&width=533" alt="[Imagem de um produto]" class="w-full h-auto object-cover">
-                            <div class="p-4 text-center">
-                                <h3 class="text-lg font-bold">Sour Pebbles x Raspberry Kush | 3g</h3>
-                                <p class="text-gray-400 mt-2">$24.99</p>
-                            </div>
-                        </div>
-                        <div class="w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
-                            <img src="https://pressurela.com/cdn/shop/files/StrawberryBlue.png?v=1750867901&width=533" alt="[Imagem de um produto]" class="w-full h-auto object-cover">
-                            <div class="p-4 text-center">
-                                <h3 class="text-lg font-bold">Strawberry Blue x Rainbow Runtz | 3g</h3>
-                                <p class="text-gray-400 mt-2">$24.99</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Carrossel de Produtos: PRESSURE PACK DEALS -->
-        <section class="py-12">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-8">
-                    <h2 class="font-itc-benguiat text-4xl lg:text-5xl font-bold uppercase text-yellow-400">OFERTAS DE PACOTES PRESSURE</h2>
-                    <p class="text-white mt-4 max-w-2xl mx-auto">
-                        Os pacotes Pressure oferecem um pacote cheio de sabor com uma mistura dos nossos produtos mais vendidos - tudo a um preço imbatível. Seja para explorar ou reabastecer seu estoque, esta oferta é imperdível.
-                    </p>
-                </div>
-                <!-- Carrossel de produtos com overflow horizontal -->
-                <div class="overflow-x-auto scroll-container pb-4">
-                    <div class="flex space-x-4 min-w-max">
-                        <!-- Card do Produto 1 (em promoção) -->
-                        <div class="relative w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
-                            <img src="https://pressurela.com/cdn/shop/files/KingCartPack_c2665c9a-e7b9-4637-841c-263622c127e1.png?v=1747324503&width=533" alt="[Imagem de um produto]" class="w-full h-auto object-cover">
-                            <div class="p-4 text-center">
-                                <h3 class="text-lg font-bold">Pacote King Cart</h3>
-                                <div class="mt-2">
-                                    <span class="text-gray-400 line-through mr-2">$140.00</span>
-                                    <span class="text-red-500 font-bold">$129.99</span>
-                                </div>
-                            </div>
-                            <span class="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">Promoção</span>
-                        </div>
-                         <!-- Card do Produto 2 -->
-                         <div class="relative w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
-                            <img src="https://pressurela.com/cdn/shop/files/QueenDispoPack_56d537cd-fd28-4224-8ba6-91fa0ae4cf28.png?v=1747324420&width=533" alt="[Imagem de um produto]" class="w-full h-auto object-cover">
-                            <div class="p-4 text-center">
-                                <h3 class="text-lg font-bold">Pacote Queen Dispo</h3>
-                                <div class="mt-2">
-                                    <span class="text-gray-400 line-through mr-2">$180.00</span>
-                                    <span class="text-red-500 font-bold">$159.99</span>
-                                </div>
-                            </div>
-                            <span class="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">Promoção</span>
-                        </div>
-                        <!-- Outros cards de pacotes... -->
-                        <div class="relative w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
-                            <img src="https://pressurela.com/cdn/shop/files/TropicalEscapePack_bdf4e585-f746-415b-9c3c-f97f8de00129.png?v=1754512115&width=533" alt="[Imagem de um produto]" class="w-full h-auto object-cover">
-                            <div class="p-4 text-center">
-                                <h3 class="text-lg font-bold">Pacote Tropical Escape</h3>
-                                <div class="mt-2">
-                                    <span class="text-gray-400 line-through mr-2">$124.00</span>
-                                    <span class="text-red-500 font-bold">$113.99</span>
-                                </div>
-                            </div>
-                            <span class="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">Promoção</span>
-                        </div>
-                        <div class="relative w-72 flex-shrink-0 bg-gray-900 rounded-md overflow-hidden shadow-lg border border-gray-800">
-                            <img src="https://pressurela.com/cdn/shop/files/BakedPack_9ad22132-b2ed-4261-8b7a-43f31dbf871c.png?v=1754511471&width=533" alt="[Imagem de um produto]" class="w-full h-auto object-cover opacity-50">
-                            <div class="p-4 text-center">
-                                <h3 class="text-lg font-bold">Pacote Baked</h3>
-                                <div class="mt-2">
-                                    <span class="text-gray-400 line-through mr-2">$111.00</span>
-                                    <span class="text-red-500 font-bold">$94.99</span>
-                                </div>
-                            </div>
-                            <span class="absolute bottom-4 left-4 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full">Esgotado</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Seção "ON DECK" -->
-        <section class="py-12">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-8">
-                    <h2 class="font-itc-benguiat text-4xl lg:text-5xl font-bold uppercase text-yellow-400">EM DESTAQUE</h2>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <!-- Item 1 -->
-                    <div class="text-center">
-                        <img src="https://pressurela.com/cdn/shop/files/Artboard_1_1.png?v=1744049311&width=600" alt="[Imagem de um produto]" class="w-full h-auto rounded-md">
-                        <h3 class="font-bold text-lg mt-4">DESCARTÁVEL 1G ACES THC-A</h3>
-                        <a href="#" class="text-yellow-400 font-bold mt-2 inline-block">COMPRE AGORA →</a>
-                    </div>
-                    <!-- Item 2 -->
-                    <div class="text-center">
-                        <img src="https://pressurela.com/cdn/shop/files/Artboard_3_2_4da7b686-242c-4bd3-bedf-e65dc5a82cdf.png?v=1744057763&width=600" alt="[Imagem de um produto]" class="w-full h-auto rounded-md">
-                        <h3 class="font-bold text-lg mt-4">DESCARTÁVEL 6G THC-A</h3>
-                        <a href="#" class="text-yellow-400 font-bold mt-2 inline-block">COMPRE AGORA →</a>
-                    </div>
-                    <!-- Item 3 -->
-                    <div class="text-center">
-                        <img src="https://pressurela.com/cdn/shop/files/Honcho_Gummies.png?v=1717441407&width=600" alt="[Imagem de um produto]" class="w-full h-auto rounded-md">
-                        <h3 class="font-bold text-lg mt-4">GUMMIES HONCHO 16000MG</h3>
-                        <a href="#" class="text-yellow-400 font-bold mt-2 inline-block">COMPRE AGORA →</a>
-                    </div>
-                    <!-- Item 4 -->
-                    <div class="text-center">
-                        <img src="https://pressurela.com/cdn/shop/files/Artboard_2_2.png?v=1744052746&width=600" alt="[Imagem de um produto]" class="w-full h-auto rounded-md">
-                        <h3 class="font-bold text-lg mt-4">CART 1G ACES THC-A</h3>
-                        <a href="#" class="text-yellow-400 font-bold mt-2 inline-block">COMPRE AGORA →</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Seção "DEAL OF THE MONTH!" -->
-        <section class="py-12">
-            <div class="container mx-auto px-4">
-                <div class="text-center mb-8">
-                    <h2 class="font-itc-benguiat text-4xl lg:text-5xl font-bold uppercase text-yellow-400">OFERTA DO MÊS!</h2>
-                </div>
-                <div class="flex flex-col lg:flex-row items-center gap-8 bg-gray-900 rounded-md p-6 shadow-lg">
-                    <div class="flex-shrink-0">
-                        <img src="https://pressurela.com/cdn/shop/files/Artboard_14_b41ba218-7634-40c3-8518-2758fcd14d2d.png?v=1753977006&width=800" alt="[Imagem de um produto]" class="w-full lg:w-96 h-auto rounded-md">
-                    </div>
-                    <div class="text-center lg:text-left">
-                        <h3 class="font-bold text-2xl lg:text-3xl mt-4 text-yellow-400">DISPOSITIVO DE BATERIA IKKI GRÁTIS NA COMPRA DE 3 OU MAIS CARTS 1g ACES</h3>
-                        <p class="mt-4">
-                            Misture e combine 3 ou mais carts de 1g ACES e receba um dispositivo IKKI Conceal & Carry GRÁTIS! Limite de 1 dispositivo GRÁTIS por pedido!
-                        </p>
-                        <a href="#" class="inline-block mt-6 px-6 py-3 bg-yellow-400 text-black font-bold rounded-full hover:bg-yellow-500 transition-colors">
-                            VÁ RÁPIDO - PEGUE O SEU AGORA!
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Seção de Colagem de Imagens -->
-        <section class="py-12">
-            <div class="container mx-auto px-4">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="col-span-1">
-                        <img src="https://pressurela.com/cdn/shop/files/DSC08126_1.png?v=1717170432&width=600" alt="[Imagem de produtos em estúdio]" class="w-full h-auto rounded-md">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="https://pressurela.com/cdn/shop/files/DSC07666.png?v=1717170432&width=600" alt="[Imagem de embalagens de produtos]" class="w-full h-auto rounded-md">
-                    </div>
-                    <div class="col-span-1">
-                        <img src="https://pressurela.com/cdn/shop/files/DSC08022.png?v=1717170432&width=600" alt="[Imagem de um dispositivo eletrônico]" class="w-full h-auto rounded-md">
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Rodapé -->
-    <footer class="bg-gray-900 text-white py-8 px-4">
-        <div class="container mx-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Links Rápidos -->
-                <div>
-                    <h2 class="font-bold text-lg mb-4 text-yellow-400">LINKS RÁPIDOS</h2>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="hover:underline">SUPORTE</a></li>
-                        <li><a href="#" class="hover:underline">COAs</a></li>
-                        <li><a href="#" class="hover:underline">TORNE-SE UM AFILIADO</a></li>
-                        <li><a href="#" class="hover:underline">COLABORE CONOSCO</a></li>
-                        <li><a href="#" class="hover:underline">POLÍTICAS DA LOJA</a></li>
-                        <li><a href="#" class="hover:underline">POLÍTICAS DE ENVIO</a></li>
-                        <li><a href="#" class="hover:underline">POLÍTICAS DE PRIVACIDADE</a></li>
-                        <li><a href="#" class="hover:underline">VERIFICAÇÃO DE IDADE</a></li>
-                        <li><a href="#" class="hover:underline">ATACADO</a></li>
-                    </ul>
-                </div>
-                <!-- Isenção de responsabilidade -->
-                <div class="lg:col-span-2">
-                    <h2 class="font-bold text-lg mb-4 text-yellow-400">
-                        TODOS OS PRODUTOS MOSTRADOS NESTE SITE SÃO DERIVADOS DE CÂNHAMO 100% LEGAL DOS EUA E CONTÊM MENOS DE 0,3% DE DELTA9, EM CONFORMIDADE COM A LEI AGRÍCOLA DE 2018.
-                    </h2>
-                    <p class="text-sm text-gray-400">
-                        Os produtos deste site não são para uso ou venda a pessoas com menos de 21 anos, dependendo das leis do seu estado ou território. As declarações feitas sobre esses produtos não foram avaliadas pela Food and Drug Administration. A eficácia desses produtos não foi confirmada por pesquisas aprovadas pela FDA. Estes produtos não se destinam a diagnosticar, tratar, curar ou prevenir qualquer doença. Todas as informações são provenientes de profissionais de saúde. Consulte seu profissional de saúde sobre possíveis interações ou outras complicações antes de usar qualquer produto. O Federal Food, Drug, and Cosmetic Act exige este aviso. Ao usar este site, você concorda em seguir a Política de Privacidade e todos os Termos e Condições impressos neste site. Nulo Onde Proibido por Lei.
-                    </p>
-                    <div class="flex justify-center md:justify-start mt-6 space-x-4">
-                         <!-- Ícone do Instagram -->
-                        <a href="https://instagram.com/pressurebrandla" class="text-white hover:text-yellow-400" aria-label="Instagram">
-                             <svg class="icon icon-instagram h-6 w-6" viewBox="0 0 20 20"><path fill="currentColor" fill-rule="evenodd"d="M13.23 3.492c-.84-.037-1.096-.046-3.23-.046-2.144 0-2.39.01-3.238.055-.776.027-1.195.164-1.487.273a2.4 2.4 0 0 0-.912.593 2.5 2.5 0 0 0-.602.922c-.11.282-.238.702-.274 1.486-.046.84-.046 1.095-.046 3.23s.01 2.39.046 3.229c.004.51.097 1.016.274 1.495.145.365.319.639.602.913.282.282.538.456.92.602.474.176.974.268 1.479.273.848.046 1.103.046 3.238.046s2.39-.01 3.23-.046c.784-.036 1.203-.164 1.486-.273.374-.146.648-.329.921-.602.283-.283.447-.548.602-.922.177-.476.27-.979.274-1.486.037-.84.046-1.095.046-3.23s-.01-2.39-.055-3.229c-.027-.784-.164-1.204-.274-1.495a2.4 2.4 0 0 0-.593-.913 2.6 2.6 0 0 0-.92-.602c-.284-.11-.703-.237-1.488-.273ZM6.697 2.05c.857-.036 1.131-.045 3.302-.045a63 63 0 0 1 3.302.045c.664.014 1.321.14 1.943.374a4 4 0 0 1 1.414.922c.41.397.728.88.93 1.414.23.622.354 1.279.365 1.942C18 7.56 18 7.824 18 10.005c0 2.17-.01 2.444-.046 3.292-.036.858-.173 1.442-.374 1.943-.2.53-.474.976-.92 1.423a3.9 3.9 0 0 1-1.415.922c-.51.191-1.095.337-1.943.374-.857.036-1.122.045-3.302.045-2.171 0-2.445-.009-3.302-.055-.849-.027-1.432-.164-1.943-.364a4.15 4.15 0 0 1-1.414-.922 4.1 4.1 0 0 1-.93-1.423c-.183-.51-.329-1.085-.365-1.943C2.009 12.45 2 12.167 2 10.004c0-2.161 0-2.435.055-3.302.027-.848.164-1.432.365-1.942a4.4 4.4 0 0 1 .92-1.414 4.2 4.2 0 0 1 1.415-.93c.51-.183 1.094-.33 1.943-.366Zm.427 4.806a4.105 4.105 0 1 1 5.805 5.805 4.105 4.105 0 0 1-5.805-5.805m1.882 5.371a2.668 2.668 0 1 0 2.042-4.93 2.668 2.668 0 0 0-2.042 4.93m5.922-5.942a.958.958 0 1 1-1.355-1.355.958.958 0 0 1 1.355 1.355" clip-rule="evenodd"/></svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <!-- Direitos autorais e métodos de pagamento -->
-            <div class="border-t border-gray-700 mt-8 pt-4 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
-                <small class="mb-2 md:mb-0">&copy; 2025, Pressure Los Angeles</small>
-                <small>
-                    <a target="_blank" rel="nofollow" href="https://www.shopify.com" class="hover:underline">Desenvolvido por Shopify</a>
-                </small>
-            </div>
-        </div>
-    </footer>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const parallaxBg = document.querySelector('.parallax-bg');
-            if (parallaxBg) {
-                // Acessa a imagem do arquivo que você enviou
-                const imageSource = 'https://canvas-static-assets.s3.amazonaws.com/files/IMG_2918.jpg-8365a625-e5c8-458c-a249-d821d9421f77';
-                parallaxBg.style.backgroundImage = `url('${imageSource}')`;
+        // Array de perguntas do quiz
+        const questions = [
+            {
+                question: "Qual foi o primeiro presente que o seu parceiro te deu?",
+                options: [
+                    { text: "Flores", isCorrect: false },
+                    { text: "Um ursinho de pelúcia", isCorrect: false },
+                    { text: "Uma joia", isCorrect: true },
+                    { text: "Uma viagem", isCorrect: false },
+                ]
+            },
+            {
+                question: "Quem disse 'Eu te amo' primeiro?",
+                options: [
+                    { text: "Eu", isCorrect: false },
+                    { text: "Ele(a)", isCorrect: true },
+                    { text: "Nós dissemos ao mesmo tempo", isCorrect: false },
+                    { text: "Ainda não dissemos", isCorrect: false },
+                ]
+            },
+            {
+                question: "Em uma escala de 1 a 10, o quão ciumento é o seu parceiro?",
+                options: [
+                    { text: "1-3 (Nem um pouco)", isCorrect: false },
+                    { text: "4-6 (Um pouco)", isCorrect: false },
+                    { text: "7-9 (Bastante)", isCorrect: true },
+                    { text: "10 (Extremamente)", isCorrect: false },
+                ]
+            },
+            {
+                question: "Você traiu em Porto?",
+                options: [
+                    { text: "Não, nunca!", isCorrect: true },
+                    { text: "Talvez...", isCorrect: false },
+                    { text: "O que acontece em Porto, fica em Porto", isCorrect: false },
+                    { text: "Sim, e valeu a pena!", isCorrect: false },
+                ]
+            },
+            {
+                question: "Qual era a cor do mar em Porto?",
+                options: [
+                    { text: "Azul profundo", isCorrect: false },
+                    { text: "Verde esmeralda", isCorrect: false },
+                    { text: "É um rio, não um mar", isCorrect: true },
+                    { text: "Não me lembro, estava ocupado(a)", isCorrect: false },
+                ]
+            },
+            {
+                question: "Você ficou mais tempo com o grupo de amigos ou explorando sozinha(o) em Porto?",
+                options: [
+                    { text: "Com o grupo, sempre!", isCorrect: false },
+                    { text: "Um pouco dos dois", isCorrect: true },
+                    { text: "Explorando sozinha(o)", isCorrect: false },
+                    { text: "Eu não fui a Porto", isCorrect: false },
+                ]
+            },
+            {
+                question: "A melhor parte da viagem a Porto foi...",
+                options: [
+                    { text: "A comida e o vinho", isCorrect: false },
+                    { text: "A arquitetura e os pontos turísticos", isCorrect: false },
+                    { text: "As pessoas que conheci...", isCorrect: false },
+                    { text: "Estar com você, mesmo à distância!", isCorrect: true },
+                ]
             }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const startScreen = document.getElementById('start-screen');
+        const quizContainer = document.getElementById('quiz-container');
+        const resultScreen = document.getElementById('result-screen');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const resultHeading = document.getElementById('result-heading');
+        const resultMessage = document.getElementById('result-message');
+
+        // Função para iniciar o quiz
+        function startQuiz() {
+            startScreen.classList.add('hidden');
+            quizContainer.classList.remove('hidden');
+            currentQuestionIndex = 0;
+            score = 0;
+            displayQuestion();
+        }
+
+        // Função para exibir a pergunta atual
+        function displayQuestion() {
+            // Limpa as opções anteriores
+            optionsContainer.innerHTML = '';
+            
+            const currentQuestion = questions[currentQuestionIndex];
+            questionText.textContent = currentQuestion.question;
+
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement('button');
+                button.textContent = option.text;
+                button.classList.add('option-button', 'bg-white', 'text-pink-700', 'font-semibold', 'py-3', 'px-4', 'rounded-full', 'hover:bg-pink-50', 'focus:outline-none', 'transition-all');
+                button.dataset.isCorrect = option.isCorrect;
+                button.addEventListener('click', selectOption);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // Função para lidar com a seleção de uma opção
+        function selectOption(event) {
+            const selectedButton = event.target;
+            const isCorrect = selectedButton.dataset.isCorrect === 'true';
+
+            // Adiciona a classe de feedback visual
+            selectedButton.classList.add(isCorrect ? 'correct' : 'wrong');
+            
+            // Desabilita os botões para evitar múltiplos cliques
+            Array.from(optionsContainer.children).forEach(button => {
+                button.disabled = true;
+            });
+
+            if (isCorrect) {
+                score++;
+            }
+
+            // Move para a próxima pergunta após um pequeno delay
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    displayQuestion();
+                } else {
+                    showResult();
+                }
+            }, 750); // Delay para mostrar o feedback visual
+        }
+
+        // Função para exibir a tela de resultados
+        function showResult() {
+            quizContainer.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+
+            resultHeading.textContent = `Você acertou ${score} de ${questions.length} perguntas.`;
+            
+            let message = '';
+            // Mensagens personalizadas baseadas na pontuação
+            if (score >= questions.length * 0.8) {
+                message = "Uau! Você e seu parceiro(a) têm uma sintonia incrível! Parece que a viagem a Porto foi só um detalhe para o amor de vocês.";
+            } else if (score >= questions.length * 0.5) {
+                message = "Hmm, parece que tem algumas coisas para serem alinhadas. Mas nada que uma boa conversa não resolva... Cuidado com as pistas de Porto!";
+            } else {
+                message = "Alerta vermelho! Algo não bate com o que o seu parceiro(a) pensa... Ou as respostas foram muito sinceras, ou é hora de abrir o jogo sobre a viagem a Porto!";
+            }
+            
+            resultMessage.textContent = message;
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', startQuiz);
+        restartBtn.addEventListener('click', () => {
+            resultScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
         });
+
     </script>
 </body>
 </html>
