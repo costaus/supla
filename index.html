@@ -62,7 +62,7 @@
 
             <!-- Título do Quiz -->
             <h1 class="text-4xl sm:text-5xl font-bold text-pink-600 mb-4">QUIZ LAVRAS</h1>
-            <p class="text-pink-500 mb-8 sm:mb-10 text-lg">Responda a estas perguntas sobre o seu relacionamento. A sinceridade é a chave!</p>
+            <p class="text-pink-500 mb-8 sm:mb-10 text-lg">Responda a estas perguntas sobre a sua viagem a Porto. A sinceridade é a chave!</p>
 
             <!-- Seção de Início do Quiz -->
             <div id="start-screen">
@@ -96,35 +96,8 @@
     </div>
 
     <script>
-        // Array de perguntas do quiz
+        // Array de perguntas do quiz, focadas em descobrir a "verdade" sobre a viagem a Porto
         const questions = [
-            {
-                question: "Qual foi o primeiro presente que o seu parceiro te deu?",
-                options: [
-                    { text: "Flores", isCorrect: false },
-                    { text: "Um ursinho de pelúcia", isCorrect: false },
-                    { text: "Uma joia", isCorrect: true },
-                    { text: "Uma viagem", isCorrect: false },
-                ]
-            },
-            {
-                question: "Quem disse 'Eu te amo' primeiro?",
-                options: [
-                    { text: "Eu", isCorrect: false },
-                    { text: "Ele(a)", isCorrect: true },
-                    { text: "Nós dissemos ao mesmo tempo", isCorrect: false },
-                    { text: "Ainda não dissemos", isCorrect: false },
-                ]
-            },
-            {
-                question: "Em uma escala de 1 a 10, o quão ciumento é o seu parceiro?",
-                options: [
-                    { text: "1-3 (Nem um pouco)", isCorrect: false },
-                    { text: "4-6 (Um pouco)", isCorrect: false },
-                    { text: "7-9 (Bastante)", isCorrect: true },
-                    { text: "10 (Extremamente)", isCorrect: false },
-                ]
-            },
             {
                 question: "Você traiu em Porto?",
                 options: [
@@ -139,26 +112,44 @@
                 options: [
                     { text: "Azul profundo", isCorrect: false },
                     { text: "Verde esmeralda", isCorrect: false },
-                    { text: "É um rio, não um mar", isCorrect: true },
+                    { text: "É um rio, não um mar", isCorrect: true }, // Resposta "correta" para o pegadinha
                     { text: "Não me lembro, estava ocupado(a)", isCorrect: false },
                 ]
             },
             {
-                question: "Você ficou mais tempo com o grupo de amigos ou explorando sozinha(o) em Porto?",
+                question: "Houve algum momento em que você pensou em mandar uma foto para mim, mas desistiu?",
                 options: [
-                    { text: "Com o grupo, sempre!", isCorrect: false },
-                    { text: "Um pouco dos dois", isCorrect: true },
-                    { text: "Explorando sozinha(o)", isCorrect: false },
-                    { text: "Eu não fui a Porto", isCorrect: false },
+                    { text: "Sim, todas as vezes", isCorrect: true },
+                    { text: "Sim, mas a bateria acabou", isCorrect: false },
+                    { text: "Não, nem pensei nisso", isCorrect: false },
+                    { text: "Sim, mas não estava sozinha", isCorrect: false },
                 ]
             },
             {
-                question: "A melhor parte da viagem a Porto foi...",
+                question: "Você fez alguma amizade 'especial' na viagem a Porto?",
                 options: [
-                    { text: "A comida e o vinho", isCorrect: false },
-                    { text: "A arquitetura e os pontos turísticos", isCorrect: false },
-                    { text: "As pessoas que conheci...", isCorrect: false },
-                    { text: "Estar com você, mesmo à distância!", isCorrect: true },
+                    { text: "Sim, conheci pessoas incríveis", isCorrect: false },
+                    { text: "Apenas amizades de grupo", isCorrect: true },
+                    { text: "Prefiro não comentar", isCorrect: false },
+                    { text: "Sim, mas foi só um encontro casual", isCorrect: false },
+                ]
+            },
+            {
+                question: "Se um estranho perguntasse sobre a sua viagem, você contaria toda a verdade?",
+                options: [
+                    { text: "Sim, a viagem foi perfeita", isCorrect: true },
+                    { text: "Depende de quem estivesse perguntando", isCorrect: false },
+                    { text: "Não, algumas coisas são só minhas", isCorrect: false },
+                    { text: "Não, tenho medo de expor a verdade", isCorrect: false },
+                ]
+            },
+            {
+                question: "Qual foi a coisa mais 'inesperada' que aconteceu em Porto?",
+                options: [
+                    { text: "O quão bonita a cidade é", isCorrect: true },
+                    { text: "Conhecer alguém inesquecível", isCorrect: false },
+                    { text: "Uma festa que durou a noite toda", isCorrect: false },
+                    { text: "Um flerte inocente...", isCorrect: false },
                 ]
             }
         ];
@@ -178,77 +169,88 @@
 
         // Função para iniciar o quiz
         function startQuiz() {
-            startScreen.classList.add('hidden');
-            quizContainer.classList.remove('hidden');
-            currentQuestionIndex = 0;
-            score = 0;
-            displayQuestion();
+            try {
+                startScreen.classList.add('hidden');
+                quizContainer.style.display = 'block'; // Mostra o container
+                currentQuestionIndex = 0;
+                score = 0;
+                displayQuestion();
+            } catch (error) {
+                console.error("Erro ao iniciar o quiz:", error);
+            }
         }
 
         // Função para exibir a pergunta atual
         function displayQuestion() {
-            // Limpa as opções anteriores
-            optionsContainer.innerHTML = '';
-            
-            const currentQuestion = questions[currentQuestionIndex];
-            questionText.textContent = currentQuestion.question;
+            try {
+                optionsContainer.innerHTML = '';
+                
+                if (currentQuestionIndex < questions.length) {
+                    const currentQuestion = questions[currentQuestionIndex];
+                    questionText.textContent = currentQuestion.question;
 
-            currentQuestion.options.forEach(option => {
-                const button = document.createElement('button');
-                button.textContent = option.text;
-                button.classList.add('option-button', 'bg-white', 'text-pink-700', 'font-semibold', 'py-3', 'px-4', 'rounded-full', 'hover:bg-pink-50', 'focus:outline-none', 'transition-all');
-                button.dataset.isCorrect = option.isCorrect;
-                button.addEventListener('click', selectOption);
-                optionsContainer.appendChild(button);
-            });
+                    currentQuestion.options.forEach(option => {
+                        const button = document.createElement('button');
+                        button.textContent = option.text;
+                        button.classList.add('option-button', 'bg-white', 'text-pink-700', 'font-semibold', 'py-3', 'px-4', 'rounded-full', 'hover:bg-pink-50', 'focus:outline-none', 'transition-all');
+                        button.dataset.isCorrect = option.isCorrect;
+                        button.addEventListener('click', selectOption);
+                        optionsContainer.appendChild(button);
+                    });
+                } else {
+                    showResult();
+                }
+            } catch (error) {
+                console.error("Erro ao exibir a pergunta:", error);
+            }
         }
 
         // Função para lidar com a seleção de uma opção
         function selectOption(event) {
-            const selectedButton = event.target;
-            const isCorrect = selectedButton.dataset.isCorrect === 'true';
+            try {
+                const selectedButton = event.target;
+                const isCorrect = selectedButton.dataset.isCorrect === 'true';
 
-            // Adiciona a classe de feedback visual
-            selectedButton.classList.add(isCorrect ? 'correct' : 'wrong');
-            
-            // Desabilita os botões para evitar múltiplos cliques
-            Array.from(optionsContainer.children).forEach(button => {
-                button.disabled = true;
-            });
+                selectedButton.classList.add(isCorrect ? 'correct' : 'wrong');
+                
+                Array.from(optionsContainer.children).forEach(button => {
+                    button.disabled = true;
+                });
 
-            if (isCorrect) {
-                score++;
-            }
-
-            // Move para a próxima pergunta após um pequeno delay
-            setTimeout(() => {
-                currentQuestionIndex++;
-                if (currentQuestionIndex < questions.length) {
-                    displayQuestion();
-                } else {
-                    showResult();
+                if (isCorrect) {
+                    score++;
                 }
-            }, 750); // Delay para mostrar o feedback visual
+
+                setTimeout(() => {
+                    currentQuestionIndex++;
+                    displayQuestion();
+                }, 750);
+            } catch (error) {
+                console.error("Erro ao selecionar a opção:", error);
+            }
         }
 
         // Função para exibir a tela de resultados
         function showResult() {
-            quizContainer.classList.add('hidden');
-            resultScreen.classList.remove('hidden');
+            try {
+                quizContainer.style.display = 'none';
+                resultScreen.classList.remove('hidden');
 
-            resultHeading.textContent = `Você acertou ${score} de ${questions.length} perguntas.`;
-            
-            let message = '';
-            // Mensagens personalizadas baseadas na pontuação
-            if (score >= questions.length * 0.8) {
-                message = "Uau! Você e seu parceiro(a) têm uma sintonia incrível! Parece que a viagem a Porto foi só um detalhe para o amor de vocês.";
-            } else if (score >= questions.length * 0.5) {
-                message = "Hmm, parece que tem algumas coisas para serem alinhadas. Mas nada que uma boa conversa não resolva... Cuidado com as pistas de Porto!";
-            } else {
-                message = "Alerta vermelho! Algo não bate com o que o seu parceiro(a) pensa... Ou as respostas foram muito sinceras, ou é hora de abrir o jogo sobre a viagem a Porto!";
+                resultHeading.textContent = `Você acertou ${score} de ${questions.length} perguntas.`;
+                
+                let message = '';
+                if (score >= questions.length * 0.8) {
+                    message = "Incrível! As suas respostas batem perfeitamente com o que o seu parceiro(a) esperaria. Parece que a viagem a Porto foi só um detalhe para o amor de vocês!";
+                } else if (score >= questions.length * 0.5) {
+                    message = "Hmm, algumas respostas parecem suspeitas... Nada que um interrogatório (brincadeira!) não resolva. Talvez seja hora de ter uma conversa sobre a viagem a Porto.";
+                } else {
+                    message = "Alerta máximo! A maioria das respostas não bate com o esperado. É hora de abrir o jogo sobre o que realmente aconteceu em Porto!";
+                }
+                
+                resultMessage.textContent = message;
+            } catch (error) {
+                console.error("Erro ao exibir o resultado:", error);
             }
-            
-            resultMessage.textContent = message;
         }
 
         // Event Listeners
