@@ -65,6 +65,24 @@
             padding: 1rem 1rem;
             transition: max-height 0.5s ease-in;
         }
+
+        /* Estilo para o formulário de qualificação dinâmico */
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .form-choice-btn {
+            @apply w-full px-6 py-3 rounded-lg border border-gray-700 bg-gray-800 text-gray-300 font-medium transition-colors duration-200 hover:bg-gray-700 hover:border-blue-500;
+        }
+
+        .form-choice-btn.selected {
+            @apply bg-blue-600 text-white border-blue-600;
+        }
+
     </style>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-950 text-gray-200">
@@ -88,7 +106,6 @@
                 <li><a href="#" id="acessibilidade-btn" class="menu-item" onclick="toggleSubmenu(event, 'acessibilidade-content')">Acessibilidade</a></li>
                 <li><a href="#" id="fale-conosco-btn" class="menu-item" onclick="toggleSubmenu(event, 'fale-conosco-content')">Fale Conosco</a></li>
                 <li><a href="#" id="duvidas-btn" class="menu-item" onclick="scrollToFAQ()">Dúvidas Frequentes</a></li>
-                <!-- Removidos "Mapa do Site" e "Transparência" -->
                 <li><a href="#" id="ajuda-btn" class="menu-item" onclick="toggleSubmenu(event, 'ajuda-content')">Ajuda</a></li>
             </ul>
             <!-- Seções de conteúdo que se expandem abaixo da navbar. -->
@@ -111,14 +128,14 @@
                 <h2 class="text-2xl font-bold text-gray-200 mb-6">Últimas Notícias</h2>
                 <div class="scrolling-container flex space-x-6 overflow-x-scroll pb-4">
                     <!-- Notícia 1 -->
-                    <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openNewsPage('Polícia Civil prende suspeito de aliciar menores', 'https://iili.io/FboOxRa.jpg', 'Nesta quinta-feira (14/8), em Belo Horizonte, a Polícia Civil de Minas Gerais (PCMG) prendeu um homem, de 47 anos, suspeito de aliciar crianças e adolescentes e produzir conteúdos de cunho sexual envolvendo menores de idade. No celular dele, os policiais encontraram diversos arquivos dessa natureza. A ação policial decorre de apurações em curso na Divisão de Crimes Cibernéticos do Departamento Estadual de Combate à Corrupção e a Fraudes (Deccof), que começaram após a família de uma vítima de 11 anos, residente em São Paulo, identificar conteúdos suspeitos no celular da criança. O caso foi inicialmente registrado na Polícia Civil paulista e encaminhado para a equipe especializada da PCMG na capital. Modo de agir: Segundo as investigações da PCMG, o suspeito iniciava contato com as vítimas por meio de aplicativo de mensagem, pelo qual recebia perfis e conteúdos de crianças, e depois migrava para outras plataformas. As apurações indicam que o homem interagia com vítimas de ambos os sexos, muitas vezes, se passando por adolescente para conquistar a confiança delas. Também utilizava jogos on-line e redes sociais para estabelecer vínculos antes de iniciar conversas de teor sexual. Até o momento, foram identificadas pelo menos cinco vítimas, mas a análise do material apreendido poderá revelar mais casos. O investigado confessou os crimes e, em interrogatório, admitiu ter se relacionado com 13 crianças. Histórico: O homem já possuía registros de boletins de ocorrência por assédio sexual, tanto virtual quanto presencial, mas nunca havia sido preso. Ele poderá responder por crimes previstos no Estatuto da Criança e do Adolescente e no Código Penal, que incluem produção, armazenamento e compartilhamento de material sexual envolvendo menores, além de corrupção de menores e aliciamento. “Mais uma vez, a Polícia Civil reafirma o seu trabalho incansável, 24 horas, para combater esses crimes. E o recado, claro, para os criminosos: nós não vamos permitir que essas atrocidades continuem acontecendo no nosso estado, até no nosso país”, destacou a chefe da Divisão, delegada Cristiana Angelini. O delegado Arthur Martins da Costa Benício, titular da 1ª Delegacia Especializada em Investigação de Crimes Cibernéticos, unidade responsável pelo inquérito, acrescentou que o crime digital não tem fronteiras. “Nosso trabalho é incansável para identificar e prender esses criminosos”, reforçou. O suspeito preso hoje foi detido em casa e, após os procedimentos policiais, encaminhado ao sistema prisional.', '14/08/2025 15:09', '12.583')">
+                    <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openNewsPage('Polícia Civil prende suspeito de aliciar menores', 'https://iili.io/FboOxRa.jpg', 'Nesta quinta-feira (14/8), em Belo Horizonte, a Polícia Civil de Minas Gerais (PCMG) prendeu um homem, de 47 anos, suspeito de aliciar crianças e adolescentes e produzir conteúdos de cunho sexual envolvendo menores de idade. No celular dele, os policiais encontraram diversos arquivos dessa natureza. A ação policial decorre de apurações em curso na Divisão de Crimes Cibernéticos do Departamento Estadual de Combate à Corrupção e a Fraudes (Deccof), que começaram após a família de uma vítima de 11 anos, residente em São Paulo, identificar conteúdos suspeitos no celular da criança. O caso foi inicialmente registrado na Polícia Civil paulista e encaminhado para a equipe especializada da PCMG na capital. Modo de agir: Segundo as investigações da PCMG, o suspeito iniciava contato com as vítimas por meio de aplicativo de mensagem, pelo qual recebia perfis e conteúdos de crianças, e depois migrava para outras plataformas. As apurações indicam que o homem interagia com vítimas de ambos os sexos, muitas vezes, se passando por adolescente para conquistar a confiança delas. Também utilizava jogos on-line e redes sociais para estabelecer vínculos antes de iniciar conversas de teor sexual. Até o momento, foram identificadas pelo menos cinco vítimas, mas a análise do material apreendido poderá revelar mais casos. O investigado confessou os crimes e, em interrogatório, admitiu ter se relacionado com 13 crianças. Histórico: O homem já possuía registros de boletins de ocorrência por assédio sexual, tanto virtual quanto presencial, mas nunca havia sido preso. Ele poderá responder por crimes previstos no Estatuto da Criança e do Adolescente e no Código Penal, que incluem produção, armazenamento e compartilhamento de material sexual envolvendo menores, além de corrupção de menores e aliciamento. “Mais uma vez, a Polícia Civil reafirma o seu trabalho incansável, 24 horas, para combater esses crimes. E o recado, claro, para os criminosos: nós não vamos permitir que essas atrocidades continuem acontecendo no nosso estado, até no nosso país”, destacou a chefe da Divisão, delegada Cristiana Angelini. O delegado Arthur Martins da Costa, titular da 1ª Delegacia Especializada em Investigação de Crimes Cibernéticos, unidade responsável pelo inquérito, acrescentou que o crime digital não tem fronteiras. “Nosso trabalho é incansável para identificar e prender esses criminosos”, reforçou. O suspeito preso hoje foi detido em casa e, após os procedimentos policiais, encaminhado ao sistema prisional.', '14/08/2025 15:09', '12.583')">
                         <img src="https://iili.io/FboOxRa.jpg" alt="Homem sendo preso pela polícia civil" class="w-full h-36 object-cover rounded-t-lg">
                         <div class="p-4">
                             <h4 class="font-bold text-gray-200 text-sm">Polícia Civil prende suspeito de aliciar menores.</h4>
                         </div>
                     </div>
                     <!-- Notícia 2 -->
-                    <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openNewsPage('PCMG prende trio suspeito de furtos a residências.', 'https://iili.io/FboO1OG.jpg', 'Em decorrência de investigações de crimes patrimoniais, especialmente furto a residências, a Polícia Civil de Minas Gerais (PCMG) cumpriu a prisão preventiva de três alvos, na sexta-feira (8/8) e ontem (13/8). Eles são suspeitos de atuar na capital e na Região Metropolitana de Belo Horizonte (RMBH) e estariam ampliando as atividades criminosas para o interior. O trio foi preso a partir de trabalho investigativo conduzido pelo Departamento Estadual de Investigação de Crimes Contra o Patrimônio (Depatri) para apurar um furto ocorrido em 24 de agosto de 2024 no bairro Belvedere, região Centro-Sul de Belo Horizonte, com participação de quatro suspeitos – a PCMG trabalha na identificação do último. Na ocasião, conforme as vítimas, foram levados joias e objetos pessoais estimados em R$ 200 mil. De acordo com o delegado Gustavo Barletta, titular da 2ª Delegacia Especializada em Investigação e Repressão ao Furto e Roubo, durante a ação policial realizada recentemente, ainda foram apreendidos um veículo roubado, objetos usados para arrombamento, além de um violão, uma caixa de som e uma televisão – subtraídos no sábado passado (9/8) na região do Barreiro – entre outros materiais variados. Atuação: Barletta explicou que nem sempre os suspeitos agem em conjunto. “Na verdade, eles conseguem as informações, ou decidem fazer os arrombamentos, e vêem praticamente quem está disponível naquele momento para praticar o crime. Nesse sentido, eles trocam veículos, alugam carros, flutuam entre uma quadrilha e outra”, observou. Segundo o delegado, as apurações indicam que os alvos teriam começado a atuar também em cidades do interior: Temos informações que eles já estão se aventurando em Divinópolis [Centro-Oeste], em Juiz de Fora [Zona da Mata], Montes Claros [Norte de Minas] e Uberlândia [Triângulo Mineiro], enfim, onde acreditam que possam ter sucesso nos crimes”. Prisões: Na última sexta-feira (8/8), foi efetuada a prisão do investigado de 30 anos, no bairro Alto Vera Cruz, região Leste da capital. Ele poderá responder por crimes previstos no Estatuto da Criança e do Adolescente e no Código Penal, que incluem produção, armazenamento e compartilhamento de material sexual envolvendo menores, além de corrupção de menores e aliciamento. “Mais uma vez, a Polícia Civil reafirma o seu trabalho incansável, 24 horas, para combater esses crimes. E o recado, claro, para os criminosos: nós não vamos permitir que essas atrocidades continuem acontecendo no nosso estado, até no nosso país”, destacou a chefe da Divisão, delegada Cristiana Angelini. O delegado Arthur Martins da Costa Costa, titular da 1ª Delegacia Especializada em Investigação de Crimes Cibernéticos, unidade responsável pelo inquérito, acrescentou que o crime digital não tem fronteiras. “Nosso trabalho é incansável para identificar e prender esses criminosos”, reforçou. O suspeito preso hoje foi detido em casa e, após os procedimentos policiais, encaminhado ao sistema prisional.', '13/08/2025 10:45', '8.910')">
+                    <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openNewsPage('PCMG prende trio suspeito de furtos a residências.', 'https://iili.io/FboO1OG.jpg', 'Em decorrência de investigações de crimes patrimoniais, especialmente furto a residências, a Polícia Civil de Minas Gerais (PCMG) cumpriu a prisão preventiva de três alvos, na sexta-feira (8/8) e ontem (13/8). Eles são suspeitos de atuar na capital e na Região Metropolitana de Belo Horizonte (RMBH) e estariam ampliando as atividades criminosas para o interior. O trio foi preso a partir de trabalho investigativo conduzido pelo Departamento Estadual de Investigação de Crimes Contra o Patrimônio (Depatri) para apurar um furto ocorrido em 24 de agosto de 2024 no bairro Belvedere, região Centro-Sul de Belo Horizonte, com participação de quatro suspeitos – a PCMG trabalha na identificação do último. Na ocasião, conforme as vítimas, foram levados joias e objetos pessoais estimados em R$ 200 mil. De acordo com o delegado Gustavo Barletta, titular da 2ª Delegacia Especializada em Investigação e Repressão ao Furto e Roubo, durante a ação policial realizada recentemente, ainda foram apreendidos um veículo roubado, objetos usados para arrombamento, além de um violão, uma caixa de som e uma televisão – subtraídos no sábado passado (9/8) na região do Barreiro – entre outros materiais variados. Atuação: Barletta explicou que nem sempre os suspeitos agem em conjunto. “Na verdade, eles conseguem as informações, ou decidem fazer os arrombamentos, e vêem praticamente quem está disponível naquele momento para praticar o crime. Nesse sentido, eles trocam veículos, alugam carros, flutuam entre uma quadrilha e outra”, observou. Segundo o delegado, as apurações indicam que os alvos teriam começado a atuar também em cidades do interior: Temos informações que eles já estão se aventurando em Divinópolis [Centro-Oeste], em Juiz de Fora [Zona da Mata], Montes Claros [Norte de Minas] e Uberlândia [Triângulo Mineiro], enfim, onde acreditam que possam ter sucesso nos crimes”. Prisões: Na última sexta-feira (8/8), foi efetuada a prisão do investigado de 30 anos, no bairro Alto Vera Cruz, região Leste da capital. Ele poderá responder por crimes previstos no Estatuto da Criança e do Adolescente e no Código Penal, que incluem produção, armazenamento e compartilhamento de material sexual envolvendo menores, além de corrupção de menores e aliciamento. “Mais uma vez, a Polícia Civil reafirma o seu trabalho incansável, 24 horas, para combater esses crimes. E o recado, claro, para os criminosos: nós não vamos permitir que essas atrocidades continuem acontecendo no nosso estado, até no nosso país”, destacou a chefe da Divisão, delegada Cristiana Angelini. O delegado Arthur Martins da Costa, titular da 1ª Delegacia Especializada em Investigação de Crimes Cibernéticos, unidade responsável pelo inquérito, acrescentou que o crime digital não tem fronteiras. “Nosso trabalho é incansável para identificar e prender esses criminosos”, reforçou. O suspeito preso hoje foi detido em casa e, após os procedimentos policiais, encaminhado ao sistema prisional.', '13/08/2025 10:45', '8.910')">
                         <img src="https://iili.io/FboO1OG.jpg" alt="Polícia Civil prendendo suspeitos de furto" class="w-full h-36 object-cover rounded-t-lg">
                         <div class="p-4">
                             <h4 class="font-bold text-gray-200 text-sm">PCMG prende trio suspeito de furtos a residências.</h4>
@@ -152,7 +169,7 @@
         <!-- Conteúdo principal com formulário de inscrição -->
         <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-10">
 
-            <!-- Novo Conteúdo: Pré-Formulário de Qualificação -->
+            <!-- Novo Conteúdo: Pré-Formulário de Qualificação (dinâmico) -->
             <section id="qualification-section" class="max-w-2xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800">
                 <div class="mb-8 text-center">
                     <h3 class="text-3xl font-bold text-white mb-4">Oportunidade Única: Concurso da Polícia Federal</h3>
@@ -166,104 +183,60 @@
                 <div class="max-w-xl mx-auto">
                     <form id="qualification-form" class="space-y-6">
                         <!-- Pergunta 1 -->
-                        <div>
-                            <p class="block text-gray-300 font-semibold mb-2">Qual sua escolaridade atual?</p>
-                            <div class="space-y-2">
-                                <label class="inline-flex items-center">
-                                    <input type="radio" name="escolaridade" value="fundamental" class="form-radio text-blue-600" required>
-                                    <span class="ml-2 text-gray-400">Ensino Fundamental</span>
-                                </label>
-                                <label class="inline-flex items-center ml-4">
-                                    <input type="radio" name="escolaridade" value="medio" class="form-radio text-blue-600">
-                                    <span class="ml-2 text-gray-400">Ensino Médio Completo</span>
-                                </label>
-                                <label class="inline-flex items-center ml-4">
-                                    <input type="radio" name="escolaridade" value="superior" class="form-radio text-blue-600">
-                                    <span class="ml-2 text-gray-400">Ensino Superior Completo</span>
-                                </label>
+                        <div id="step-1" class="form-step active">
+                            <p class="block text-gray-300 font-semibold mb-2">1. Qual sua escolaridade atual?</p>
+                            <div class="flex flex-col space-y-2">
+                                <button type="button" class="form-choice-btn" data-value="medio">Ensino Médio Completo</button>
+                                <button type="button" class="form-choice-btn" data-value="superior">Ensino Superior Completo</button>
+                                <button type="button" class="form-choice-btn" data-value="fundamental">Ensino Fundamental</button>
                             </div>
                         </div>
 
                         <!-- Pergunta 2 -->
-                        <div>
-                            <p class="block text-gray-300 font-semibold mb-2">Qual é sua faixa salarial atual?</p>
-                            <div class="space-y-2">
-                                <label class="inline-flex items-center">
-                                    <input type="radio" name="salario" value="5k" class="form-radio text-blue-600" required>
-                                    <span class="ml-2 text-gray-400">Até R$ 5.000</span>
-                                </label>
-                                <label class="inline-flex items-center ml-4">
-                                    <input type="radio" name="salario" value="10k" class="form-radio text-blue-600">
-                                    <span class="ml-2 text-gray-400">Até R$ 10.000</span>
-                                </label>
-                                <label class="inline-flex items-center ml-4">
-                                    <input type="radio" name="salario" value="20k" class="form-radio text-blue-600">
-                                    <span class="ml-2 text-gray-400">Até R$ 20.000</span>
-                                </label>
-                                <label class="inline-flex items-center ml-4">
-                                    <input type="radio" name="salario" value="20k+" class="form-radio text-blue-600">
-                                    <span class="ml-2 text-gray-400">Mais de R$ 20.000</span>
-                                </label>
+                        <div id="step-2" class="form-step">
+                            <p class="block text-gray-300 font-semibold mb-2">2. Qual é sua faixa salarial atual?</p>
+                            <div class="flex flex-col space-y-2">
+                                <button type="button" class="form-choice-btn" data-value="20k+">Mais de R$ 20.000</button>
+                                <button type="button" class="form-choice-btn" data-value="20k">Até R$ 20.000</button>
+                                <button type="button" class="form-choice-btn" data-value="10k">Até R$ 10.000</button>
+                                <button type="button" class="form-choice-btn" data-value="5k">Até R$ 5.000</button>
                             </div>
                         </div>
 
                         <!-- Pergunta 3 -->
-                        <div>
-                            <p class="block text-gray-300 font-semibold mb-2">Você possui carteira de motorista?</p>
-                            <div class="space-y-2">
-                                <label class="inline-flex items-center">
-                                    <input type="radio" name="cnh" value="sim" class="form-radio text-blue-600" required>
-                                    <span class="ml-2 text-gray-400">Sim</span>
-                                </label>
-                                <label class="inline-flex items-center ml-4">
-                                    <input type="radio" name="cnh" value="nao" class="form-radio text-blue-600">
-                                    <span class="ml-2 text-gray-400">Não</span>
-                                </label>
+                        <div id="step-3" class="form-step">
+                            <p class="block text-gray-300 font-semibold mb-2">3. Você possui carteira de motorista?</p>
+                            <div class="flex flex-col space-y-2">
+                                <button type="button" class="form-choice-btn" data-value="sim">Sim</button>
+                                <button type="button" class="form-choice-btn" data-value="nao">Não</button>
                             </div>
                         </div>
 
                         <!-- Pergunta 4 -->
-                        <div>
-                            <p class="block text-gray-300 font-semibold mb-2">Qual a sua experiência de trabalho em áreas administrativas?</p>
-                            <div class="space-y-2">
-                                <label class="inline-flex items-center">
-                                    <input type="radio" name="experiencia" value="nenhuma" class="form-radio text-blue-600" required>
-                                    <span class="ml-2 text-gray-400">Nenhuma</span>
-                                </label>
-                                <label class="inline-flex items-center ml-4">
-                                    <input type="radio" name="experiencia" value="1a3" class="form-radio text-blue-600">
-                                    <span class="ml-2 text-gray-400">1 a 3 anos</span>
-                                </label>
-                                <label class="inline-flex items-center ml-4">
-                                    <input type="radio" name="experiencia" value="3a5" class="form-radio text-blue-600">
-                                    <span class="ml-2 text-gray-400">3 a 5 anos</span>
-                                </label>
-                                <label class="inline-flex items-center ml-4">
-                                    <input type="radio" name="experiencia" value="5+" class="form-radio text-blue-600">
-                                    <span class="ml-2 text-gray-400">Mais de 5 anos</span>
-                                </label>
+                        <div id="step-4" class="form-step">
+                            <p class="block text-gray-300 font-semibold mb-2">4. Qual a sua experiência de trabalho em áreas administrativas?</p>
+                            <div class="flex flex-col space-y-2">
+                                <button type="button" class="form-choice-btn" data-value="5+">Mais de 5 anos</button>
+                                <button type="button" class="form-choice-btn" data-value="3a5">3 a 5 anos</button>
+                                <button type="button" class="form-choice-btn" data-value="1a3">1 a 3 anos</button>
+                                <button type="button" class="form-choice-btn" data-value="nenhuma">Nenhuma</button>
                             </div>
                         </div>
 
                         <!-- Pergunta 5 -->
-                        <div>
-                            <p class="block text-gray-300 font-semibold mb-2">Você tem disponibilidade para jornada de trabalho de 40 horas semanais?</p>
-                            <div class="space-y-2">
-                                <label class="inline-flex items-center">
-                                    <input type="radio" name="jornada" value="sim" class="form-radio text-blue-600" required>
-                                    <span class="ml-2 text-gray-400">Sim</span>
-                                </label>
-                                <label class="inline-flex items-center ml-4">
-                                    <input type="radio" name="jornada" value="nao" class="form-radio text-blue-600">
-                                    <span class="ml-2 text-gray-400">Não</span>
-                                </label>
+                        <div id="step-5" class="form-step">
+                            <p class="block text-gray-300 font-semibold mb-2">5. Você tem disponibilidade para jornada de 40 horas semanais?</p>
+                            <div class="flex flex-col space-y-2">
+                                <button type="button" class="form-choice-btn" data-value="sim">Sim</button>
+                                <button type="button" class="form-choice-btn" data-value="nao">Não</button>
                             </div>
                         </div>
 
-                        <div class="text-center pt-4">
-                            <button type="submit" class="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
-                                Enviar Respostas
-                            </button>
+                        <!-- Botões de navegação do formulário -->
+                        <div class="flex justify-between items-center pt-4">
+                            <button type="button" id="prev-btn" class="px-6 py-2 bg-gray-700 text-white rounded-lg transition-colors duration-300 hover:bg-gray-600 hidden">Voltar</button>
+                            <button type="button" id="next-btn" class="px-6 py-2 bg-blue-600 text-white rounded-lg transition-colors duration-300 hover:bg-blue-700">Próxima</button>
+                            <button type="submit" id="submit-btn" class="px-6 py-2 bg-green-600 text-white rounded-lg transition-colors duration-300 hover:bg-green-700 hidden">Concluir</button>
                         </div>
                     </form>
                 </div>
@@ -496,6 +469,10 @@
 
     <!-- Script para a funcionalidade do modal de notícias e do menu -->
     <script>
+        let currentStep = 1;
+        const totalSteps = 5;
+        let userAnswers = {};
+
         // Função para mostrar uma caixa de mensagem personalizada
         function showMessageBox(title, message) {
             document.getElementById('message-title').textContent = title;
@@ -636,6 +613,75 @@
                 icon.textContent = '+';
             }
         }
+
+        // Lógica do formulário de qualificação dinâmico
+        const formSteps = document.querySelectorAll('.form-step');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const submitBtn = document.getElementById('submit-btn');
+
+        // Adiciona um ouvinte de evento para os botões de escolha de cada passo
+        formSteps.forEach(step => {
+            const buttons = step.querySelectorAll('.form-choice-btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove a classe 'selected' de todos os botões no passo atual
+                    buttons.forEach(btn => btn.classList.remove('selected'));
+                    // Adiciona a classe 'selected' ao botão clicado
+                    button.classList.add('selected');
+                });
+            });
+        });
+
+        // Evento do botão "Próxima"
+        nextBtn.addEventListener('click', () => {
+            // Verifica se uma opção foi selecionada no passo atual
+            const currentStepEl = document.getElementById(`step-${currentStep}`);
+            const selectedChoice = currentStepEl.querySelector('.form-choice-btn.selected');
+
+            if (!selectedChoice) {
+                showMessageBox('Aviso', 'Por favor, selecione uma opção antes de continuar.');
+                return;
+            }
+
+            // Esconde o passo atual
+            currentStepEl.classList.remove('active');
+            
+            // Avança para o próximo passo
+            currentStep++;
+
+            // Mostra o próximo passo
+            const nextStepEl = document.getElementById(`step-${currentStep}`);
+            nextStepEl.classList.add('active');
+
+            // Gerencia a visibilidade dos botões
+            if (currentStep > 1) {
+                prevBtn.classList.remove('hidden');
+            }
+            if (currentStep === totalSteps) {
+                nextBtn.classList.add('hidden');
+                submitBtn.classList.remove('hidden');
+            }
+        });
+
+        // Evento do botão "Voltar"
+        prevBtn.addEventListener('click', () => {
+            // Esconde o passo atual
+            document.getElementById(`step-${currentStep}`).classList.remove('active');
+
+            // Volta para o passo anterior
+            currentStep--;
+
+            // Mostra o passo anterior
+            document.getElementById(`step-${currentStep}`).classList.add('active');
+
+            // Gerencia a visibilidade dos botões
+            if (currentStep === 1) {
+                prevBtn.classList.add('hidden');
+            }
+            nextBtn.classList.remove('hidden');
+            submitBtn.classList.add('hidden');
+        });
 
         // Adiciona funcionalidade ao formulário de qualificação
         document.getElementById('qualification-form').addEventListener('submit', (event) => {
