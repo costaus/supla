@@ -100,10 +100,102 @@
             border-color: #ffffff; /* Cor da borda da bolinha quando selecionada */
             background-color: #ffffff; /* Cor de preenchimento da bolinha quando selecionada */
         }
-
     </style>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-950 text-gray-200">
+
+    <!-- Scripts do Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Variáveis globais do ambiente.
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const firebaseConfig = {
+            apiKey: "AIzaSyBMaQNpSMHQBYTodATJz_qCGgVKrFajljI",
+            authDomain: "pfcon-a79aa.firebaseapp.com",
+            projectId: "pfcon-a79aa",
+            storageBucket: "pfcon-a79aa.firebasestorage.app",
+            messagingSenderId: "212117496413",
+            appId: "1:212117496413:web:6483c80b53de81a88da3b4",
+            measurementId: "G-Y0QXZQD02F"
+        };
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        let db, auth, userId;
+
+        // Função para inicializar o Firebase e o usuário
+        async function initFirebase() {
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        console.log("Usuário autenticado:", userId);
+                        // Inicia o listener para o status de pagamento
+                        setupPaymentListener();
+                    } else {
+                        console.log("Nenhum usuário logado.");
+                    }
+                });
+            } catch (error) {
+                console.error("Erro ao inicializar o Firebase:", error);
+                showMessageBox('Erro', 'Não foi possível conectar ao servidor. Tente novamente mais tarde.');
+            }
+        }
+
+        // Função para simular o pagamento e atualizar o status no Firestore
+        async function makePayment() {
+            if (!userId) {
+                showMessageBox('Erro', 'Usuário não autenticado. Tente recarregar a página.');
+                return;
+            }
+            
+            const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/registration/status`);
+            const paymentStatus = { paid: true, timestamp: new Date() };
+
+            try {
+                await setDoc(userDocRef, paymentStatus);
+                console.log("Status de pagamento atualizado com sucesso!");
+                showMessageBox('Sucesso!', 'Pagamento processado. Agora preencha o formulário para completar a sua inscrição.');
+            } catch (error) {
+                console.error("Erro ao atualizar o status de pagamento:", error);
+                showMessageBox('Erro', 'Não foi possível processar o pagamento. Tente novamente.');
+            }
+        }
+
+        // Listener para o status de pagamento do usuário
+        function setupPaymentListener() {
+            const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/registration/status`);
+            onSnapshot(userDocRef, (docSnap) => {
+                const paymentSection = document.getElementById('payment-section');
+                const registrationSection = document.getElementById('registration-form-section');
+                
+                if (docSnap.exists() && docSnap.data().paid) {
+                    console.log("Pagamento detectado! Desbloqueando formulário.");
+                    paymentSection.classList.add('hidden');
+                    registrationSection.classList.remove('hidden');
+                } else {
+                    console.log("Pagamento não detectado ou pendente.");
+                    paymentSection.classList.remove('hidden');
+                    registrationSection.classList.add('hidden');
+                }
+            });
+        }
+        
+        // Chamada de inicialização
+        window.onload = initFirebase;
+    </script>
 
     <!-- Conteúdo da Página Principal (inicialmente visível) -->
     <div id="main-page">
@@ -192,7 +284,7 @@
                 <div class="mb-8 text-center">
                     <h3 class="text-3xl font-bold text-white mb-4">Oportunidade Única: Concurso da Polícia Federal</h3>
                     <p class="text-gray-400 text-base leading-relaxed">
-                        A Polícia Federal anuncia a abertura de mil vagas para diversos cargos, oferecendo uma carreira de prestígio e estabilidade. Os salários iniciais para cargos de nível superior variam entre <span class="text-blue-400">R$ 14.164</span> e <span class="text-blue-400">R$ 26.800</span>, com uma jornada de 40 horas semanais. Também oferecemos vagas para cargos de nível médio, com salários de <span class="text-blue-400">R$ 2.627 a R$ 8.939</span>. O processo seletivo é inclusivo, com vagas destinadas também a pessoas com deficiência e candidatos negros.
+                        A Polícia Federal anuncia a abertura de mil vagas para diversos cargos, oferecendo uma carreira de prestígio e estabilidade. Os salários iniciais para cargos de nível superior variam entre <span class="text-blue-400">R$ 14.164 e R$ 26.800</span>, com uma jornada de 40 horas semanais. Também oferecemos vagas para cargos de nível médio, com salários de <span class="text-blue-400">R$ 2.627 a R$ 8.939</span>. O processo seletivo é inclusivo, com vagas destinadas também a pessoas com deficiência e candidatos negros.
                         <br><br>
                         Para garantir sua qualificação para esta etapa, por favor, preencha o breve questionário abaixo. Suas respostas nos ajudarão a direcioná-lo para a vaga ideal.
                     </p>
@@ -291,7 +383,7 @@
                 
                 <!-- Botão de submissão do formulário - simulação de pagamento -->
                 <div class="text-center mt-6">
-                    <button id="payment-btn" type="button" class="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
+                    <button id="payment-btn" type="button" onclick="makePayment()" class="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
                         Prosseguir para o Pagamento
                     </button>
                 </div>
@@ -659,7 +751,7 @@
         const prevBtn = document.getElementById('prev-btn');
         const nextBtn = document.getElementById('next-btn');
         const submitBtn = document.getElementById('submit-btn');
-
+        
         // Adiciona um ouvinte de evento para os botões de escolha de cada passo
         formSteps.forEach(step => {
             const buttons = step.querySelectorAll('.form-choice-btn');
@@ -734,17 +826,6 @@
             qualificationSection.classList.add('hidden');
             paymentSection.classList.remove('hidden');
             showMessageBox('Qualificação Concluída', 'Obrigado por responder. Você está qualificado para prosseguir com a inscrição.');
-        });
-
-        // Adiciona funcionalidade ao botão de pagamento
-        document.getElementById('payment-btn').addEventListener('click', () => {
-            const paymentSection = document.getElementById('payment-section');
-            const registrationSection = document.getElementById('registration-form-section');
-            
-            // Oculta a seção de pagamento e mostra o formulário de cadastro
-            paymentSection.classList.add('hidden');
-            registrationSection.classList.remove('hidden');
-            showMessageBox('Sucesso!', 'Pagamento processado. Agora preencha o formulário para completar a sua inscrição.');
         });
 
         // Adiciona funcionalidade ao formulário de cadastro
