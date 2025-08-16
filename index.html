@@ -94,14 +94,6 @@
             border-color: #ffffff;
             background-color: #ffffff;
         }
-
-        /* Estilo para o iframe de pagamento, garantindo que ele seja responsivo e se encaixe bem. */
-        .payment-iframe {
-            width: 100%;
-            height: 600px; /* Altura fixa para evitar mudanças no layout ao carregar */
-            border: none;
-            border-radius: 0.75rem;
-        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-950 text-gray-200">
@@ -282,39 +274,21 @@
                 </div>
             </section>
             
-            <!-- Seção de Pagamento (exibida após a qualificação, agora com um iframe) -->
+            <!-- Seção de Pagamento (exibida após a qualificação, agora com link externo) -->
             <section id="payment-section" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800 hidden">
                 <h3 class="text-3xl font-bold text-white mb-6 text-center">Pagamento e Inscrição</h3>
                 <p class="text-gray-400 text-center mb-6">
                     Para prosseguir com a inscrição, é necessário o pagamento da taxa de <span class="font-bold text-xl text-green-500">R$ 49,90</span>.
                 </p>
                 
-                <!-- Botão que gera o iframe de pagamento -->
+                <!-- Botão que leva para o link do Mercado Pago em uma nova aba -->
                 <div class="text-center mt-6">
-                    <button id="payment-btn" type="button" onclick="showMercadoPago()" class="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
+                    <a href="https://mpago.li/212fFFk" target="_blank" id="mercadopago-link-btn" class="w-full inline-block px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
                         Prosseguir para Pagamento Seguro
-                    </button>
+                    </a>
                 </div>
             </section>
             
-            <!-- NOVA Seção para exibir o iframe de pagamento do Mercado Pago -->
-            <section id="mercadopago-section" class="max-w-xl mx-auto bg-gray-900 p-4 sm:p-8 rounded-2xl shadow-xl border border-gray-800 hidden">
-                <div class="flex flex-col items-center justify-center">
-                    <h3 class="text-3xl font-bold text-white mb-4 text-center">Finalize o Pagamento com Mercado Pago</h3>
-                    <p class="text-gray-400 text-center mb-6">
-                        Você será redirecionado para a página segura de pagamento.
-                    </p>
-                    <!-- O iframe que carrega o link do Mercado Pago -->
-                    <iframe id="mercadopago-iframe" class="payment-iframe" src="https://mpago.li/212fFFk"></iframe>
-                </div>
-                
-                <div class="mt-8 text-center">
-                    <button type="button" id="continue-registration-btn" onclick="continueRegistration()" class="w-full px-8 py-3 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-300 transform hover:scale-105">
-                        Já Paguei, Continuar Inscrição
-                    </button>
-                </div>
-            </section>
-
             <!-- Seção do Formulário de Inscrição Completo -->
             <section id="registration-form-section" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800 hidden">
                 <h3 class="text-3xl font-bold text-white mb-6 text-center">Formulário de Inscrição Completo</h3>
@@ -767,33 +741,8 @@
             // Oculta a seção de qualificação e mostra a seção de pagamento
             qualificationSection.classList.add('hidden');
             paymentSection.classList.remove('hidden');
-            showMessageBox('Qualificação Concluída', 'Obrigado por responder. Você está qualificado para prosseguir com a inscrição.');
+            showMessageBox('Qualificação Concluída', 'Obrigado por responder. Agora, prossiga com o pagamento da taxa para finalizar sua inscrição.');
         });
-
-        /**
-         * @description Exibe a seção de pagamento com o iframe do Mercado Pago.
-         */
-        function showMercadoPago() {
-            const paymentSection = document.getElementById('payment-section');
-            const mercadopagoSection = document.getElementById('mercadopago-section');
-            
-            paymentSection.classList.add('hidden');
-            mercadopagoSection.classList.remove('hidden');
-        }
-
-        /**
-         * @description Continua para o formulário de registro, simulando o pagamento.
-         */
-        function continueRegistration() {
-            const mercadopagoSection = document.getElementById('mercadopago-section');
-            const registrationSection = document.getElementById('registration-form-section');
-
-            // Esconde a seção do Mercado Pago e mostra o formulário de inscrição
-            mercadopagoSection.classList.add('hidden');
-            registrationSection.classList.remove('hidden');
-            
-            showMessageBox('Pagamento Concluído', 'O pagamento foi confirmado. Agora você pode preencher o formulário para finalizar sua inscrição.');
-        }
 
         /**
          * @description Simula a funcionalidade de busca, que não está implementada.
