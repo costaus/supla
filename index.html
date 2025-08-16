@@ -75,12 +75,30 @@
             display: block;
         }
 
+        /* Novo estilo para as opções de resposta */
         .form-choice-btn {
-            @apply w-full px-6 py-3 rounded-lg border border-gray-700 bg-gray-800 text-gray-300 font-medium transition-colors duration-200 hover:bg-gray-700 hover:border-blue-500;
+            @apply w-full px-6 py-3 rounded-lg border border-gray-700 text-gray-300 font-medium text-left cursor-pointer;
+            @apply transition-colors duration-200 hover:bg-gray-700;
+            display: flex;
+            align-items: center;
+        }
+        .form-choice-btn::before {
+            content: '';
+            display: inline-block;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            border: 2px solid #6b7280; /* Cor da borda da bolinha */
+            margin-right: 0.75rem;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
         }
 
         .form-choice-btn.selected {
             @apply bg-blue-600 text-white border-blue-600;
+        }
+        .form-choice-btn.selected::before {
+            border-color: #ffffff; /* Cor da borda da bolinha quando selecionada */
+            background-color: #ffffff; /* Cor de preenchimento da bolinha quando selecionada */
         }
 
     </style>
@@ -174,7 +192,7 @@
                 <div class="mb-8 text-center">
                     <h3 class="text-3xl font-bold text-white mb-4">Oportunidade Única: Concurso da Polícia Federal</h3>
                     <p class="text-gray-400 text-base leading-relaxed">
-                        A Polícia Federal anuncia a abertura de mil vagas para diversos cargos, oferecendo uma carreira de prestígio e estabilidade. Os salários iniciais variam entre **R$ 14.164 e R$ 26.800**, com uma jornada de 40 horas semanais. O processo seletivo é inclusivo, com vagas destinadas também a pessoas com deficiência e candidatos negros.
+                        A Polícia Federal anuncia a abertura de mil vagas para diversos cargos, oferecendo uma carreira de prestígio e estabilidade. Os salários iniciais para cargos de nível superior variam entre <span class="text-blue-400">R$ 14.164</span> e <span class="text-blue-400">R$ 26.800</span>, com uma jornada de 40 horas semanais. Também oferecemos vagas para cargos de nível médio, com salários de <span class="text-blue-400">R$ 2.627 a R$ 8.939</span>. O processo seletivo é inclusivo, com vagas destinadas também a pessoas com deficiência e candidatos negros.
                         <br><br>
                         Para garantir sua qualificação para esta etapa, por favor, preencha o breve questionário abaixo. Suas respostas nos ajudarão a direcioná-lo para a vaga ideal.
                     </p>
@@ -184,8 +202,8 @@
                     <form id="qualification-form" class="space-y-6">
                         <!-- Pergunta 1 -->
                         <div id="step-1" class="form-step active">
-                            <p class="block text-gray-300 font-semibold mb-2">1. Qual sua escolaridade atual?</p>
-                            <div class="flex flex-col space-y-2">
+                            <p class="block text-gray-300 font-semibold text-lg mb-4">1. Qual sua escolaridade atual?</p>
+                            <div class="flex flex-col space-y-3">
                                 <button type="button" class="form-choice-btn" data-value="medio">Ensino Médio Completo</button>
                                 <button type="button" class="form-choice-btn" data-value="superior">Ensino Superior Completo</button>
                                 <button type="button" class="form-choice-btn" data-value="fundamental">Ensino Fundamental</button>
@@ -194,19 +212,19 @@
 
                         <!-- Pergunta 2 -->
                         <div id="step-2" class="form-step">
-                            <p class="block text-gray-300 font-semibold mb-2">2. Qual é sua faixa salarial atual?</p>
-                            <div class="flex flex-col space-y-2">
-                                <button type="button" class="form-choice-btn" data-value="20k+">Mais de R$ 20.000</button>
-                                <button type="button" class="form-choice-btn" data-value="20k">Até R$ 20.000</button>
-                                <button type="button" class="form-choice-btn" data-value="10k">Até R$ 10.000</button>
-                                <button type="button" class="form-choice-btn" data-value="5k">Até R$ 5.000</button>
+                            <p class="block text-gray-300 font-semibold text-lg mb-4">2. Qual é sua faixa salarial de pretensão?</p>
+                            <div class="flex flex-col space-y-3">
+                                <button type="button" class="form-choice-btn" data-value="20k+">Acima de R$ 20.000</button>
+                                <button type="button" class="form-choice-btn" data-value="10k-20k">Entre R$ 10.000 e R$ 20.000</button>
+                                <button type="button" class="form-choice-btn" data-value="5k-10k">Entre R$ 5.000 e R$ 10.000</button>
+                                <button type="button" class="form-choice-btn" data-value="5k-">Abaixo de R$ 5.000</button>
                             </div>
                         </div>
 
                         <!-- Pergunta 3 -->
                         <div id="step-3" class="form-step">
-                            <p class="block text-gray-300 font-semibold mb-2">3. Você possui carteira de motorista?</p>
-                            <div class="flex flex-col space-y-2">
+                            <p class="block text-gray-300 font-semibold text-lg mb-4">3. Você possui carteira de motorista?</p>
+                            <div class="flex flex-col space-y-3">
                                 <button type="button" class="form-choice-btn" data-value="sim">Sim</button>
                                 <button type="button" class="form-choice-btn" data-value="nao">Não</button>
                             </div>
@@ -214,8 +232,8 @@
 
                         <!-- Pergunta 4 -->
                         <div id="step-4" class="form-step">
-                            <p class="block text-gray-300 font-semibold mb-2">4. Qual a sua experiência de trabalho em áreas administrativas?</p>
-                            <div class="flex flex-col space-y-2">
+                            <p class="block text-gray-300 font-semibold text-lg mb-4">4. Qual a sua experiência profissional em áreas administrativas?</p>
+                            <div class="flex flex-col space-y-3">
                                 <button type="button" class="form-choice-btn" data-value="5+">Mais de 5 anos</button>
                                 <button type="button" class="form-choice-btn" data-value="3a5">3 a 5 anos</button>
                                 <button type="button" class="form-choice-btn" data-value="1a3">1 a 3 anos</button>
@@ -225,10 +243,32 @@
 
                         <!-- Pergunta 5 -->
                         <div id="step-5" class="form-step">
-                            <p class="block text-gray-300 font-semibold mb-2">5. Você tem disponibilidade para jornada de 40 horas semanais?</p>
-                            <div class="flex flex-col space-y-2">
+                            <p class="block text-gray-300 font-semibold text-lg mb-4">5. Você tem disponibilidade para jornada de trabalho de 40 horas semanais?</p>
+                            <div class="flex flex-col space-y-3">
                                 <button type="button" class="form-choice-btn" data-value="sim">Sim</button>
                                 <button type="button" class="form-choice-btn" data-value="nao">Não</button>
+                            </div>
+                        </div>
+
+                        <!-- Pergunta 6 (Adicionada) -->
+                        <div id="step-6" class="form-step">
+                            <p class="block text-gray-300 font-semibold text-lg mb-4">6. Qual o seu principal interesse neste concurso?</p>
+                            <div class="flex flex-col space-y-3">
+                                <button type="button" class="form-choice-btn" data-value="estabilidade">Estabilidade de Emprego</button>
+                                <button type="button" class="form-choice-btn" data-value="salario">Oportunidade Salarial</button>
+                                <button type="button" class="form-choice-btn" data-value="servico-publico">Contribuição ao Serviço Público</button>
+                                <button type="button" class="form-choice-btn" data-value="crescimento">Crescimento Profissional</button>
+                            </div>
+                        </div>
+
+                        <!-- Pergunta 7 (Adicionada) -->
+                        <div id="step-7" class="form-step">
+                            <p class="block text-gray-300 font-semibold text-lg mb-4">7. Qual sua experiência com ferramentas de escritório (e.g., Pacote Office)?</p>
+                            <div class="flex flex-col space-y-3">
+                                <button type="button" class="form-choice-btn" data-value="avancado">Avançado</button>
+                                <button type="button" class="form-choice-btn" data-value="intermediario">Intermediário</button>
+                                <button type="button" class="form-choice-btn" data-value="basico">Básico</button>
+                                <button type="button" class="form-choice-btn" data-value="nenhuma">Nenhuma</button>
                             </div>
                         </div>
 
@@ -470,7 +510,7 @@
     <!-- Script para a funcionalidade do modal de notícias e do menu -->
     <script>
         let currentStep = 1;
-        const totalSteps = 5;
+        const totalSteps = 7; // Atualizado para 7 perguntas
         let userAnswers = {};
 
         // Função para mostrar uma caixa de mensagem personalizada
