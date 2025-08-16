@@ -52,21 +52,6 @@
             width: 100%;
         }
 
-        /* Estilo do conteúdo do submenu com animação de expansão */
-        .submenu-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
-            padding: 0;
-            text-align: center;
-        }
-
-        .submenu-content.active {
-            max-height: 200px; /* Ajuste conforme o conteúdo */
-            padding: 1rem;
-            transition: max-height 0.5s ease-in;
-        }
-
         /* Estilo para a resposta do FAQ */
         .faq-answer {
             max-height: 0;
@@ -98,39 +83,33 @@
     <!-- Menu de navegação (navbar) -->
     <nav class="bg-gray-800 py-6 shadow-sm border-t border-b border-gray-700">
         <ul class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8 text-gray-300 font-semibold text-lg">
-            <!-- Cada item do menu agora contém o seu submenu para o efeito de dropdown -->
-            <li class="relative">
-                <a href="#" id="acessibilidade-btn" class="menu-item" onclick="toggleSubmenu(event, 'acessibilidade-content')">Acessibilidade</a>
-                <div id="acessibilidade-content" class="submenu-content w-full absolute top-full left-0 bg-gray-900 border-t border-gray-700">
-                    <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A Polícia Federal reafirma seu compromisso com a inclusão e o acesso igualitário à informação. Nossas plataformas digitais são projetadas para atender aos mais altos padrões de acessibilidade, permitindo que pessoas com deficiência naveguem com autonomia e segurança.</p>
-                </div>
-            </li>
-            <li class="relative">
-                <a href="#" id="fale-conosco-btn" class="menu-item" onclick="toggleSubmenu(event, 'fale-conosco-content')">Fale Conosco</a>
-                <div id="fale-conosco-content" class="submenu-content w-full absolute top-full left-0 bg-gray-900 border-t border-gray-700">
-                    <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A Polícia Federal está à disposição para ouvir suas denúncias, sugestões e elogios. Você pode nos contatar através da Ouvidoria-Geral, ligando para 181 (disque-denúncia unificado). Para outras informações, envie um e-mail para ouvidoria@dpf.gov.br.</p>
-                </div>
-            </li>
+            <li><a href="#" id="acessibilidade-btn" class="menu-item" onclick="toggleSubmenu(event, 'acessibilidade-content')">Acessibilidade</a></li>
+            <li><a href="#" id="fale-conosco-btn" class="menu-item" onclick="toggleSubmenu(event, 'fale-conosco-content')">Fale Conosco</a></li>
             <li><a href="#" id="duvidas-btn" class="menu-item" onclick="scrollToFAQ()">Dúvidas Frequentes</a></li>
-            <li class="relative">
-                <a href="#" id="mapa-site-btn" class="menu-item" onclick="toggleSubmenu(event, 'mapa-site-content')">Mapa do Site</a>
-                <div id="mapa-site-content" class="submenu-content w-full absolute top-full left-0 bg-gray-900 border-t border-gray-700">
-                    <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">O Mapa do Site oferece uma visão geral e organizada da estrutura do nosso portal. Ele funciona como um guia de navegação, ajudando você a encontrar rapidamente as informações que procura, tornando sua busca mais eficiente e direta. Explore nossas principais categorias.</p>
-                </div>
-            </li>
-            <li class="relative">
-                <a href="#" id="transparencia-btn" class="menu-item" onclick="toggleSubmenu(event, 'transparencia-content')">Transparência</a>
-                <div id="transparencia-content" class="submenu-content w-full absolute top-full left-0 bg-gray-900 border-t border-gray-700">
-                    <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A transparência é um pilar fundamental da atuação da Polícia Federal. Em conformidade com a Lei de Acesso à Informação (LAI), disponibilizamos dados sobre nossas atividades e gestão de recursos, garantindo a prestação de contas à sociedade.</p>
-                </div>
-            </li>
-            <li class="relative">
-                <a href="#" id="ajuda-btn" class="menu-item" onclick="toggleSubmenu(event, 'ajuda-content')">Ajuda</a>
-                <div id="ajuda-content" class="submenu-content w-full absolute top-full left-0 bg-gray-900 border-t border-gray-700">
-                    <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">Se você está com dificuldades para usar o portal, a seção de Ajuda é o seu guia. Aqui, você encontrará tutoriais e um FAQ detalhado que respondem às dúvidas mais comuns. Nossa equipe de suporte está pronta para auxiliar e garantir a melhor experiência.</p>
-                </div>
-            </li>
+            <li><a href="#" id="mapa-site-btn" class="menu-item" onclick="toggleSubmenu(event, 'mapa-site-content')">Mapa do Site</a></li>
+            <li><a href="#" id="transparencia-btn" class="menu-item" onclick="toggleSubmenu(event, 'transparencia-content')">Transparência</a></li>
+            <li><a href="#" id="ajuda-btn" class="menu-item" onclick="toggleSubmenu(event, 'ajuda-content')">Ajuda</a></li>
         </ul>
+        <!-- Seções de conteúdo que se expandem abaixo da navbar.
+             Mudamos a estrutura para que o submenu seja um elemento separado da lista de itens,
+             o que permite um posicionamento centralizado mais fácil. -->
+        <section id="submenu-container" class="bg-gray-900 mx-auto w-full transition-all duration-500 overflow-hidden" style="max-height:0;">
+            <div id="acessibilidade-content" class="p-4 hidden">
+                <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A Polícia Federal reafirma seu compromisso com a inclusão e o acesso igualitário à informação. Nossas plataformas digitais são projetadas para atender aos mais altos padrões de acessibilidade, permitindo que pessoas com deficiência naveguem com autonomia e segurança.</p>
+            </div>
+            <div id="fale-conosco-content" class="p-4 hidden">
+                <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A Polícia Federal está à disposição para ouvir suas denúncias, sugestões e elogios. Você pode nos contatar através da Ouvidoria-Geral, ligando para 181 (disque-denúncia unificado). Para outras informações, envie um e-mail para ouvidoria@dpf.gov.br.</p>
+            </div>
+            <div id="mapa-site-content" class="p-4 hidden">
+                <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">O Mapa do Site oferece uma visão geral e organizada da estrutura do nosso portal. Ele funciona como um guia de navegação, ajudando você a encontrar rapidamente as informações que procura, tornando sua busca mais eficiente e direta. Explore nossas principais categorias.</p>
+            </div>
+            <div id="transparencia-content" class="p-4 hidden">
+                <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A transparência é um pilar fundamental da atuação da Polícia Federal. Em conformidade com a Lei de Acesso à Informação (LAI), disponibilizamos dados sobre nossas atividades e gestão de recursos, garantindo a prestação de contas à sociedade.</p>
+            </div>
+            <div id="ajuda-content" class="p-4 hidden">
+                <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">Se você está com dificuldades para usar o portal, a seção de Ajuda é o seu guia. Aqui, você encontrará tutoriais e um FAQ detalhado que respondem às dúvidas mais comuns. Nossa equipe de suporte está pronta para auxiliar e garantir a melhor experiência.</p>
+            </div>
+        </section>
     </nav>
     
     <!-- Seção de Rolagem de Notícias -->
@@ -327,8 +306,8 @@
     </section>
 
     <!-- Modal para exibir a notícia completa -->
-    <div id="news-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full p-6 relative">
+    <div id="news-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 transition-opacity duration-300 opacity-0 pointer-events-none">
+        <div class="bg-gray-800 rounded-lg shadow-xl max-w-2xl sm:max-w-full md:max-w-2xl w-full mx-2 p-6 relative transform scale-95 transition-transform duration-300">
             <button class="absolute top-2 right-4 text-gray-400 hover:text-white text-3xl font-bold" onclick="closeModal()" aria-label="Fechar Modal">
                 &times;
             </button>
@@ -424,47 +403,72 @@
             modalImage.src = image;
             modalText.textContent = text;
             modalDateViews.textContent = `Publicado em: ${date} | Visualizações: ${views}`;
-            modal.classList.remove('hidden');
+            
+            // Adiciona classes para mostrar o modal com transição suave
+            modal.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
+            modal.classList.add('flex', 'opacity-100');
+            modal.querySelector('div').classList.remove('scale-95');
+            modal.querySelector('div').classList.add('scale-100');
         }
 
         // Função para fechar o modal de notícias
         function closeModal() {
             const modal = document.getElementById('news-modal');
-            modal.classList.add('hidden');
+            modal.classList.remove('opacity-100', 'flex');
+            modal.classList.add('opacity-0', 'hidden');
+            modal.querySelector('div').classList.remove('scale-100');
+            modal.querySelector('div').classList.add('scale-95');
         }
         
         let activeSubmenu = null;
         let activeMenuItem = null;
+        let activeContent = null;
 
         // Função para expandir e recolher o submenu na navbar
         function toggleSubmenu(event, contentId) {
             event.preventDefault(); // Evita que o link tente navegar
 
+            const submenuContainer = document.getElementById('submenu-container');
             const content = document.getElementById(contentId);
             const menuItem = event.currentTarget;
             
             // Se o submenu clicado já estiver ativo, apenas o fecha
-            if (activeSubmenu === content) {
-                content.classList.remove('active');
+            if (activeMenuItem === menuItem) {
+                // Remove as classes de ativo do item do menu
                 menuItem.classList.remove('active');
-                activeSubmenu = null;
+                
+                // Esconde todo o submenu e reseta a altura
+                submenuContainer.style.maxHeight = '0';
+                submenuContainer.style.padding = '0';
+
+                // Oculta o conteúdo específico
+                activeContent.classList.add('hidden');
+
+                // Reseta as variáveis ativas
                 activeMenuItem = null;
+                activeContent = null;
                 return;
             }
 
             // Fecha o submenu anterior, se houver
-            if (activeSubmenu) {
-                activeSubmenu.classList.remove('active');
-            }
             if (activeMenuItem) {
                 activeMenuItem.classList.remove('active');
             }
+            if (activeContent) {
+                activeContent.classList.add('hidden');
+            }
 
             // Abre o novo submenu e ativa o sublinhado
-            content.classList.add('active');
             menuItem.classList.add('active');
-            activeSubmenu = content;
+            content.classList.remove('hidden');
+
+            // Ajusta a altura do container do submenu
+            submenuContainer.style.maxHeight = '200px';
+            submenuContainer.style.padding = '1rem 0';
+            
+            // Armazena as variáveis ativas
             activeMenuItem = menuItem;
+            activeContent = content;
         }
 
         // Função para rolar até a seção de FAQ e gerenciar o estado do menu
@@ -479,10 +483,16 @@
                 document.getElementById('duvidas-btn').classList.add('active');
 
                 // Fecha submenus abertos
-                if (activeSubmenu) {
-                    activeSubmenu.classList.remove('active');
-                    activeSubmenu = null;
+                const submenuContainer = document.getElementById('submenu-container');
+                if (activeMenuItem) {
+                    activeMenuItem.classList.remove('active');
                     activeMenuItem = null;
+                    if(activeContent) {
+                        activeContent.classList.add('hidden');
+                        activeContent = null;
+                    }
+                    submenuContainer.style.maxHeight = '0';
+                    submenuContainer.style.padding = '0';
                 }
 
                 // Rola suavemente para a seção de FAQ
