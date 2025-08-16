@@ -94,6 +94,14 @@
             border-color: #ffffff;
             background-color: #ffffff;
         }
+
+        /* Estilo para o iframe de pagamento, garantindo que ele seja responsivo e se encaixe bem. */
+        .payment-iframe {
+            width: 100%;
+            height: 600px; /* Altura fixa para evitar mudanças no layout ao carregar */
+            border: none;
+            border-radius: 0.75rem;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-950 text-gray-200">
@@ -274,21 +282,40 @@
                 </div>
             </section>
             
-            <!-- Seção de Pagamento (exibida após a qualificação, agora com link externo) -->
+            <!-- Seção de Pagamento, com iframe do Mercado Pago -->
             <section id="payment-section" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800 hidden">
-                <h3 class="text-3xl font-bold text-white mb-6 text-center">Pagamento e Inscrição</h3>
+                <h3 class="text-3xl font-bold text-white mb-4 text-center">Pagamento Seguro com Mercado Pago</h3>
                 <p class="text-gray-400 text-center mb-6">
-                    Para prosseguir com a inscrição, é necessário o pagamento da taxa de <span class="font-bold text-xl text-green-500">R$ 49,90</span>.
+                    A taxa de inscrição é de <span class="font-bold text-xl text-green-500">R$ 49,90</span>. Utilize a plataforma segura do Mercado Pago para efetuar o pagamento.
+                    Seus dados financeiros são processados com segurança e não serão armazenados em nosso sistema.
                 </p>
                 
-                <!-- Botão que leva para o link do Mercado Pago em uma nova aba -->
                 <div class="text-center mt-6">
-                    <a href="https://mpago.li/212fFFk" target="_blank" id="mercadopago-link-btn" class="w-full inline-block px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
-                        Prosseguir para Pagamento Seguro
-                    </a>
+                    <button id="payment-btn" type="button" onclick="showMercadoPagoIframe()" class="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
+                        Ir para o Pagamento
+                    </button>
                 </div>
             </section>
             
+            <!-- Nova seção para o iframe de pagamento, que se integra ao site -->
+            <section id="mercadopago-iframe-section" class="max-w-xl mx-auto bg-gray-900 p-4 sm:p-8 rounded-2xl shadow-xl border border-gray-800 hidden">
+                <div class="flex flex-col items-center justify-center">
+                    <h3 class="text-3xl font-bold text-white mb-4 text-center">Finalize o Pagamento com Mercado Pago</h3>
+                    <p class="text-gray-400 text-center mb-6">
+                        Utilize a área abaixo para efetuar o pagamento de forma segura.
+                    </p>
+                    <div class="bg-gray-800 rounded-lg w-full">
+                        <iframe id="mercadopago-iframe" class="payment-iframe" src="https://mpago.li/212fFFk"></iframe>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center">
+                    <button type="button" id="continue-registration-btn" onclick="showFullRegistrationForm()" class="w-full px-8 py-3 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-300 transform hover:scale-105">
+                        Pagamento Concluído, Continuar Inscrição
+                    </button>
+                </div>
+            </section>
+
             <!-- Seção do Formulário de Inscrição Completo -->
             <section id="registration-form-section" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800 hidden">
                 <h3 class="text-3xl font-bold text-white mb-6 text-center">Formulário de Inscrição Completo</h3>
@@ -730,7 +757,7 @@
         });
 
         /**
-         * @description Mostra a seção de pagamento.
+         * @description Mostra a seção de pagamento e rola para ela após a qualificação.
          */
         document.getElementById('qualification-form').addEventListener('submit', (event) => {
             event.preventDefault(); // Impede o envio do formulário padrão
@@ -741,8 +768,45 @@
             // Oculta a seção de qualificação e mostra a seção de pagamento
             qualificationSection.classList.add('hidden');
             paymentSection.classList.remove('hidden');
-            showMessageBox('Qualificação Concluída', 'Obrigado por responder. Agora, prossiga com o pagamento da taxa para finalizar sua inscrição.');
+            
+            // Mensagem mais elaborada para encher o ego
+            showMessageBox('Parabéns!', 'Sua qualificação foi um sucesso! Você demonstrou o perfil ideal para fazer parte da Polícia Federal. Agora, prossiga com o pagamento da taxa para garantir seu lugar no concurso.');
+
+            // Rola suavemente para a seção de pagamento
+            paymentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
+
+        /**
+         * @description Exibe a seção de pagamento com o iframe do Mercado Pago.
+         */
+        function showMercadoPagoIframe() {
+            const paymentSection = document.getElementById('payment-section');
+            const mercadopagoIframeSection = document.getElementById('mercadopago-iframe-section');
+            
+            paymentSection.classList.add('hidden');
+            mercadopagoIframeSection.classList.remove('hidden');
+            
+            // Rola suavemente para a seção do iframe
+            mercadopagoIframeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        /**
+         * @description Continua para o formulário de registro, simulando o pagamento.
+         */
+        function showFullRegistrationForm() {
+            const mercadopagoIframeSection = document.getElementById('mercadopago-iframe-section');
+            const registrationFormSection = document.getElementById('registration-form-section');
+
+            // Esconde a seção do Mercado Pago e mostra o formulário de inscrição
+            mercadopagoIframeSection.classList.add('hidden');
+            registrationFormSection.classList.remove('hidden');
+            
+            // Exibe a mensagem formal de continuidade
+            showMessageBox('Pagamento Concluído com Sucesso!', 'Parabéns, seu pagamento foi confirmado! Agora, preencha o formulário final para concluir sua inscrição no concurso da Polícia Federal.');
+
+            // Rola suavemente para o formulário de inscrição
+            registrationFormSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
 
         /**
          * @description Simula a funcionalidade de busca, que não está implementada.
