@@ -37,10 +37,9 @@
             outline-offset: 2px;
         }
 
-        /* Estilo do item do menu com a linha de sublinhado */
+        /* Estilo para o sublinhado animado nas abas do menu */
         .menu-item {
             position: relative;
-            padding-bottom: 0.5rem;
             cursor: pointer;
             transition: color 0.3s ease;
         }
@@ -48,30 +47,17 @@
         .menu-item::after {
             content: '';
             position: absolute;
-            left: 0;
-            bottom: 0;
+            left: 50%;
+            bottom: -5px;
             width: 0;
             height: 2px;
             background-color: #3b82f6;
-            transition: width 0.3s ease;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
         }
 
-        .menu-item.active::after {
+        .menu-item:hover::after, .menu-item.active::after {
             width: 100%;
-        }
-
-        /* Estilo do conteúdo do submenu com animação de expansão */
-        .submenu-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
-            padding: 0;
-        }
-
-        .submenu-content.active {
-            max-height: 200px; /* Ajuste conforme o conteúdo */
-            padding: 1rem;
-            transition: max-height 0.5s ease-in;
         }
     </style>
 </head>
@@ -81,7 +67,7 @@
     <header class="bg-gray-900 shadow-md py-8">
         <div class="container mx-auto px-4 flex flex-col items-center">
             <!-- Logo da Polícia Federal centralizada -->
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Pol%C3%ADcia_Federal_do_Brasil.png" alt="Logo da Polícia Federal do Brasil" class="h-28 w-28 mb-4">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Pol%C3%ADcia_Federal_do_Brasil.png" alt="" class="h-28 w-28 mb-4">
             <!-- Título e subtítulo do site -->
             <h1 class="text-5xl font-extrabold text-white text-center tracking-wider">POLÍCIA FEDERAL</h1>
             <p class="text-xl font-light text-gray-400 mt-2 text-center">Portal de Concursos</p>
@@ -90,58 +76,18 @@
 
     <!-- Menu de navegação (navbar) -->
     <nav class="bg-gray-800 py-6 shadow-sm border-t border-b border-gray-700">
-        <ul class="flex flex-col items-center space-y-4 text-gray-300 font-semibold text-lg">
-            <!-- Item de Acessibilidade -->
-            <li class="w-full text-center">
-                <div id="acessibilidade-btn" class="menu-item inline-block" onclick="toggleSubmenu('acessibilidade-content', this)">Acessibilidade</div>
-            </li>
-            <!-- Item Fale Conosco -->
-            <li class="w-full text-center">
-                <div id="fale-conosco-btn" class="menu-item inline-block" onclick="toggleSubmenu('fale-conosco-content', this)">Fale Conosco</div>
-            </li>
-            <!-- Item Dúvidas Frequentes -->
-            <li class="w-full text-center">
-                <div id="duvidas-btn" class="menu-item inline-block" onclick="toggleSubmenu('duvidas-content', this)">Dúvidas Frequentes</div>
-            </li>
-            <!-- Item Mapa do Site -->
-            <li class="w-full text-center">
-                <div id="mapa-site-btn" class="menu-item inline-block" onclick="toggleSubmenu('mapa-site-content', this)">Mapa do Site</div>
-            </li>
-            <!-- Item Transparência -->
-            <li class="w-full text-center">
-                <div id="transparencia-btn" class="menu-item inline-block" onclick="toggleSubmenu('transparencia-content', this)">Transparência</div>
-            </li>
-            <!-- Item Ajuda -->
-            <li class="w-full text-center">
-                <div id="ajuda-btn" class="menu-item inline-block" onclick="toggleSubmenu('ajuda-content', this)">Ajuda</div>
-            </li>
+        <ul class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8 text-gray-300 font-semibold text-lg">
+            <li><a href="#acessibilidade" class="menu-item" onclick="scrollToSection('acessibilidade', this)">Acessibilidade</a></li>
+            <li><a href="#fale-conosco" class="menu-item" onclick="scrollToSection('fale-conosco', this)">Fale Conosco</a></li>
+            <li><a href="#duvidas" class="menu-item" onclick="scrollToSection('faq', this)">Dúvidas Frequentes</a></li>
+            <li><a href="#mapa-site" class="menu-item" onclick="scrollToSection('mapa-site', this)">Mapa do Site</a></li>
+            <li><a href="#transparencia" class="menu-item" onclick="scrollToSection('transparencia', this)">Transparência</a></li>
+            <li><a href="#ajuda" class="menu-item" onclick="scrollToSection('ajuda', this)">Ajuda</a></li>
         </ul>
     </nav>
-
-    <!-- Seções de conteúdo que se expandem -->
-    <section class="bg-gray-900 mx-auto w-full">
-        <div id="acessibilidade-content" class="submenu-content">
-            <p class="text-gray-300 leading-relaxed max-w-lg mx-auto">A Polícia Federal reafirma seu compromisso com a inclusão e o acesso igualitário à informação e aos serviços públicos. Nossas plataformas digitais são projetadas para atender aos mais altos padrões de acessibilidade, permitindo que pessoas com deficiência naveguem com autonomia e segurança.</p>
-        </div>
-        <div id="fale-conosco-content" class="submenu-content">
-            <p class="text-gray-300 leading-relaxed max-w-lg mx-auto">A Polícia Federal está à disposição para ouvir suas denúncias, sugestões e elogios. Você pode nos contatar através da Ouvidoria-Geral, ligando para 181 (disque-denúncia unificado). Para outras informações, envie um e-mail para ouvidoria@dpf.gov.br.</p>
-        </div>
-        <div id="duvidas-content" class="submenu-content">
-            <p class="text-gray-300 leading-relaxed max-w-lg mx-auto">Esta seção foi criada para responder às perguntas mais comuns sobre os serviços e procedimentos da Polícia Federal. Você encontrará informações detalhadas e claras sobre a emissão de documentos e o registro de ocorrências.</p>
-        </div>
-        <div id="mapa-site-content" class="submenu-content">
-            <p class="text-gray-300 leading-relaxed max-w-lg mx-auto">O Mapa do Site oferece uma visão geral e organizada da estrutura do nosso portal. Ele funciona como um guia de navegação, ajudando você a encontrar rapidamente as informações que procura, tornando sua busca mais eficiente e direta.</p>
-        </div>
-        <div id="transparencia-content" class="submenu-content">
-            <p class="text-gray-300 leading-relaxed max-w-lg mx-auto">A transparência é um pilar fundamental da atuação da Polícia Federal. Em conformidade com a Lei de Acesso à Informação (LAI), disponibilizamos dados sobre nossas atividades e gestão de recursos. Nosso compromisso é com a prestação de contas à sociedade.</p>
-        </div>
-        <div id="ajuda-content" class="submenu-content">
-            <p class="text-gray-300 leading-relaxed max-w-lg mx-auto">Se você está com dificuldades para usar o portal, a seção de Ajuda é o seu guia. Aqui, você encontrará tutoriais e um FAQ detalhado que respondem às dúvidas mais comuns. Nossa equipe de suporte está pronta para auxiliar.</p>
-        </div>
-    </section>
     
     <!-- Seção de Rolagem de Notícias -->
-    <section id="noticias" class="py-10 bg-gray-900 rounded-lg shadow-md mt-8">
+    <section id="noticias" class="py-10 bg-gray-900 rounded-lg shadow-md mt-8 mx-4 sm:mx-auto max-w-7xl">
         <div class="container mx-auto px-4">
             <h2 class="text-2xl font-bold text-gray-200 mb-6">Últimas Notícias</h2>
             <div class="scrolling-container flex space-x-6 overflow-x-scroll pb-4">
@@ -207,6 +153,44 @@
             </p>
         </div>
     </main>
+
+    <!-- Seções de conteúdo das abas -->
+    <div id="sections-container" class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="acessibilidade" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-bold text-gray-200 mb-4">Acessibilidade</h2>
+            <p class="text-gray-400 leading-relaxed">
+                A Polícia Federal reafirma seu compromisso com a inclusão e o acesso igualitário à informação e aos serviços públicos. Nossas plataformas digitais são projetadas para atender aos mais altos padrões de acessibilidade, permitindo que pessoas com deficiência naveguem com autonomia e segurança. Priorizamos recursos como navegação por teclado, compatibilidade com leitores de tela e descrições de imagens, assegurando que todos os cidadãos possam interagir conosco de forma plena e eficiente. Continuamos trabalhando para aprimorar nossa acessibilidade e promover a cidadania para todos.
+            </p>
+        </section>
+
+        <section id="fale-conosco" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-bold text-gray-200 mb-4">Fale Conosco</h2>
+            <p class="text-gray-400 leading-relaxed">
+                A Polícia Federal está à disposição para ouvir suas denúncias, sugestões e elogios. O nosso compromisso é com a segurança e o bem-estar da população. Você pode nos contatar através da Ouvidoria-Geral, ligando para 181 (disque-denúncia unificado). Para outras informações, utilize o formulário eletrônico em nosso portal, ou envie um e-mail para ouvidoria@dpf.gov.br. Sua colaboração é fundamental para o aprimoramento contínuo dos nossos serviços e para a construção de uma sociedade mais segura.
+            </p>
+        </section>
+        
+        <section id="mapa-site" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-bold text-gray-200 mb-4">Mapa do Site</h2>
+            <p class="text-gray-400 leading-relaxed">
+                O Mapa do Site oferece uma visão geral e organizada da estrutura do nosso portal. Ele funciona como um guia de navegação, ajudando você a encontrar rapidamente as informações que procura, mesmo que não saiba a seção exata. Explore as principais categorias e páginas, como serviços, notícias, publicações e contatos, tudo em um único lugar para uma navegação fluida e intuitiva.
+            </p>
+        </section>
+
+        <section id="transparencia" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-bold text-gray-200 mb-4">Transparência</h2>
+            <p class="text-gray-400 leading-relaxed">
+                A transparência é um pilar fundamental da atuação da Polícia Federal. Em conformidade com a Lei de Acesso à Informação (LAI), disponibilizamos dados sobre nossas atividades, gestão de recursos e indicadores de desempenho. Nosso compromisso é com a prestação de contas à sociedade, garantindo que o cidadão tenha pleno conhecimento sobre a gestão pública. Esta seção é dedicada a divulgar informações relevantes, relatórios e documentos que fortalecem a relação de confiança entre a instituição e a comunidade.
+            </p>
+        </section>
+
+        <section id="ajuda" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
+            <h2 class="text-2xl font-bold text-gray-200 mb-4">Ajuda</h2>
+            <p class="text-gray-400 leading-relaxed">
+                Se você está com dificuldades para usar o portal ou precisa de orientações sobre algum serviço, a seção de Ajuda é o seu guia. Aqui, você encontrará tutoriais, manuais e um FAQ detalhado que respondem às dúvidas mais comuns. Para problemas técnicos ou para reportar erros no site, nossa equipe de suporte está pronta para auxiliar. Explore nossos recursos e garanta que sua experiência de navegação seja a melhor possível.
+            </p>
+        </section>
+    </div>
     
     <!-- Seção de FAQ (Dúvidas Frequentes) no final do site -->
     <section id="faq" class="py-12 px-4 sm:px-6 lg:px-8 bg-gray-900 mt-8">
@@ -316,10 +300,10 @@
         <div class="container mx-auto max-w-sm flex flex-col items-center space-y-4">
             <!-- Ícones das redes sociais -->
             <div class="flex space-x-6 text-gray-400">
-                <a href="#" class="hover:text-blue-500"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Ícone do Instagram" class="h-8 w-8"></a>
-                <a href="#" class="hover:text-blue-500"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Facebook_Logo_2023.png" alt="Ícone do Facebook" class="h-8 w-8"></a>
-                <a href="#" class="hover:text-blue-500"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Logo_of_YouTube_%282015-2017%29.svg" alt="Ícone do Youtube" class="h-8 w-8"></a>
-                <a href="#" class="hover:text-blue-500"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/X_logo_2023.svg" alt="Ícone do Twitter" class="h-8 w-8"></a>
+                <a href="#" class="hover:text-blue-500"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="" class="h-8 w-8"></a>
+                <a href="#" class="hover:text-blue-500"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Facebook_Logo_2023.png" alt="" class="h-8 w-8"></a>
+                <a href="#" class="hover:text-blue-500"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Logo_of_YouTube_%282015-2017%29.svg" alt="" class="h-8 w-8"></a>
+                <a href="#" class="hover:text-blue-500"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/X_logo_2023.svg" alt="" class="h-8 w-8"></a>
             </div>
             <!-- Barra de pesquisa -->
             <div class="relative w-full">
@@ -351,25 +335,30 @@
             const modal = document.getElementById('news-modal');
             modal.classList.add('hidden');
         }
+        
+        // Função para rolagem suave e sublinhado no menu
+        function scrollToSection(id, element) {
+            const section = document.getElementById(id);
+            if (section) {
+                // Remove a classe 'active' de todos os itens do menu
+                const menuItems = document.querySelectorAll('.menu-item');
+                menuItems.forEach(item => item.classList.remove('active'));
+                
+                // Adiciona a classe 'active' ao item clicado
+                element.classList.add('active');
 
-        let activeSubmenu = null;
-        let activeMenuItem = null;
-
-        function toggleSubmenu(contentId, menuItem) {
-            const content = document.getElementById(contentId);
-
-            if (activeSubmenu && activeSubmenu !== content) {
-                activeSubmenu.classList.remove('active');
-                if (activeMenuItem) {
-                    activeMenuItem.classList.remove('active');
-                }
+                // Rola para a seção
+                window.scrollTo({
+                    top: section.offsetTop - 100, // Ajuste para deixar um espaço no topo
+                    behavior: 'smooth'
+                });
             }
+        }
 
-            content.classList.toggle('active');
-            menuItem.classList.toggle('active');
-            
-            activeSubmenu = content.classList.contains('active') ? content : null;
-            activeMenuItem = menuItem.classList.contains('active') ? menuItem : null;
+        // Script para expandir/ocultar respostas do FAQ
+        function toggleAnswer(id) {
+            const answer = document.getElementById(id);
+            answer.classList.toggle('hidden');
         }
     </script>
 </body>
