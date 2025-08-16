@@ -69,294 +69,305 @@
 </head>
 <body class="flex flex-col min-h-screen bg-gray-950 text-gray-200">
 
-    <!-- Cabeçalho com a logo e nome centralizados -->
-    <header class="bg-gray-900 shadow-md py-8">
-        <div class="container mx-auto px-4 flex flex-col items-center">
-            <!-- Logo da Polícia Federal centralizada com descrição para acessibilidade -->
-            <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Pol%C3%ADcia_Federal_do_Brasil.png" alt="Logo da Polícia Federal do Brasil" class="h-28 w-28 mb-4">
-            <!-- Título e subtítulo do site -->
-            <h1 class="text-5xl font-extrabold text-white text-center tracking-wider">POLÍCIA FEDERAL</h1>
-            <p class="text-xl font-light text-gray-400 mt-2 text-center">Portal de Concursos</p>
-        </div>
-    </header>
+    <!-- Conteúdo da Página Principal (inicialmente visível) -->
+    <div id="main-page">
+        <!-- Cabeçalho com a logo e nome centralizados -->
+        <header class="bg-gray-900 shadow-md py-8">
+            <div class="container mx-auto px-4 flex flex-col items-center">
+                <!-- Logo da Polícia Federal centralizada com descrição para acessibilidade -->
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Pol%C3%ADcia_Federal_do_Brasil.png" alt="Logo da Polícia Federal do Brasil" class="h-28 w-28 mb-4">
+                <!-- Título e subtítulo do site -->
+                <h1 class="text-5xl font-extrabold text-white text-center tracking-wider">POLÍCIA FEDERAL</h1>
+                <p class="text-xl font-light text-gray-400 mt-2 text-center">Portal de Concursos</p>
+            </div>
+        </header>
 
-    <!-- Menu de navegação (navbar) -->
-    <nav class="bg-gray-800 py-6 shadow-sm border-t border-b border-gray-700">
-        <ul class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8 text-gray-300 font-semibold text-lg">
-            <li><a href="#" id="acessibilidade-btn" class="menu-item" onclick="toggleSubmenu(event, 'acessibilidade-content')">Acessibilidade</a></li>
-            <li><a href="#" id="fale-conosco-btn" class="menu-item" onclick="toggleSubmenu(event, 'fale-conosco-content')">Fale Conosco</a></li>
-            <li><a href="#" id="duvidas-btn" class="menu-item" onclick="scrollToFAQ()">Dúvidas Frequentes</a></li>
-            <li><a href="#" id="mapa-site-btn" class="menu-item" onclick="toggleSubmenu(event, 'mapa-site-content')">Mapa do Site</a></li>
-            <li><a href="#" id="transparencia-btn" class="menu-item" onclick="toggleSubmenu(event, 'transparencia-content')">Transparência</a></li>
-            <li><a href="#" id="ajuda-btn" class="menu-item" onclick="toggleSubmenu(event, 'ajuda-content')">Ajuda</a></li>
-        </ul>
-        <!-- Seções de conteúdo que se expandem abaixo da navbar.
-             Mudamos a estrutura para que o submenu seja um elemento separado da lista de itens,
-             o que permite um posicionamento centralizado mais fácil. -->
-        <section id="submenu-container" class="bg-gray-900 mx-auto w-full transition-all duration-500 overflow-hidden" style="max-height:0;">
-            <div id="acessibilidade-content" class="p-4 hidden">
-                <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A Polícia Federal reafirma seu compromisso com a inclusão e o acesso igualitário à informação. Nossas plataformas digitais são projetadas para atender aos mais altos padrões de acessibilidade, permitindo que pessoas com deficiência naveguem com autonomia e segurança.</p>
-            </div>
-            <div id="fale-conosco-content" class="p-4 hidden">
-                <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A Polícia Federal está à disposição para ouvir suas denúncias, sugestões e elogios. Você pode nos contatar através da Ouvidoria-Geral, ligando para 181 (disque-denúncia unificado). Para outras informações, envie um e-mail para ouvidoria@dpf.gov.br.</p>
-            </div>
-            <div id="mapa-site-content" class="p-4 hidden">
-                <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">O Mapa do Site oferece uma visão geral e organizada da estrutura do nosso portal. Ele funciona como um guia de navegação, ajudando você a encontrar rapidamente as informações que procura, tornando sua busca mais eficiente e direta. Explore nossas principais categorias.</p>
-            </div>
-            <div id="transparencia-content" class="p-4 hidden">
-                <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A transparência é um pilar fundamental da atuação da Polícia Federal. Em conformidade com a Lei de Acesso à Informação (LAI), disponibilizamos dados sobre nossas atividades e gestão de recursos, garantindo a prestação de contas à sociedade.</p>
-            </div>
-            <div id="ajuda-content" class="p-4 hidden">
-                <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">Se você está com dificuldades para usar o portal, a seção de Ajuda é o seu guia. Aqui, você encontrará tutoriais e um FAQ detalhado que respondem às dúvidas mais comuns. Nossa equipe de suporte está pronta para auxiliar e garantir a melhor experiência.</p>
-            </div>
-        </section>
-    </nav>
-    
-    <!-- Seção de Rolagem de Notícias -->
-    <section id="noticias" class="py-10 bg-gray-900 rounded-lg shadow-md mt-8 mx-4 sm:mx-auto max-w-7xl">
-        <div class="container mx-auto px-4">
-            <h2 class="text-2xl font-bold text-gray-200 mb-6">Últimas Notícias</h2>
-            <div class="scrolling-container flex space-x-6 overflow-x-scroll pb-4">
-                <!-- Notícia 1 -->
-                <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('Polícia Civil prende suspeito de aliciar menores', 'https://iili.io/FboOxRa.jpg', 'Nesta quinta-feira (14/8), em Belo Horizonte, a Polícia Civil de Minas Gerais (PCMG) prendeu um homem, de 47 anos, suspeito de aliciar crianças e adolescentes e produzir conteúdos de cunho sexual envolvendo menores de idade. No celular dele, os policiais encontraram diversos arquivos dessa natureza. A ação policial decorre de apurações em curso na Divisão de Crimes Cibernéticos do Departamento Estadual de Combate à Corrupção e a Fraudes (Deccof), que começaram após a família de uma vítima de 11 anos, residente em São Paulo, identificar conteúdos suspeitos no celular da criança. O caso foi inicialmente registrado na Polícia Civil paulista e encaminhado para a equipe especializada da PCMG na capital. Modo de agir: Segundo as investigações da PCMG, o suspeito iniciava contato com as vítimas por meio de aplicativo de mensagem, pelo qual recebia perfis e conteúdos de crianças, e depois migrava para outras plataformas. As apurações indicam que o homem interagia com vítimas de ambos os sexos, muitas vezes, se passando por adolescente para conquistar a confiança delas. Também utilizava jogos on-line e redes sociais para estabelecer vínculos antes de iniciar conversas de teor sexual. Até o momento, foram identificadas pelo menos cinco vítimas, mas a análise do material apreendido poderá revelar mais casos. O investigado confessou os crimes e, em interrogatório, admitiu ter se relacionado com 13 crianças. Histórico: O homem já possuía registros de boletins de ocorrência por assédio sexual, tanto virtual quanto presencial, mas nunca havia sido preso. Ele poderá responder por crimes previstos no Estatuto da Criança e do Adolescente e no Código Penal, que incluem produção, armazenamento e compartilhamento de material sexual envolvendo menores, além de corrupção de menores e aliciamento. “Mais uma vez, a Polícia Civil reafirma o seu trabalho incansável, 24 horas, para combater esses crimes. E o recado, claro, para os criminosos: nós não vamos permitir que essas atrocidades continuem acontecendo no nosso estado, até no nosso país”, destacou a chefe da Divisão, delegada Cristiana Angelini. O delegado Arthur Martins da Costa Benício, titular da 1ª Delegacia Especializada em Investigação de Crimes Cibernéticos, unidade responsável pelo inquérito, acrescentou que o crime digital não tem fronteiras. “Nosso trabalho é incansável para identificar e prender esses criminosos”, reforçou. O suspeito preso hoje foi detido em casa e, após os procedimentos policiais, encaminhado ao sistema prisional.', '14/08/2025 15:09', '12.583')">
-                    <img src="https://iili.io/FboOxRa.jpg" alt="Homem sendo preso pela polícia civil" class="w-full h-36 object-cover rounded-t-lg">
-                    <div class="p-4">
-                        <h4 class="font-bold text-gray-200 text-sm">Polícia Civil prende suspeito de aliciar menores.</h4>
-                    </div>
+        <!-- Menu de navegação (navbar) -->
+        <nav class="bg-gray-800 py-6 shadow-sm border-t border-b border-gray-700">
+            <ul class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8 text-gray-300 font-semibold text-lg">
+                <li><a href="#" id="acessibilidade-btn" class="menu-item" onclick="toggleSubmenu(event, 'acessibilidade-content')">Acessibilidade</a></li>
+                <li><a href="#" id="fale-conosco-btn" class="menu-item" onclick="toggleSubmenu(event, 'fale-conosco-content')">Fale Conosco</a></li>
+                <li><a href="#" id="duvidas-btn" class="menu-item" onclick="scrollToFAQ()">Dúvidas Frequentes</a></li>
+                <li><a href="#" id="mapa-site-btn" class="menu-item" onclick="toggleSubmenu(event, 'mapa-site-content')">Mapa do Site</a></li>
+                <li><a href="#" id="transparencia-btn" class="menu-item" onclick="toggleSubmenu(event, 'transparencia-content')">Transparência</a></li>
+                <li><a href="#" id="ajuda-btn" class="menu-item" onclick="toggleSubmenu(event, 'ajuda-content')">Ajuda</a></li>
+            </ul>
+            <!-- Seções de conteúdo que se expandem abaixo da navbar. -->
+            <section id="submenu-container" class="bg-gray-900 mx-auto w-full transition-all duration-500 overflow-hidden" style="max-height:0;">
+                <div id="acessibilidade-content" class="p-4 hidden">
+                    <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A Polícia Federal reafirma seu compromisso com a inclusão e o acesso igualitário à informação. Nossas plataformas digitais são projetadas para atender aos mais altos padrões de acessibilidade, permitindo que pessoas com deficiência naveguem com autonomia e segurança.</p>
                 </div>
-                <!-- Notícia 2 -->
-                <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('PCMG prende trio suspeito de furtos a residências.', 'https://iili.io/FboO1OG.jpg', 'Em decorrência de investigações de crimes patrimoniais, especialmente furto a residências, a Polícia Civil de Minas Gerais (PCMG) cumpriu a prisão preventiva de três alvos, na sexta-feira (8/8) e ontem (13/8). Eles são suspeitos de atuar na capital e na Região Metropolitana de Belo Horizonte (RMBH) e estariam ampliando as atividades criminosas para o interior. O trio foi preso a partir de trabalho investigativo conduzido pelo Departamento Estadual de Investigação de Crimes Contra o Patrimônio (Depatri) para apurar um furto ocorrido em 24 de agosto de 2024 no bairro Belvedere, região Centro-Sul de Belo Horizonte, com participação de quatro suspeitos – a PCMG trabalha na identificação do último. Na ocasião, conforme as vítimas, foram levados joias e objetos pessoais estimados em R$ 200 mil. De acordo com o delegado Gustavo Barletta, titular da 2ª Delegacia Especializada em Investigação e Repressão ao Furto e Roubo, durante a ação policial realizada recentemente, ainda foram apreendidos um veículo roubado, objetos usados para arrombamento, além de um violão, uma caixa de som e uma televisão – subtraídos no sábado passado (9/8) na região do Barreiro – entre outros materiais variados. Atuação: Barletta explicou que nem sempre os suspeitos agem em conjunto. “Na verdade, eles conseguem as informações, ou decidem fazer os arrombamentos, e vêem praticamente quem está disponível naquele momento para praticar o crime. Nesse sentido, eles trocam veículos, alugam carros, flutuam entre uma quadrilha e outra”, observou. Segundo o delegado, as apurações indicam que os alvos teriam começado a atuar também em cidades do interior: Temos informações que eles já estão se aventurando em Divinópolis [Centro-Oeste], em Juiz de Fora [Zona da Mata], Montes Claros [Norte de Minas] e Uberlândia [Triângulo Mineiro], enfim, onde acreditam que possam ter sucesso nos crimes”. Prisões: Na última sexta-feira (8/8), foi efetuada a prisão do investigado de 30 anos, no bairro Alto Vera Cruz, região Leste da capital. Ontem (13/8), os policiais civis prenderam outro alvo, de 26 anos, na cidade de Sabará, na RMBH. Já o terceiro, de 31, já está acautelado em presídio por roubo e teve o mandado formalizado pelo crime de furto no Belvedere. Agora, os três estão no sistema prisional, à disposição da Justiça.', '13/08/2025 10:45', '8.910')">
-                    <img src="https://iili.io/FboO1OG.jpg" alt="Polícia Civil prendendo suspeitos de furto" class="w-full h-36 object-cover rounded-t-lg">
-                    <div class="p-4">
-                        <h4 class="font-bold text-gray-200 text-sm">PCMG prende trio suspeito de furtos a residências.</h4>
-                    </div>
+                <div id="fale-conosco-content" class="p-4 hidden">
+                    <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A Polícia Federal está à disposição para ouvir suas denúncias, sugestões e elogios. Você pode nos contatar através da Ouvidoria-Geral, ligando para 181 (disque-denúncia unificado). Para outras informações, envie um e-mail para ouvidoria@dpf.gov.br.</p>
                 </div>
-                <!-- Notícia 3 -->
-                <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('PCMG prende homem por crimes de abuso sexual infantil.', 'https://iili.io/Fbo8Z3N.jpg', 'Nessa quarta-feira (13/8), a Polícia Civil de Minas Gerais (PCMG) prendeu em flagrante, no município de Itabira, na região Central do estado, um homem de 18 anos suspeito de armazenar e produzir material de abuso sexual infantil. Durante o cumprimento do mandado de busca e apreensão na residência do investigado, foram apreendidos um celular e um computador, que passarão por perícia para identificar outras vítimas. A ação policial foi coordenada pela 2ª Delegacia Especializada na Investigação de Crimes Cibernéticos, vinculada ao Departamento Estadual de Combate à Corrupção e a Fraudes (Deccof). Levantamentos iniciais: As investigações tiveram início no dia 9 de julho deste ano, após levantamentos indicarem que o suspeito possuía e compartilhava imagens e vídeos de abuso sexual contra crianças e adolescentes. Entre as vítimas, a PCMG acredita que pode haver familiares do suspeito. “Além do armazenamento das imagens, fotos e vídeos de abuso sexual infantil, também havia produção de material do próprio suspeito com uma criança que a gente acreditava, no início das investigações, ser uma criança da família do suspeito”, contou a delegada à frente das investigações Marcelle Bacellar. Responsabilização: O suspeito poderá responder por posse e armazenamento de material contendo cena de sexo explícito ou pornográfica envolvendo criança ou adolescente (artigo 241-B da Lei nº 8.069/90 – Estatuto da Criança e do Adolescente) e por estupro de vulnerável (artigo 217-A do Código Penal). A Polícia Civil apura ainda o possível envolvimento do investigado em outros crimes. “O nosso compromisso com as crianças e os adolescentes é reafirmado dia após dia com as nossas investigações. O combate a esses crimes, principalmente no ambiente virtual, mostra, mais uma vez, que a internet não é terra sem lei”, garantiu a chefe da Divisão Especializada de Investigação aos Crimes Cibernéticos e Defesa do Consumidor, delegada Cristiana Angelini.', '12/08/2025 09:10', '15.120')">
-                    <img src="https://iili.io/Fbo8Z3N.jpg" alt="Polícia Civil prendendo homem em flagrante" class="w-full h-36 object-cover rounded-t-lg">
-                    <div class="p-4">
-                        <h4 class="font-bold text-gray-200 text-sm">PCMG prende homem por crimes de abuso sexual infantil.</h4>
-                    </div>
+                <div id="mapa-site-content" class="p-4 hidden">
+                    <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">O Mapa do Site oferece uma visão geral e organizada da estrutura do nosso portal. Ele funciona como um guia de navegação, ajudando você a encontrar rapidamente as informações que procura, tornando sua busca mais eficiente e direta. Explore nossas principais categorias.</p>
                 </div>
-                <!-- Notícia 4 -->
-                <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('Inscrições abertas para curso sobre Lei Maria da Penha.', 'https://iili.io/FboScwg.jpg', 'Estão abertas, até a próxima terça-feira (19/8), as inscrições para a 2ª edição do curso Lei Maria da Penha e pacote antifeminicídio na investigação criminal, promovido pela Polícia Civil de Minas Gerais (PCMG), na modalidade de Educação a Distância (EaD). A capacitação é aberta a servidores da PCMG e público em geral. Realizado por meio da Academia de Polícia Civil (Acadepol), o curso será realizado entre os dias 25 de agosto a 3 de setembro, com carga horária de 20h/a. O objetivo é conhecer, discutir e analisar os conceitos de gênero e violência, bem como compreender os processos de encaminhamento de problemas relacionados às violências com base no gênero e as violências contra mulheres em situação de vulnerabilidade ou hipervulnerabilidade. Para se inscrever, acesse a plataforma EaD: clique AQUI.', '08/08/2025 14:22', '7.450')">
-                    <img src="https://iili.io/FboScwg.jpg" alt="Curso sobre Lei Maria da Penha" class="w-full h-36 object-cover rounded-t-lg">
-                    <div class="p-4">
-                        <h4 class="font-bold text-gray-200 text-sm">Inscrições abertas para curso sobre Lei Maria da Penha.</h4>
-                    </div>
+                <div id="transparencia-content" class="p-4 hidden">
+                    <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A transparência é um pilar fundamental da atuação da Polícia Federal. Em conformidade com a Lei de Acesso à Informação (LAI), disponibilizamos dados sobre nossas atividades e gestão de recursos, garantindo a prestação de contas à sociedade.</p>
                 </div>
-                <!-- Notícia 5 -->
-                <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('PCMG lança cartilha para combater violência doméstica no Agosto Lilás.', 'https://iili.io/FboUxRt.jpg', 'Em mais uma ação que marca o Agosto Lilás, mês de enfrentamento de violações contra a mulher, a Polícia Civil de Minas Gerais (PCMG) lançou, nessa quarta-feira (13/8), a cartilha informativa do programa Dialogar. “Pelo fim da violência doméstica: reflexão, responsabilização e transformação” é o título do conteúdo desenvolvido para apresentar o trabalho do grupo reflexivo voltado a homens autores de crimes dessa natureza. O documento reúne objetivos, público-alvo, metodologia, princípios e resultados do programa, implementado em 2010 na PCMG e reformulado em 2022 a partir das melhores práticas de grupos reflexivos responsabilizantes - clique AQUI e acesse o material. Atualmente, o Dialogar é realizado no Departamento Estadual de Investigação, Orientação e Proteção à Família (Defam), por meio de encontros semanais com autores de violência direcionados por determinação judicial como parte do cumprimento de medida protetiva ou no curso da ação penal. Idealizadora da cartilha, a delegada Pollyanna Aguiar, responsável pelo Dialogar, ressaltou o significado da ação durante a cerimônia realizada no Defam: “Nós só vamos conseguir efetivamente combater o crime contra a mulher se atingirmos a causa, se trabalharmos na educação, na reflexão e na responsabilização desses homens autores de violência”. Eixo: A fim de fortalecer as políticas de prevenção e repressão aos crimes no âmbito doméstico e familiar, a PCMG visa à expansão do programa para o interior de Minas. “Trata-se de um projeto que é eixo básico da instituição, muito importante no combate à violência doméstica”, pontuou o chefe de Gabinete, delegado-geral Frederico Abelha, que representou a chefia da Polícia Civil na solenidade. Para a chefe do Defam, delegada Danúbia Quadros, o Dialogar pode ser considerado pioneiro no formato que vem sendo desenvolvido. “Podemos dizer que a PCMG tem grupos reflexivos desde 2013, de forma também inovadora, porque há pouco tempo houve a alteração legislativa da Lei Maria da Penha, inserindo a possibilidade de encaminhamento para grupos reflexivos, e já tínhamos quase uma década que o projeto funcionava em Minas Gerais”, mencionou. O evento de lançamento da cartilha contou com uma apresentação de alunos da Marilu Dias Escola de Dança, que levou aos participantes uma reflexão, de forma artística, com trechos do espetáculo Fem., que trata do “universo feminino e suas camadas. Do aprisionamento velado pelas expectativas e amarras sociais, ao desejo de liberdade em ser aquilo que se é”.', '09/08/2025 11:55', '9.800')">
-                    <img src="https://iili.io/FboUxRt.jpg" alt="Cartilha sobre combate à violência doméstica" class="w-full h-36 object-cover rounded-t-lg">
-                    <div class="p-4">
-                        <h4 class="font-bold text-gray-200 text-sm">PCMG lança cartilha para combater violência doméstica no Agosto Lilás.</h4>
-                    </div>
+                <div id="ajuda-content" class="p-4 hidden">
+                    <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">Se você está com dificuldades para usar o portal, a seção de Ajuda é o seu guia. Aqui, você encontrará tutoriais e um FAQ detalhado que respondem às dúvidas mais comuns. Nossa equipe de suporte está pronta para auxiliar e garantir a melhor experiência.</p>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Conteúdo principal com formulário de inscrição -->
-    <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            </section>
+        </nav>
         
-        <!-- Seção de Pagamento -->
-        <section id="payment-section" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800">
-            <h3 class="text-3xl font-bold text-white mb-6 text-center">Pagamento e Inscrição</h3>
-            <p class="text-gray-400 text-center mb-6">
-                Para prosseguir com a inscrição, é necessário o pagamento da taxa de <span class="font-bold text-xl text-green-500">R$ 49,90</span>. Após a confirmação do pagamento, o formulário completo será disponibilizado online para que você possa enviar seus dados.
-            </p>
-            
-            <!-- Botão de submissão do formulário - simulação de pagamento -->
-            <div class="text-center mt-6">
-                <button id="payment-btn" type="button" class="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
-                    Prosseguir para o Pagamento
-                </button>
+        <!-- Seção de Rolagem de Notícias -->
+        <section id="noticias" class="py-10 bg-gray-900 rounded-lg shadow-md mt-8 mx-4 sm:mx-auto max-w-7xl">
+            <div class="container mx-auto px-4">
+                <h2 class="text-2xl font-bold text-gray-200 mb-6">Últimas Notícias</h2>
+                <div class="scrolling-container flex space-x-6 overflow-x-scroll pb-4">
+                    <!-- Notícia 1 -->
+                    <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openNewsPage('Polícia Civil prende suspeito de aliciar menores', 'https://iili.io/FboOxRa.jpg', 'Nesta quinta-feira (14/8), em Belo Horizonte, a Polícia Civil de Minas Gerais (PCMG) prendeu um homem, de 47 anos, suspeito de aliciar crianças e adolescentes e produzir conteúdos de cunho sexual envolvendo menores de idade. No celular dele, os policiais encontraram diversos arquivos dessa natureza. A ação policial decorre de apurações em curso na Divisão de Crimes Cibernéticos do Departamento Estadual de Combate à Corrupção e a Fraudes (Deccof), que começaram após a família de uma vítima de 11 anos, residente em São Paulo, identificar conteúdos suspeitos no celular da criança. O caso foi inicialmente registrado na Polícia Civil paulista e encaminhado para a equipe especializada da PCMG na capital. Modo de agir: Segundo as investigações da PCMG, o suspeito iniciava contato com as vítimas por meio de aplicativo de mensagem, pelo qual recebia perfis e conteúdos de crianças, e depois migrava para outras plataformas. As apurações indicam que o homem interagia com vítimas de ambos os sexos, muitas vezes, se passando por adolescente para conquistar a confiança delas. Também utilizava jogos on-line e redes sociais para estabelecer vínculos antes de iniciar conversas de teor sexual. Até o momento, foram identificadas pelo menos cinco vítimas, mas a análise do material apreendido poderá revelar mais casos. O investigado confessou os crimes e, em interrogatório, admitiu ter se relacionado com 13 crianças. Histórico: O homem já possuía registros de boletins de ocorrência por assédio sexual, tanto virtual quanto presencial, mas nunca havia sido preso. Ele poderá responder por crimes previstos no Estatuto da Criança e do Adolescente e no Código Penal, que incluem produção, armazenamento e compartilhamento de material sexual envolvendo menores, além de corrupção de menores e aliciamento. “Mais uma vez, a Polícia Civil reafirma o seu trabalho incansável, 24 horas, para combater esses crimes. E o recado, claro, para os criminosos: nós não vamos permitir que essas atrocidades continuem acontecendo no nosso estado, até no nosso país”, destacou a chefe da Divisão, delegada Cristiana Angelini. O delegado Arthur Martins da Costa Benício, titular da 1ª Delegacia Especializada em Investigação de Crimes Cibernéticos, unidade responsável pelo inquérito, acrescentou que o crime digital não tem fronteiras. “Nosso trabalho é incansável para identificar e prender esses criminosos”, reforçou. O suspeito preso hoje foi detido em casa e, após os procedimentos policiais, encaminhado ao sistema prisional.', '14/08/2025 15:09', '12.583')">
+                        <img src="https://iili.io/FboOxRa.jpg" alt="Homem sendo preso pela polícia civil" class="w-full h-36 object-cover rounded-t-lg">
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-200 text-sm">Polícia Civil prende suspeito de aliciar menores.</h4>
+                        </div>
+                    </div>
+                    <!-- Notícia 2 -->
+                    <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openNewsPage('PCMG prende trio suspeito de furtos a residências.', 'https://iili.io/FboO1OG.jpg', 'Em decorrência de investigações de crimes patrimoniais, especialmente furto a residências, a Polícia Civil de Minas Gerais (PCMG) cumpriu a prisão preventiva de três alvos, na sexta-feira (8/8) e ontem (13/8). Eles são suspeitos de atuar na capital e na Região Metropolitana de Belo Horizonte (RMBH) e estariam ampliando as atividades criminosas para o interior. O trio foi preso a partir de trabalho investigativo conduzido pelo Departamento Estadual de Investigação de Crimes Contra o Patrimônio (Depatri) para apurar um furto ocorrido em 24 de agosto de 2024 no bairro Belvedere, região Centro-Sul de Belo Horizonte, com participação de quatro suspeitos – a PCMG trabalha na identificação do último. Na ocasião, conforme as vítimas, foram levados joias e objetos pessoais estimados em R$ 200 mil. De acordo com o delegado Gustavo Barletta, titular da 2ª Delegacia Especializada em Investigação e Repressão ao Furto e Roubo, durante a ação policial realizada recentemente, ainda foram apreendidos um veículo roubado, objetos usados para arrombamento, além de um violão, uma caixa de som e uma televisão – subtraídos no sábado passado (9/8) na região do Barreiro – entre outros materiais variados. Atuação: Barletta explicou que nem sempre os suspeitos agem em conjunto. “Na verdade, eles conseguem as informações, ou decidem fazer os arrombamentos, e vêem praticamente quem está disponível naquele momento para praticar o crime. Nesse sentido, eles trocam veículos, alugam carros, flutuam entre uma quadrilha e outra”, observou. Segundo o delegado, as apurações indicam que os alvos teriam começado a atuar também em cidades do interior: Temos informações que eles já estão se aventurando em Divinópolis [Centro-Oeste], em Juiz de Fora [Zona da Mata], Montes Claros [Norte de Minas] e Uberlândia [Triângulo Mineiro], enfim, onde acreditam que possam ter sucesso nos crimes”. Prisões: Na última sexta-feira (8/8), foi efetuada a prisão do investigado de 30 anos, no bairro Alto Vera Cruz, região Leste da capital. Ontem (13/8), os policiais civis prenderam outro alvo, de 26 anos, na cidade de Sabará, na RMBH. Já o terceiro, de 31, já está acautelado em presídio por roubo e teve o mandado formalizado pelo crime de furto no Belvedere. Agora, os três estão no sistema prisional, à disposição da Justiça.', '13/08/2025 10:45', '8.910')">
+                        <img src="https://iili.io/FboO1OG.jpg" alt="Polícia Civil prendendo suspeitos de furto" class="w-full h-36 object-cover rounded-t-lg">
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-200 text-sm">PCMG prende trio suspeito de furtos a residências.</h4>
+                        </div>
+                    </div>
+                    <!-- Notícia 3 -->
+                    <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openNewsPage('PCMG prende homem por crimes de abuso sexual infantil.', 'https://iili.io/Fbo8Z3N.jpg', 'Nessa quarta-feira (13/8), a Polícia Civil de Minas Gerais (PCMG) prendeu em flagrante, no município de Itabira, na região Central do estado, um homem de 18 anos suspeito de armazenar e produzir material de abuso sexual infantil. Durante o cumprimento do mandado de busca e apreensão na residência do investigado, foram apreendidos um celular e um computador, que passarão por perícia para identificar outras vítimas. A ação policial foi coordenada pela 2ª Delegacia Especializada na Investigação de Crimes Cibernéticos, vinculada ao Departamento Estadual de Combate à Corrupção e a Fraudes (Deccof). Levantamentos iniciais: As investigações tiveram início no dia 9 de julho deste ano, após levantamentos indicarem que o suspeito possuía e compartilhava imagens e vídeos de abuso sexual contra crianças e adolescentes. Entre as vítimas, a PCMG acredita que pode haver familiares do suspeito. “Além do armazenamento das imagens, fotos e vídeos de abuso sexual infantil, também havia produção de material do próprio suspeito com uma criança que a gente acreditava, no início das investigações, ser uma criança da família do suspeito”, contou a delegada à frente das investigações Marcelle Bacellar. Responsabilização: O suspeito poderá responder por posse e armazenamento de material contendo cena de sexo explícito ou pornográfica envolvendo criança ou adolescente (artigo 241-B da Lei nº 8.069/90 – Estatuto da Criança e do Adolescente) e por estupro de vulnerável (artigo 217-A do Código Penal). A Polícia Civil apura ainda o possível envolvimento do investigado em outros crimes. “O nosso compromisso com as crianças e os adolescentes é reafirmado dia após dia com as nossas investigações. O combate a esses crimes, principalmente no ambiente virtual, mostra, mais uma vez, que a internet não é terra sem lei”, garantiu a chefe da Divisão Especializada de Investigação aos Crimes Cibernéticos e Defesa do Consumidor, delegada Cristiana Angelini.', '12/08/2025 09:10', '15.120')">
+                        <img src="https://iili.io/Fbo8Z3N.jpg" alt="Polícia Civil prendendo homem em flagrante" class="w-full h-36 object-cover rounded-t-lg">
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-200 text-sm">PCMG prende homem por crimes de abuso sexual infantil.</h4>
+                        </div>
+                    </div>
+                    <!-- Notícia 4 -->
+                    <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openNewsPage('Inscrições abertas para curso sobre Lei Maria da Penha.', 'https://iili.io/FboScwg.jpg', 'Estão abertas, até a próxima terça-feira (19/8), as inscrições para a 2ª edição do curso Lei Maria da Penha e pacote antifeminicídio na investigação criminal, promovido pela Polícia Civil de Minas Gerais (PCMG), na modalidade de Educação a Distância (EaD). A capacitação é aberta a servidores da PCMG e público em geral. Realizado por meio da Academia de Polícia Civil (Acadepol), o curso será realizado entre os dias 25 de agosto a 3 de setembro, com carga horária de 20h/a. O objetivo é conhecer, discutir e analisar os conceitos de gênero e violência, bem como compreender os processos de encaminhamento de problemas relacionados às violências com base no gênero e as violências contra mulheres em situação de vulnerabilidade ou hipervulnerabilidade. Para se inscrever, acesse a plataforma EaD: clique AQUI.', '08/08/2025 14:22', '7.450')">
+                        <img src="https://iili.io/FboScwg.jpg" alt="Curso sobre Lei Maria da Penha" class="w-full h-36 object-cover rounded-t-lg">
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-200 text-sm">Inscrições abertas para curso sobre Lei Maria da Penha.</h4>
+                        </div>
+                    </div>
+                    <!-- Notícia 5 -->
+                    <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openNewsPage('PCMG lança cartilha para combater violência doméstica no Agosto Lilás.', 'https://iili.io/FboUxRt.jpg', 'Em mais uma ação que marca o Agosto Lilás, mês de enfrentamento de violações contra a mulher, a Polícia Civil de Minas Gerais (PCMG) lançou, nessa quarta-feira (13/8), a cartilha informativa do programa Dialogar. “Pelo fim da violência doméstica: reflexão, responsabilização e transformação” é o título do conteúdo desenvolvido para apresentar o trabalho do grupo reflexivo voltado a homens autores de crimes dessa natureza. O documento reúne objetivos, público-alvo, metodologia, princípios e resultados do programa, implementado em 2010 na PCMG e reformulado em 2022 a partir das melhores práticas de grupos reflexivos responsabilizantes - clique AQUI e acesse o material. Atualmente, o Dialogar é realizado no Departamento Estadual de Investigação, Orientação e Proteção à Família (Defam), por meio de encontros semanais com autores de violência direcionados por determinação judicial como parte do cumprimento de medida protetiva ou no curso da ação penal. Idealizadora da cartilha, a delegada Pollyanna Aguiar, responsável pelo Dialogar, ressaltou o significado da ação durante a cerimônia realizada no Defam: “Nós só vamos conseguir efetivamente combater o crime contra a mulher se atingirmos a causa, se trabalharmos na educação, na reflexão e na responsabilização desses homens autores de violência”. Eixo: A fim de fortalecer as políticas de prevenção e repressão aos crimes no âmbito doméstico e familiar, a PCMG visa à expansão do programa para o interior de Minas. “Trata-se de um projeto que é eixo básico da instituição, muito importante no combate à violência doméstica”, pontuou o chefe de Gabinete, delegado-geral Frederico Abelha, que representou a chefia da Polícia Civil na solenidade. Para a chefe do Defam, delegada Danúbia Quadros, o Dialogar pode ser considerado pioneiro no formato que vem sendo desenvolvido. “Podemos dizer que a PCMG tem grupos reflexivos desde 2013, de forma também inovadora, porque há pouco tempo houve a alteração legislativa da Lei Maria da Penha, inserindo a possibilidade de encaminhamento para grupos reflexivos, e já tínhamos quase uma década que o projeto funcionava em Minas Gerais”, mencionou. O evento de lançamento da cartilha contou com uma apresentação de alunos da Marilu Dias Escola de Dança, que levou aos participantes uma reflexão, de forma artística, com trechos do espetáculo Fem., que trata do “universo feminino e suas camadas. Do aprisionamento velado pelas expectativas e amarras sociais, ao desejo de liberdade em ser aquilo que se é”.', '09/08/2025 11:55', '9.800')">
+                        <img src="https://iili.io/FboUxRt.jpg" alt="Cartilha sobre combate à violência doméstica" class="w-full h-36 object-cover rounded-t-lg">
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-200 text-sm">PCMG lança cartilha para combater violência doméstica no Agosto Lilás.</h4>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Seção do Formulário de Inscrição Completo (inicialmente oculta) -->
-        <section id="registration-form-section" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800 hidden">
-            <h3 class="text-3xl font-bold text-white mb-6 text-center">Formulário de Inscrição Completo</h3>
-            <form id="registration-form" class="space-y-4">
-                <div>
-                    <label for="full_name" class="block text-gray-400">Nome Completo</label>
-                    <input type="text" id="full_name" name="full_name" class="w-full px-4 py-2 mt-1 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                </div>
-                <div>
-                    <label for="cpf" class="block text-gray-400">CPF</label>
-                    <input type="text" id="cpf" name="cpf" class="w-full px-4 py-2 mt-1 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                </div>
-                <div>
-                    <label for="email" class="block text-gray-400">E-mail</label>
-                    <input type="email" id="email" name="email" class="w-full px-4 py-2 mt-1 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                </div>
-                <div>
-                    <label for="phone" class="block text-gray-400">Telefone</label>
-                    <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 mt-1 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-                </div>
-                <div class="text-center pt-4">
-                    <button type="submit" class="w-full px-8 py-3 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-300 transform hover:scale-105">
-                        Finalizar Inscrição
+        <!-- Conteúdo principal com formulário de inscrição -->
+        <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            
+            <!-- Seção de Pagamento -->
+            <section id="payment-section" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800">
+                <h3 class="text-3xl font-bold text-white mb-6 text-center">Pagamento e Inscrição</h3>
+                <p class="text-gray-400 text-center mb-6">
+                    Para prosseguir com a inscrição, é necessário o pagamento da taxa de <span class="font-bold text-xl text-green-500">R$ 49,90</span>. Após a confirmação do pagamento, o formulário completo será disponibilizado online para que você possa enviar seus dados.
+                </p>
+                
+                <!-- Botão de submissão do formulário - simulação de pagamento -->
+                <div class="text-center mt-6">
+                    <button id="payment-btn" type="button" class="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
+                        Prosseguir para o Pagamento
                     </button>
                 </div>
-            </form>
+            </section>
+
+            <!-- Seção do Formulário de Inscrição Completo (inicialmente oculta) -->
+            <section id="registration-form-section" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800 hidden">
+                <h3 class="text-3xl font-bold text-white mb-6 text-center">Formulário de Inscrição Completo</h3>
+                <form id="registration-form" class="space-y-4">
+                    <div>
+                        <label for="full_name" class="block text-gray-400">Nome Completo</label>
+                        <input type="text" id="full_name" name="full_name" class="w-full px-4 py-2 mt-1 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    <div>
+                        <label for="cpf" class="block text-gray-400">CPF</label>
+                        <input type="text" id="cpf" name="cpf" class="w-full px-4 py-2 mt-1 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    <div>
+                        <label for="email" class="block text-gray-400">E-mail</label>
+                        <input type="email" id="email" name="email" class="w-full px-4 py-2 mt-1 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-gray-400">Telefone</label>
+                        <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 mt-1 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                    </div>
+                    <div class="text-center pt-4">
+                        <button type="submit" class="w-full px-8 py-3 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-300 transform hover:scale-105">
+                            Finalizar Inscrição
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Mensagem de Confirmação (inicialmente oculta) -->
+            <div id="confirmation-message" class="max-w-xl mx-auto p-8 rounded-2xl shadow-xl hidden text-center bg-gray-900 border border-gray-800">
+                <div class="flex flex-col items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2m0 0l4-4m-4 4L9 12m4 4l-4-4m0 0l-4-4m4 4l4-4m-4 4L9 12m0 0l4-4m-4 4l-4-4" />
+                    </svg>
+                    <p class="text-xl font-semibold mt-4 text-green-500">Inscrição realizada com sucesso!</p>
+                    <p class="text-gray-400 mt-2">Você receberá uma confirmação por e-mail em breve.</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Seção de FAQ (Dúvidas Frequentes) no final do site -->
+        <section id="faq" class="py-12 px-4 sm:px-6 lg:px-8 bg-gray-900 mt-8">
+            <div class="container mx-auto max-w-4xl">
+                <h3 class="text-3xl font-bold text-center text-white mb-8">Dúvidas Frequentes (FAQ)</h3>
+                
+                <!-- Container da lista de perguntas e respostas -->
+                <div id="faq-list" class="space-y-4">
+                    <!-- Pergunta 1 -->
+                    <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
+                        <div class="flex justify-between items-center" onclick="toggleAnswer('faq-1')">
+                            <h4 class="font-bold text-lg text-white">O pagamento da taxa de inscrição é seguro?</h4>
+                            <span id="icon-faq-1" class="text-blue-400 font-extrabold text-2xl">+</span>
+                        </div>
+                        <p id="faq-1" class="mt-4 text-gray-400 faq-answer">Sim, o pagamento é processado por uma plataforma de pagamentos segura e auditada, garantindo a proteção dos seus dados. As informações financeiras são criptografadas e não são armazenadas em nossos sistemas.</p>
+                    </div>
+                    <!-- Pergunta 2 -->
+                    <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
+                        <div class="flex justify-between items-center" onclick="toggleAnswer('faq-2')">
+                            <h4 class="font-bold text-lg text-white">Como posso ser aprovado no concurso?</h4>
+                            <span id="icon-faq-2" class="text-blue-400 font-extrabold text-2xl">+</span>
+                        </div>
+                        <p id="faq-2" class="mt-4 text-gray-400 faq-answer">A aprovação depende de seu desempenho em todas as etapas do concurso: provas objetiva e discursiva, exame físico, avaliação médica e psicológica, além de investigação social. A dedicação e o estudo são essenciais.</p>
+                    </div>
+                    <!-- Pergunta 3 -->
+                    <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
+                        <div class="flex justify-between items-center" onclick="toggleAnswer('faq-3')">
+                            <h4 class="font-bold text-lg text-white">Quais documentos são necessários para a inscrição?</h4>
+                            <span id="icon-faq-3" class="text-blue-400 font-extrabold text-2xl">+</span>
+                        </div>
+                        <p id="faq-3" class="mt-4 text-gray-400 faq-answer">Para a inscrição online, é necessário apenas o seu CPF. Os demais documentos, como RG e certificado de conclusão do Ensino Médio, serão solicitados nas etapas posteriores do concurso, conforme o edital.</p>
+                    </div>
+                    <!-- Pergunta 4 -->
+                    <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
+                        <div class="flex justify-between items-center" onclick="toggleAnswer('faq-4')">
+                            <h4 class="font-bold text-lg text-white">Há limite de idade para prestar o concurso?</h4>
+                            <span id="icon-faq-4" class="text-blue-400 font-extrabold text-2xl">+</span>
+                        </div>
+                        <p id="faq-4" class="mt-4 text-gray-400 faq-answer">A idade mínima para inscrição é de 18 anos. Não há idade máxima para prestar o concurso, desde que o candidato esteja em plenas condições físicas e mentais para exercer a função.</p>
+                    </div>
+                    <!-- Pergunta 5 -->
+                    <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
+                        <div class="flex justify-between items-center" onclick="toggleAnswer('faq-5')">
+                            <h4 class="font-bold text-lg text-white">Qual a escolaridade mínima exigida?</h4>
+                            <span id="icon-faq-5" class="text-blue-400 font-extrabold text-2xl">+</span>
+                        </div>
+                        <p id="faq-5" class="mt-4 text-gray-400 faq-answer">Para a maioria dos cargos de Agente e Escrivão, o requisito é ter diploma de Ensino Médio completo. Para cargos de Perito, é exigido Ensino Superior em área específica.</p>
+                    </div>
+                    <!-- Pergunta 6 -->
+                    <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
+                        <div class="flex justify-between items-center" onclick="toggleAnswer('faq-6')">
+                            <h4 class="font-bold text-lg text-white">Onde posso encontrar o edital completo?</h4>
+                            <span id="icon-faq-6" class="text-blue-400 font-extrabold text-2xl">+</span>
+                        </div>
+                        <p id="faq-6" class="mt-4 text-gray-400 faq-answer">O edital completo do concurso mais recente pode ser acessado na seção de "Publicações" do portal oficial da Polícia Federal. Ele contém todas as regras e informações detalhadas sobre as etapas do processo.</p>
+                    </div>
+                    <!-- Pergunta 7 -->
+                    <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
+                        <div class="flex justify-between items-center" onclick="toggleAnswer('faq-7')">
+                            <h4 class="font-bold text-lg text-white">Existe alguma preparação física recomendada para o TAF?</h4>
+                            <span id="icon-faq-7" class="text-blue-400 font-extrabold text-2xl">+</span>
+                        </div>
+                        <p id="faq-7" class="mt-4 text-gray-400 faq-answer">Recomendamos que os candidatos iniciem um programa de treinamento físico supervisionado, com foco nas provas do TAF (barra fixa, corrida, natação, etc.), para garantir que estejam em condições ideais no dia da avaliação.</p>
+                    </div>
+                    <!-- Pergunta 8 -->
+                    <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
+                        <div class="flex justify-between items-center" onclick="toggleAnswer('faq-8')">
+                            <h4 class="font-bold text-lg text-white">Como funciona a etapa de investigação social?</h4>
+                            <span id="icon-faq-8" class="text-blue-400 font-extrabold text-2xl">+</span>
+                        </div>
+                        <p id="faq-8" class="mt-4 text-gray-400 faq-answer">A investigação social é uma etapa sigilosa que verifica a conduta moral e social do candidato. São analisados antecedentes criminais, vida pregressa e qualquer fato que possa comprometer a reputação necessária para a função.</p>
+                    </div>
+                    <!-- Pergunta 9 -->
+                    <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
+                        <div class="flex justify-between items-center" onclick="toggleAnswer('faq-9')">
+                            <h4 class="font-bold text-lg text-white">Posso me inscrever se tiver tatuagens?</h4>
+                            <span id="icon-faq-9" class="text-blue-400 font-extrabold text-2xl">+</span>
+                        </div>
+                        <p id="faq-9" class="mt-4 text-gray-400 faq-answer">Sim, tatuagens não são um fator de eliminação, desde que não violem a moralidade ou a ética profissional. Tatuagens com símbolos de facções criminosas ou que incitem à violência podem ser motivo de inaptidão.</p>
+                    </div>
+                    <!-- Pergunta 10 -->
+                    <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
+                        <div class="flex justify-between items-center" onclick="toggleAnswer('faq-10')">
+                            <h4 class="font-bold text-lg text-white">É possível parcelar a taxa de inscrição?</h4>
+                            <span id="icon-faq-10" class="text-blue-400 font-extrabold text-2xl">+</span>
+                        </div>
+                        <p id="faq-10" class="mt-4 text-gray-400 faq-answer">Não, a taxa de inscrição é um valor único e deve ser paga à vista para que a inscrição seja processada e validada no sistema. Não há opção de parcelamento.</p>
+                    </div>
+                </div>
+            </div>
         </section>
 
-        <!-- Mensagem de Confirmação (inicialmente oculta) -->
-        <div id="confirmation-message" class="max-w-xl mx-auto p-8 rounded-2xl shadow-xl hidden text-center bg-gray-900 border border-gray-800">
-            <div class="flex flex-col items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2m0 0l4-4m-4 4L9 12m4 4l-4-4m0 0l-4-4m4 4l4-4m-4 4L9 12m0 0l4-4m-4 4l-4-4" />
-                </svg>
-                <p class="text-xl font-semibold mt-4 text-green-500">Inscrição realizada com sucesso!</p>
-                <p class="text-gray-400 mt-2">Você receberá uma confirmação por e-mail em breve.</p>
-            </div>
-        </div>
-    </main>
-
-    <!-- Seção de FAQ (Dúvidas Frequentes) no final do site -->
-    <section id="faq" class="py-12 px-4 sm:px-6 lg:px-8 bg-gray-900 mt-8">
-        <div class="container mx-auto max-w-4xl">
-            <h3 class="text-3xl font-bold text-center text-white mb-8">Dúvidas Frequentes (FAQ)</h3>
-            
-            <!-- Container da lista de perguntas e respostas -->
-            <div id="faq-list" class="space-y-4">
-                <!-- Pergunta 1 -->
-                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
-                    <div class="flex justify-between items-center" onclick="toggleAnswer('faq-1')">
-                        <h4 class="font-bold text-lg text-white">O pagamento da taxa de inscrição é seguro?</h4>
-                        <span id="icon-faq-1" class="text-blue-400 font-extrabold text-2xl">+</span>
-                    </div>
-                    <p id="faq-1" class="mt-4 text-gray-400 faq-answer">Sim, o pagamento é processado por uma plataforma de pagamentos segura e auditada, garantindo a proteção dos seus dados. As informações financeiras são criptografadas e não são armazenadas em nossos sistemas.</p>
+        <!-- Rodapé com ícones de redes sociais e barra de pesquisa -->
+        <footer class="bg-gray-900 py-6 px-4 border-t border-gray-800 mt-auto">
+            <div class="container mx-auto flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-6">
+                <!-- Ícones das redes sociais (usando SVGs inline) -->
+                <div class="flex space-x-6 text-gray-400">
+                    <a href="#" class="hover:text-blue-500" aria-label="Instagram da Polícia Federal">
+                        <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.851.07 1.171.054 1.745.249 2.166.42a3.024 3.024 0 011.085.642 3.024 3.024 0 01.642 1.085c.171.421.366.995.42 2.166.058 1.267.07 1.647.07 4.851s-.012 3.584-.07 4.851c-.054 1.171-.249 1.745-.42 2.166a3.024 3.024 0 01-.642 1.085 3.024 3.024 0 01-1.085.642c-.421.171-.995.366-2.166.42-1.267.058-1.647.07-4.851.07s-3.584-.012-4.851-.07c-1.171-.054-1.745-.249-2.166-.42a3.024 3.024 0 01-1.085-.642 3.024 3.024 0 01-.642-1.085c-.171-.421-.366-.995-.42-2.166-.058-1.267-.07-1.647-.07-4.851s.012-3.584.07-4.851c.054-1.171.249-1.745.42-2.166a3.024 3.024 0 01.642-1.085 3.024 3.024 0 011.085-.642c.421-.171.995-.366 2.166-.42C8.416 2.175 8.796 2.163 12 2.163zM12 0c-3.541 0-3.999.014-5.352.073-1.424.065-2.278.275-2.903.543a4.992 4.992 0 00-1.758 1.052A4.992 4.992 0 00.543 4.296c-.268.625-.478 1.479-.543 2.903-.059 1.353-.073 1.811-.073 5.352s.014 3.999.073 5.352c.065 1.424.275 2.278.543 2.903a4.992 4.992 0 001.052 1.758c.625.268 1.479.478 2.903.543 1.353.059 1.811.073 5.352.073s3.999-.014 5.352-.073c1.424-.065 2.278-.275 2.903-.543a4.992 4.992 0 001.758-1.052c.268-.625.478-1.479.543-2.903.059-1.353.073-1.811.073-5.352s-.014-3.999-.073-5.352c-.065-1.424-.275-2.278-.543-2.903a4.992 4.992 0 00-1.052-1.758c-.625-.268-1.479-.478-2.903-.543C16.001.014 15.541 0 12 0zm0 4.865a7.135 7.135 0 100 14.27 7.135 7.135 0 000-14.27zm0 2.392a4.743 4.743 0 110 9.486 4.743 4.743 0 010-9.486zM17.568 5.797a1.187 1.187 0 100 2.374 1.187 1.187 0 000-2.374z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="hover:text-blue-500" aria-label="Facebook da Polícia Federal">
+                        <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M14.997 2.158c.995 0 1.954.004 2.876.014.295 0 .58.006.848.012.276 0 .546.012.793.023.238.01.47.016.71.026.195.008.384.015.57.025a1.5 1.5 0 011.082 1.48v2.756c0 .827-.672 1.5-1.5 1.5H16.5c-.827 0-1.5-.673-1.5-1.5v-.5a1.5 1.5 0 00-1.5-1.5h-1.5c-2.32 0-3.328 1.528-3.328 3.528V15H8c-.828 0-1.5.672-1.5 1.5v5c0 .828.672 1.5 1.5 1.5h3.5v.006c-.015.01-.03.021-.046.03a1.5 1.5 0 01-.58 0c-2.126-.08-4.14-.14-6.19-.24a2.5 2.5 0 01-1.748-1.016l-.285-.386-.118-.16a1.5 1.5 0 01-.11-.15l-.042-.057c-.206-.27-.378-.57-.514-.897a1.5 1.5 0 01-.19-.48l-.05-.12c-.08-.18-.146-.37-.202-.56a1.5 1.5 0 01-.06-.328c-.02-.13-.035-.262-.047-.394-.01-.127-.015-.256-.02-.387-.01-.26-.013-.526-.013-.795 0-1.49-.104-3.56-.25-5.69-1.28-1.077-2.345-2.14-3.376-3.21a1.5 1.5 0 01-1.037-1.396V2.71c0-1.61 1.29-2.766 2.895-2.585 1.636.184 3.012.75 4.35 1.348C9.697 1.832 12.35 3.047 15 3.5v.5h.001c.828 0 1.5.672 1.5 1.5v5c0 .828-.672 1.5-1.5 1.5h-1.5c-.828 0-1.5-.672-1.5-1.5v-.5h3.001c.828 0 1.5.672 1.5 1.5v5c0 .828-.672 1.5-1.5 1.5h-3.001c-.828 0-1.5-.672-1.5-1.5v-.5c0-.828.672-1.5 1.5-1.5h1.5c.828 0 1.5-.672 1.5-1.5V11.5c0-.828-.672-1.5-1.5-1.5H15V6h-1.5C12.327 6 12 5.56 12 4.5v-1.5c0-1.65-.968-2.85-2.5-3.5A2.5 2.5 0 019 0H7.5C6.94 0 6.5.44 6.5 1v3c0 .828-.672 1.5-1.5 1.5h-1.5C2.172 5.5 0 3.328 0 1.5V.5c0-.276-.224-.5-.5-.5H-.5c-.276 0-.5.224-.5.5v1c0 2.206 1.794 4 4 4h1.5C6.172 5.5 6.5 6.172 6.5 7V9c0 .828.672 1.5 1.5 1.5h1.5c-.828 0-1.5-.672-1.5-1.5V7c0-1.5.952-2.5 2.5-2.5z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="hover:text-blue-500" aria-label="YouTube da Polícia Federal">
+                        <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-3.238 17.514V6.486L16.273 12l-7.511 5.514z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="hover:text-blue-500" aria-label="X (antigo Twitter) da Polícia Federal">
+                        <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M12.001 2.04c-5.503 0-9.982 4.478-9.982 9.98s4.479 9.982 9.982 9.982c5.502 0 9.981-4.479 9.981-9.982s-4.479-9.98-9.981-9.98zM14 16.5c-1.5 0-3-.5-4-1.5.5.5 1 1 2 1s2-.5 3-1.5.5-2 1-3.5c-.5-.5-1-.5-1.5-.5-1.5 0-3 .5-4 1.5-.5.5-1 1-2 1s-2-.5-3-1.5-.5-2-1-3.5c.5.5 1 .5 1.5.5s2-.5 3-1.5c.5-.5 1-1 2-1s2-.5 3-1.5c.5-.5 1-1 2-1.5s.5-.5 1-.5h-1.5c-1.5 0-3 .5-4 1.5-.5.5-1 1-2 1s-2-.5-3-1.5-.5-2-1-3.5c.5.5 1 .5 1.5.5s2-.5 3-1.5c.5-.5 1-1 2-1s2-.5 3-1.5c.5-.5 1-1 2-1.5s.5-.5 1-.5c-.5-1.5-2.5-2.5-4-2.5z" />
+                        </svg>
+                    </a>
                 </div>
-                <!-- Pergunta 2 -->
-                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
-                    <div class="flex justify-between items-center" onclick="toggleAnswer('faq-2')">
-                        <h4 class="font-bold text-lg text-white">Como posso ser aprovado no concurso?</h4>
-                        <span id="icon-faq-2" class="text-blue-400 font-extrabold text-2xl">+</span>
-                    </div>
-                    <p id="faq-2" class="mt-4 text-gray-400 faq-answer">A aprovação depende de seu desempenho em todas as etapas do concurso: provas objetiva e discursiva, exame físico, avaliação médica e psicológica, além de investigação social. A dedicação e o estudo são essenciais.</p>
-                </div>
-                <!-- Pergunta 3 -->
-                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
-                    <div class="flex justify-between items-center" onclick="toggleAnswer('faq-3')">
-                        <h4 class="font-bold text-lg text-white">Quais documentos são necessários para a inscrição?</h4>
-                        <span id="icon-faq-3" class="text-blue-400 font-extrabold text-2xl">+</span>
-                    </div>
-                    <p id="faq-3" class="mt-4 text-gray-400 faq-answer">Para a inscrição online, é necessário apenas o seu CPF. Os demais documentos, como RG e certificado de conclusão do Ensino Médio, serão solicitados nas etapas posteriores do concurso, conforme o edital.</p>
-                </div>
-                <!-- Pergunta 4 -->
-                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
-                    <div class="flex justify-between items-center" onclick="toggleAnswer('faq-4')">
-                        <h4 class="font-bold text-lg text-white">Há limite de idade para prestar o concurso?</h4>
-                        <span id="icon-faq-4" class="text-blue-400 font-extrabold text-2xl">+</span>
-                    </div>
-                    <p id="faq-4" class="mt-4 text-gray-400 faq-answer">A idade mínima para inscrição é de 18 anos. Não há idade máxima para prestar o concurso, desde que o candidato esteja em plenas condições físicas e mentais para exercer a função.</p>
-                </div>
-                <!-- Pergunta 5 -->
-                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
-                    <div class="flex justify-between items-center" onclick="toggleAnswer('faq-5')">
-                        <h4 class="font-bold text-lg text-white">Qual a escolaridade mínima exigida?</h4>
-                        <span id="icon-faq-5" class="text-blue-400 font-extrabold text-2xl">+</span>
-                    </div>
-                    <p id="faq-5" class="mt-4 text-gray-400 faq-answer">Para a maioria dos cargos de Agente e Escrivão, o requisito é ter diploma de Ensino Médio completo. Para cargos de Perito, é exigido Ensino Superior em área específica.</p>
-                </div>
-                <!-- Pergunta 6 -->
-                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
-                    <div class="flex justify-between items-center" onclick="toggleAnswer('faq-6')">
-                        <h4 class="font-bold text-lg text-white">Onde posso encontrar o edital completo?</h4>
-                        <span id="icon-faq-6" class="text-blue-400 font-extrabold text-2xl">+</span>
-                    </div>
-                    <p id="faq-6" class="mt-4 text-gray-400 faq-answer">O edital completo do concurso mais recente pode ser acessado na seção de "Publicações" do portal oficial da Polícia Federal. Ele contém todas as regras e informações detalhadas sobre as etapas do processo.</p>
-                </div>
-                <!-- Pergunta 7 -->
-                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
-                    <div class="flex justify-between items-center" onclick="toggleAnswer('faq-7')">
-                        <h4 class="font-bold text-lg text-white">Existe alguma preparação física recomendada para o TAF?</h4>
-                        <span id="icon-faq-7" class="text-blue-400 font-extrabold text-2xl">+</span>
-                    </div>
-                    <p id="faq-7" class="mt-4 text-gray-400 faq-answer">Recomendamos que os candidatos iniciem um programa de treinamento físico supervisionado, com foco nas provas do TAF (barra fixa, corrida, natação, etc.), para garantir que estejam em condições ideais no dia da avaliação.</p>
-                </div>
-                <!-- Pergunta 8 -->
-                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
-                    <div class="flex justify-between items-center" onclick="toggleAnswer('faq-8')">
-                        <h4 class="font-bold text-lg text-white">Como funciona a etapa de investigação social?</h4>
-                        <span id="icon-faq-8" class="text-blue-400 font-extrabold text-2xl">+</span>
-                    </div>
-                    <p id="faq-8" class="mt-4 text-gray-400 faq-answer">A investigação social é uma etapa sigilosa que verifica a conduta moral e social do candidato. São analisados antecedentes criminais, vida pregressa e qualquer fato que possa comprometer a reputação necessária para a função.</p>
-                </div>
-                <!-- Pergunta 9 -->
-                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
-                    <div class="flex justify-between items-center" onclick="toggleAnswer('faq-9')">
-                        <h4 class="font-bold text-lg text-white">Posso me inscrever se tiver tatuagens?</h4>
-                        <span id="icon-faq-9" class="text-blue-400 font-extrabold text-2xl">+</span>
-                    </div>
-                    <p id="faq-9" class="mt-4 text-gray-400 faq-answer">Sim, tatuagens não são um fator de eliminação, desde que não violem a moralidade ou a ética profissional. Tatuagens com símbolos de facções criminosas ou que incitem à violência podem ser motivo de inaptidão.</p>
-                </div>
-                <!-- Pergunta 10 -->
-                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105">
-                    <div class="flex justify-between items-center" onclick="toggleAnswer('faq-10')">
-                        <h4 class="font-bold text-lg text-white">É possível parcelar a taxa de inscrição?</h4>
-                        <span id="icon-faq-10" class="text-blue-400 font-extrabold text-2xl">+</span>
-                    </div>
-                    <p id="faq-10" class="mt-4 text-gray-400 faq-answer">Não, a taxa de inscrição é um valor único e deve ser paga à vista para que a inscrição seja processada e validada no sistema. Não há opção de parcelamento.</p>
+                <!-- Barra de pesquisa -->
+                <div class="relative w-full sm:w-auto mt-4 sm:mt-0">
+                    <input type="text" placeholder="Buscar no site" id="search-input" class="w-full py-2 pl-4 pr-10 rounded-full border border-gray-700 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-500">
+                    <button onclick="performSearch()" aria-label="Buscar" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- Modal para exibir a notícia completa -->
-    <div id="news-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50 transition-opacity duration-300 opacity-0 pointer-events-none">
-        <div class="bg-gray-800 rounded-lg shadow-xl max-w-2xl sm:max-w-full md:max-w-2xl w-full mx-2 p-6 relative transform scale-95 transition-transform duration-300">
-            <button class="absolute top-2 right-4 text-gray-400 hover:text-white text-3xl font-bold" onclick="closeModal()" aria-label="Fechar Modal">
-                &times;
-            </button>
-            <h4 id="modal-title" class="text-xl font-bold text-gray-200 mb-2"></h4>
-            <img id="modal-image" src="" alt="Imagem da notícia" class="w-full h-auto rounded-lg mb-4">
-            <p id="modal-date-views" class="text-gray-400 text-sm mb-2"></p>
-            <p id="modal-text" class="text-gray-300 text-sm leading-relaxed max-h-96 overflow-y-auto"></p>
-        </div>
+            <!-- Mensagem de direitos autorais no rodapé -->
+            <p class="text-center text-gray-500 text-sm mt-4">&copy; 2025 Polícia Federal. Todos os direitos reservados.</p>
+        </footer>
     </div>
-    
-    <!-- Rodapé com ícones de redes sociais e barra de pesquisa -->
-    <footer class="bg-gray-900 py-6 px-4 border-t border-gray-800 mt-auto">
-        <div class="container mx-auto flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-6">
-            <!-- Ícones das redes sociais (usando SVGs inline) -->
-            <div class="flex space-x-6 text-gray-400">
-                <a href="#" class="hover:text-blue-500" aria-label="Instagram da Polícia Federal">
-                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12 2.163c3.204 0 3.584.012 4.851.07 1.171.054 1.745.249 2.166.42a3.024 3.024 0 011.085.642 3.024 3.024 0 01.642 1.085c.171.421.366.995.42 2.166.058 1.267.07 1.647.07 4.851s-.012 3.584-.07 4.851c-.054 1.171-.249 1.745-.42 2.166a3.024 3.024 0 01-.642 1.085 3.024 3.024 0 01-1.085.642c-.421.171-.995.366-2.166.42-1.267.058-1.647.07-4.851.07s-3.584-.012-4.851-.07c-1.171-.054-1.745-.249-2.166-.42a3.024 3.024 0 01-1.085-.642 3.024 3.024 0 01-.642-1.085c-.171-.421-.366-.995-.42-2.166-.058-1.267-.07-1.647-.07-4.851s.012-3.584.07-4.851c.054-1.171.249-1.745.42-2.166a3.024 3.024 0 01.642-1.085 3.024 3.024 0 011.085-.642c.421-.171.995-.366 2.166-.42C8.416 2.175 8.796 2.163 12 2.163zM12 0c-3.541 0-3.999.014-5.352.073-1.424.065-2.278.275-2.903.543a4.992 4.992 0 00-1.758 1.052A4.992 4.992 0 00.543 4.296c-.268.625-.478 1.479-.543 2.903-.059 1.353-.073 1.811-.073 5.352s.014 3.999.073 5.352c.065 1.424.275 2.278.543 2.903a4.992 4.992 0 001.052 1.758c.625.268 1.479.478 2.903.543 1.353.059 1.811.073 5.352.073s3.999-.014 5.352-.073c1.424-.065 2.278-.275 2.903-.543a4.992 4.992 0 001.758-1.052c.268-.625.478-1.479.543-2.903.059-1.353.073-1.811.073-5.352s-.014-3.999-.073-5.352c-.065-1.424-.275-2.278-.543-2.903a4.992 4.992 0 00-1.052-1.758c-.625-.268-1.479-.478-2.903-.543C16.001.014 15.541 0 12 0zm0 4.865a7.135 7.135 0 100 14.27 7.135 7.135 0 000-14.27zm0 2.392a4.743 4.743 0 110 9.486 4.743 4.743 0 010-9.486zM17.568 5.797a1.187 1.187 0 100 2.374 1.187 1.187 0 000-2.374z" />
-                    </svg>
-                </a>
-                <a href="#" class="hover:text-blue-500" aria-label="Facebook da Polícia Federal">
-                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M14.997 2.158c.995 0 1.954.004 2.876.014.295 0 .58.006.848.012.276 0 .546.012.793.023.238.01.47.016.71.026.195.008.384.015.57.025a1.5 1.5 0 011.082 1.48v2.756c0 .827-.672 1.5-1.5 1.5H16.5c-.827 0-1.5-.673-1.5-1.5v-.5a1.5 1.5 0 00-1.5-1.5h-1.5c-2.32 0-3.328 1.528-3.328 3.528V15H8c-.828 0-1.5.672-1.5 1.5v5c0 .828.672 1.5 1.5 1.5h3.5v.006c-.015.01-.03.021-.046.03a1.5 1.5 0 01-.58 0c-2.126-.08-4.14-.14-6.19-.24a2.5 2.5 0 01-1.748-1.016l-.285-.386-.118-.16a1.5 1.5 0 01-.11-.15l-.042-.057c-.206-.27-.378-.57-.514-.897a1.5 1.5 0 01-.19-.48l-.05-.12c-.08-.18-.146-.37-.202-.56a1.5 1.5 0 01-.06-.328c-.02-.13-.035-.262-.047-.394-.01-.127-.015-.256-.02-.387-.01-.26-.013-.526-.013-.795 0-1.49-.104-3.56-.25-5.69-1.28-1.077-2.345-2.14-3.376-3.21a1.5 1.5 0 01-1.037-1.396V2.71c0-1.61 1.29-2.766 2.895-2.585 1.636.184 3.012.75 4.35 1.348C9.697 1.832 12.35 3.047 15 3.5v.5h.001c.828 0 1.5.672 1.5 1.5v5c0 .828-.672 1.5-1.5 1.5h-1.5c-.828 0-1.5-.672-1.5-1.5v-.5h3.001c.828 0 1.5.672 1.5 1.5v5c0 .828-.672 1.5-1.5 1.5h-3.001c-.828 0-1.5-.672-1.5-1.5v-.5c0-.828.672-1.5 1.5-1.5h1.5c.828 0 1.5-.672 1.5-1.5V11.5c0-.828-.672-1.5-1.5-1.5H15V6h-1.5C12.327 6 12 5.56 12 4.5v-1.5c0-1.65-.968-2.85-2.5-3.5A2.5 2.5 0 019 0H7.5C6.94 0 6.5.44 6.5 1v3c0 .828-.672 1.5-1.5 1.5h-1.5C2.172 5.5 0 3.328 0 1.5V.5c0-.276-.224-.5-.5-.5H-.5c-.276 0-.5.224-.5.5v1c0 2.206 1.794 4 4 4h1.5C6.172 5.5 6.5 6.172 6.5 7V9c0 .828.672 1.5 1.5 1.5h1.5c-.828 0-1.5-.672-1.5-1.5V7c0-1.5.952-2.5 2.5-2.5z" />
-                    </svg>
-                </a>
-                <a href="#" class="hover:text-blue-500" aria-label="YouTube da Polícia Federal">
-                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-3.238 17.514V6.486L16.273 12l-7.511 5.514z" />
-                    </svg>
-                </a>
-                <a href="#" class="hover:text-blue-500" aria-label="X (antigo Twitter) da Polícia Federal">
-                    <svg class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M12.001 2.04c-5.503 0-9.982 4.478-9.982 9.98s4.479 9.982 9.982 9.982c5.502 0 9.981-4.479 9.981-9.982s-4.479-9.98-9.981-9.98zM14 16.5c-1.5 0-3-.5-4-1.5.5.5 1 1 2 1s2-.5 3-1.5.5-2 1-3.5c-.5-.5-1-.5-1.5-.5-1.5 0-3 .5-4 1.5-.5.5-1 1-2 1s-2-.5-3-1.5-.5-2-1-3.5c.5.5 1 .5 1.5.5s2-.5 3-1.5c.5-.5 1-1 2-1s2-.5 3-1.5c.5-.5 1-1 2-1.5s.5-.5 1-.5h-1.5c-1.5 0-3 .5-4 1.5-.5.5-1 1-2 1s-2-.5-3-1.5-.5-2-1-3.5c.5.5 1 .5 1.5.5s2-.5 3-1.5c.5-.5 1-1 2-1s2-.5 3-1.5c.5-.5 1-1 2-1.5s.5-.5 1-.5c-.5-1.5-2.5-2.5-4-2.5z" />
-                    </svg>
-                </a>
+
+    <!-- Conteúdo da Página da Notícia (inicialmente oculta) -->
+    <div id="news-page" class="hidden">
+        <header class="bg-gray-900 shadow-md py-8">
+            <div class="container mx-auto px-4 flex flex-col items-center">
+                <!-- Logo da Polícia Federal centralizada com descrição para acessibilidade -->
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Pol%C3%ADcia_Federal_do_Brasil.png" alt="Logo da Polícia Federal do Brasil" class="h-28 w-28 mb-4">
+                <!-- Título e subtítulo do site -->
+                <h1 class="text-5xl font-extrabold text-white text-center tracking-wider">POLÍCIA FEDERAL</h1>
+                <p class="text-xl font-light text-gray-400 mt-2 text-center">Portal de Concursos</p>
             </div>
-            <!-- Barra de pesquisa -->
-            <div class="relative w-full sm:w-auto mt-4 sm:mt-0">
-                <input type="text" placeholder="Buscar no site" id="search-input" class="w-full py-2 pl-4 pr-10 rounded-full border border-gray-700 bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-white placeholder-gray-500">
-                <button onclick="performSearch()" aria-label="Buscar" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-white">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                    </svg>
-                </button>
+        </header>
+
+        <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            <div class="max-w-4xl mx-auto">
+                <button onclick="history.back()" class="text-blue-500 hover:underline mb-4">&larr; Voltar para a Página Principal</button>
+                <h2 id="news-page-title" class="text-3xl font-bold text-white mb-4"></h2>
+                <img id="news-page-image" src="" alt="Imagem da notícia" class="w-full h-auto rounded-lg mb-4">
+                <p id="news-page-date-views" class="text-gray-400 text-sm mb-4"></p>
+                <p id="news-page-text" class="text-gray-300 text-base leading-relaxed"></p>
             </div>
-        </div>
-        <!-- Mensagem de direitos autorais no rodapé -->
-        <p class="text-center text-gray-500 text-sm mt-4">&copy; 2025 Polícia Federal. Todos os direitos reservados.</p>
-    </footer>
+        </main>
+    </div>
 
     <!-- Modal para mensagens personalizadas (substituindo alert) -->
     <div id="message-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
@@ -391,36 +402,34 @@
             showMessageBox('Funcionalidade', `Buscando por: "${query}"... (Esta é uma funcionalidade de demonstração)` );
         }
 
-        // Função para abrir o modal de notícias
-        function openModal(title, image, text, date, views) {
-            const modal = document.getElementById('news-modal');
-            const modalTitle = document.getElementById('modal-title');
-            const modalImage = document.getElementById('modal-image');
-            const modalText = document.getElementById('modal-text');
-            const modalDateViews = document.getElementById('modal-date-views');
+        // Função para abrir a nova página da notícia
+        function openNewsPage(title, image, text, date, views) {
+            const mainPage = document.getElementById('main-page');
+            const newsPage = document.getElementById('news-page');
 
-            modalTitle.textContent = title;
-            modalImage.src = image;
-            modalText.textContent = text;
-            modalDateViews.textContent = `Publicado em: ${date} | Visualizações: ${views}`;
+            // Preenche o conteúdo da página da notícia
+            document.getElementById('news-page-title').textContent = title;
+            document.getElementById('news-page-image').src = image;
+            document.getElementById('news-page-text').textContent = text;
+            document.getElementById('news-page-date-views').textContent = `Publicado em: ${date} | Visualizações: ${views}`;
             
-            // Adiciona classes para mostrar o modal com transição suave
-            modal.classList.remove('hidden', 'opacity-0', 'pointer-events-none');
-            modal.classList.add('flex', 'opacity-100');
-            modal.querySelector('div').classList.remove('scale-95');
-            modal.querySelector('div').classList.add('scale-100');
+            // Esconde a página principal e mostra a página da notícia
+            mainPage.classList.add('hidden');
+            newsPage.classList.remove('hidden');
+            
+            // Rola para o topo da nova página
+            window.scrollTo(0, 0);
         }
 
-        // Função para fechar o modal de notícias
-        function closeModal() {
-            const modal = document.getElementById('news-modal');
-            modal.classList.remove('opacity-100', 'flex');
-            modal.classList.add('opacity-0', 'hidden');
-            modal.querySelector('div').classList.remove('scale-100');
-            modal.querySelector('div').classList.add('scale-95');
+        // Função para simular o retorno à página principal
+        function goBack() {
+            const mainPage = document.getElementById('main-page');
+            const newsPage = document.getElementById('news-page');
+            mainPage.classList.remove('hidden');
+            newsPage.classList.add('hidden');
+            window.scrollTo(0, 0);
         }
-        
-        let activeSubmenu = null;
+
         let activeMenuItem = null;
         let activeContent = null;
 
