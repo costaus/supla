@@ -7,7 +7,7 @@
     <!-- Inclui o CDN do Tailwind CSS para estilização -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Define a fonte padrão 'Inter' e um fundo escuro para a página */
+        /* Define a fonte padrão 'Inter' e um fundo muito escuro para a página */
         body {
             font-family: 'Inter', sans-serif;
             background-color: #0a0a0a;
@@ -36,11 +36,48 @@
             outline: 2px solid #60a5fa;
             outline-offset: 2px;
         }
+
+        /* Estilo do item do menu com a linha de sublinhado */
+        .menu-item {
+            position: relative;
+            padding-bottom: 0.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .menu-item::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 0;
+            height: 2px;
+            background-color: #3b82f6;
+            transition: width 0.3s ease;
+        }
+
+        .menu-item.active::after {
+            width: 100%;
+        }
+
+        /* Estilo do conteúdo do submenu com animação de expansão */
+        .submenu-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+            padding: 0;
+        }
+
+        .submenu-content.active {
+            max-height: 200px; /* Ajuste conforme o conteúdo */
+            padding: 1rem;
+            transition: max-height 0.5s ease-in;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- Cabeçalho idêntico ao da foto, mas com a logo da Polícia Federal -->
+    <!-- Cabeçalho com a logo e nome centralizados -->
     <header class="bg-gray-900 shadow-md py-8">
         <div class="container mx-auto px-4 flex flex-col items-center">
             <!-- Logo da Polícia Federal centralizada -->
@@ -51,17 +88,57 @@
         </div>
     </header>
 
-    <!-- Menu de navegação (abas) com links para seções na mesma página -->
+    <!-- Menu de navegação (navbar) -->
     <nav class="bg-gray-800 py-6 shadow-sm border-t border-b border-gray-700">
         <ul class="flex flex-col items-center space-y-4 text-gray-300 font-semibold text-lg">
-            <li><a href="#acessibilidade" class="hover:underline hover:text-blue-400">Acessibilidade</a></li>
-            <li><a href="#fale-conosco" class="hover:underline hover:text-blue-400">Fale Conosco</a></li>
-            <li><a href="#duvidas" class="hover:underline hover:text-blue-400">Dúvidas Frequentes</a></li>
-            <li><a href="#mapa-site" class="hover:underline hover:text-blue-400">Mapa do Site</a></li>
-            <li><a href="#transparencia" class="hover:underline hover:text-blue-400">Transparência</a></li>
-            <li><a href="#ajuda" class="hover:underline hover:text-blue-400">Ajuda</a></li>
+            <!-- Item de Acessibilidade -->
+            <li class="w-full text-center">
+                <div id="acessibilidade-btn" class="menu-item inline-block" onclick="toggleSubmenu('acessibilidade-content', this)">Acessibilidade</div>
+            </li>
+            <!-- Item Fale Conosco -->
+            <li class="w-full text-center">
+                <div id="fale-conosco-btn" class="menu-item inline-block" onclick="toggleSubmenu('fale-conosco-content', this)">Fale Conosco</div>
+            </li>
+            <!-- Item Dúvidas Frequentes -->
+            <li class="w-full text-center">
+                <div id="duvidas-btn" class="menu-item inline-block" onclick="toggleSubmenu('duvidas-content', this)">Dúvidas Frequentes</div>
+            </li>
+            <!-- Item Mapa do Site -->
+            <li class="w-full text-center">
+                <div id="mapa-site-btn" class="menu-item inline-block" onclick="toggleSubmenu('mapa-site-content', this)">Mapa do Site</div>
+            </li>
+            <!-- Item Transparência -->
+            <li class="w-full text-center">
+                <div id="transparencia-btn" class="menu-item inline-block" onclick="toggleSubmenu('transparencia-content', this)">Transparência</div>
+            </li>
+            <!-- Item Ajuda -->
+            <li class="w-full text-center">
+                <div id="ajuda-btn" class="menu-item inline-block" onclick="toggleSubmenu('ajuda-content', this)">Ajuda</div>
+            </li>
         </ul>
     </nav>
+
+    <!-- Seções de conteúdo que se expandem -->
+    <section class="bg-gray-900 mx-auto w-full">
+        <div id="acessibilidade-content" class="submenu-content">
+            <p class="text-gray-300 leading-relaxed max-w-lg mx-auto">A Polícia Federal reafirma seu compromisso com a inclusão e o acesso igualitário à informação e aos serviços públicos. Nossas plataformas digitais são projetadas para atender aos mais altos padrões de acessibilidade, permitindo que pessoas com deficiência naveguem com autonomia e segurança.</p>
+        </div>
+        <div id="fale-conosco-content" class="submenu-content">
+            <p class="text-gray-300 leading-relaxed max-w-lg mx-auto">A Polícia Federal está à disposição para ouvir suas denúncias, sugestões e elogios. Você pode nos contatar através da Ouvidoria-Geral, ligando para 181 (disque-denúncia unificado). Para outras informações, envie um e-mail para ouvidoria@dpf.gov.br.</p>
+        </div>
+        <div id="duvidas-content" class="submenu-content">
+            <p class="text-gray-300 leading-relaxed max-w-lg mx-auto">Esta seção foi criada para responder às perguntas mais comuns sobre os serviços e procedimentos da Polícia Federal. Você encontrará informações detalhadas e claras sobre a emissão de documentos e o registro de ocorrências.</p>
+        </div>
+        <div id="mapa-site-content" class="submenu-content">
+            <p class="text-gray-300 leading-relaxed max-w-lg mx-auto">O Mapa do Site oferece uma visão geral e organizada da estrutura do nosso portal. Ele funciona como um guia de navegação, ajudando você a encontrar rapidamente as informações que procura, tornando sua busca mais eficiente e direta.</p>
+        </div>
+        <div id="transparencia-content" class="submenu-content">
+            <p class="text-gray-300 leading-relaxed max-w-lg mx-auto">A transparência é um pilar fundamental da atuação da Polícia Federal. Em conformidade com a Lei de Acesso à Informação (LAI), disponibilizamos dados sobre nossas atividades e gestão de recursos. Nosso compromisso é com a prestação de contas à sociedade.</p>
+        </div>
+        <div id="ajuda-content" class="submenu-content">
+            <p class="text-gray-300 leading-relaxed max-w-lg mx-auto">Se você está com dificuldades para usar o portal, a seção de Ajuda é o seu guia. Aqui, você encontrará tutoriais e um FAQ detalhado que respondem às dúvidas mais comuns. Nossa equipe de suporte está pronta para auxiliar.</p>
+        </div>
+    </section>
     
     <!-- Seção de Rolagem de Notícias -->
     <section id="noticias" class="py-10 bg-gray-900 rounded-lg shadow-md mt-8">
@@ -69,118 +146,158 @@
             <h2 class="text-2xl font-bold text-gray-200 mb-6">Últimas Notícias</h2>
             <div class="scrolling-container flex space-x-6 overflow-x-scroll pb-4">
                 <!-- Notícia 1 -->
-                <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('https://iili.io/FboOxRa.jpg', 'Nesta quinta-feira (14/8), em Belo Horizonte, a Polícia Civil de Minas Gerais (PCMG) prendeu um homem, de 47 anos, suspeito de aliciar crianças e adolescentes e produzir conteúdos de cunho sexual envolvendo menores de idade. No celular dele, os policiais encontraram diversos arquivos dessa natureza. A ação policial decorre de apurações em curso na Divisão de Crimes Cibernéticos do Departamento Estadual de Combate à Corrupção e a Fraudes (Deccof), que começaram após a família de uma vítima de 11 anos, residente em São Paulo, identificar conteúdos suspeitos no celular da criança. O caso foi inicialmente registrado na Polícia Civil paulista e encaminhado para a equipe especializada da PCMG na capital. Modo de agir: Segundo as investigações da PCMG, o suspeito iniciava contato com as vítimas por meio de aplicativo de mensagem, pelo qual recebia perfis e conteúdos de crianças, e depois migrava para outras plataformas. As apurações indicam que o homem interagia com vítimas de ambos os sexos, muitas vezes, se passando por adolescente para conquistar a confiança delas. Também utilizava jogos on-line e redes sociais para estabelecer vínculos antes de iniciar conversas de teor sexual. Até o momento, foram identificadas pelo menos cinco vítimas, mas a análise do material apreendido poderá revelar mais casos. O investigado confessou os crimes e, em interrogatório, admitiu ter se relacionado com 13 crianças. Histórico: O homem já possuía registros de boletins de ocorrência por assédio sexual, tanto virtual quanto presencial, mas nunca havia sido preso. Ele poderá responder por crimes previstos no Estatuto da Criança e do Adolescente e no Código Penal, que incluem produção, armazenamento e compartilhamento de material sexual envolvendo menores, além de corrupção de menores e aliciamento. “Mais uma vez, a Polícia Civil reafirma o seu trabalho incansável, 24 horas, para combater esses crimes. E o recado, claro, para os criminosos: nós não vamos permitir que essas atrocidades continuem acontecendo no nosso estado, até no nosso país”, destacou a chefe da Divisão, delegada Cristiana Angelini. O delegado Arthur Martins da Costa Benício, titular da 1ª Delegacia Especializada em Investigação de Crimes Cibernéticos, unidade responsável pelo inquérito, acrescentou que o crime digital não tem fronteiras. “Nosso trabalho é incansável para identificar e prender esses criminosos”, reforçou. O suspeito preso hoje foi detido em casa e, após os procedimentos policiais, encaminhado ao sistema prisional.')">
+                <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('https://iili.io/FboOxRa.jpg', 'Nesta quinta-feira (14/8), em Belo Horizonte, a Polícia Civil de Minas Gerais (PCMG) prendeu um homem, de 47 anos, suspeito de aliciar crianças e adolescentes e produzir conteúdos de cunho sexual envolvendo menores de idade. No celular dele, os policiais encontraram diversos arquivos dessa natureza. A ação policial decorre de apurações em curso na Divisão de Crimes Cibernéticos do Departamento Estadual de Combate à Corrupção e a Fraudes (Deccof), que começaram após a família de uma vítima de 11 anos, residente em São Paulo, identificar conteúdos suspeitos no celular da criança. O caso foi inicialmente registrado na Polícia Civil paulista e encaminhado para a equipe especializada da PCMG na capital. Modo de agir: Segundo as investigações da PCMG, o suspeito iniciava contato com as vítimas por meio de aplicativo de mensagem, pelo qual recebia perfis e conteúdos de crianças, e depois migrava para outras plataformas. As apurações indicam que o homem interagia com vítimas de ambos os sexos, muitas vezes, se passando por adolescente para conquistar a confiança delas. Também utilizava jogos on-line e redes sociais para estabelecer vínculos antes de iniciar conversas de teor sexual. Até o momento, foram identificadas pelo menos cinco vítimas, mas a análise do material apreendido poderá revelar mais casos. O investigado confessou os crimes e, em interrogatório, admitiu ter se relacionado com 13 crianças. Histórico: O homem já possuía registros de boletins de ocorrência por assédio sexual, tanto virtual quanto presencial, mas nunca havia sido preso. Ele poderá responder por crimes previstos no Estatuto da Criança e do Adolescente e no Código Penal, que incluem produção, armazenamento e compartilhamento de material sexual envolvendo menores, além de corrupção de menores e aliciamento. “Mais uma vez, a Polícia Civil reafirma o seu trabalho incansável, 24 horas, para combater esses crimes. E o recado, claro, para os criminosos: nós não vamos permitir que essas atrocidades continuem acontecendo no nosso estado, até no nosso país”, destacou a chefe da Divisão, delegada Cristiana Angelini. O delegado Arthur Martins da Costa Benício, titular da 1ª Delegacia Especializada em Investigação de Crimes Cibernéticos, unidade responsável pelo inquérito, acrescentou que o crime digital não tem fronteiras. “Nosso trabalho é incansável para identificar e prender esses criminosos”, reforçou. O suspeito preso hoje foi detido em casa e, após os procedimentos policiais, encaminhado ao sistema prisional.', '14/08/2025 15:09', '12.583')">
                     <img src="https://iili.io/FboOxRa.jpg" alt="" class="w-full h-36 object-cover rounded-t-lg">
                         <div class="p-4">
-                            <h4 class="font-bold text-gray-200 text-sm">Polícia Civil prende suspeito de aliciar menores e produzir conteúdo sexual em BH.</h4>
+                            <h4 class="font-bold text-gray-200 text-sm">Polícia Civil prende suspeito de aliciar menores.</h4>
                         </div>
                     </div>
-                    <!-- Notícia 2 -->
-                    <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('https://iili.io/FboO1OG.jpg', 'Em decorrência de investigações de crimes patrimoniais, especialmente furto a residências, a Polícia Civil de Minas Gerais (PCMG) cumpriu a prisão preventiva de três alvos, na sexta-feira (8/8) e ontem (13/8). Eles são suspeitos de atuar na capital e na Região Metropolitana de Belo Horizonte (RMBH) e estariam ampliando as atividades criminosas para o interior. O trio foi preso a partir de trabalho investigativo conduzido pelo Departamento Estadual de Investigação de Crimes Contra o Patrimônio (Depatri) para apurar um furto ocorrido em 24 de agosto de 2024 no bairro Belvedere, região Centro-Sul de Belo Horizonte, com participação de quatro suspeitos – a PCMG trabalha na identificação do último. Na ocasião, conforme as vítimas, foram levados joias e objetos pessoais estimados em R$ 200 mil. De acordo com o delegado Gustavo Barletta, titular da 2ª Delegacia Especializada em Investigação e Repressão ao Furto e Roubo, durante a ação policial realizada recentemente, ainda foram apreendidos um veículo roubado, objetos usados para arrombamento, além de um violão, uma caixa de som e uma televisão – subtraídos no sábado passado (9/8) na região do Barreiro – entre outros materiais variados. Atuação: Barletta explicou que nem sempre os suspeitos agem em conjunto. “Na verdade, eles conseguem as informações, ou decidem fazer os arrombamentos, e vêem praticamente quem está disponível naquele momento para praticar o crime. Nesse sentido, eles trocam veículos, alugam carros, flutuam entre uma quadrilha e outra”, observou. Segundo o delegado, as apurações indicam que os alvos teriam começado a atuar também em cidades do interior: Temos informações que eles já estão se aventurando em Divinópolis [Centro-Oeste], em Juiz de Fora [Zona da Mata], Montes Claros [Norte de Minas] e Uberlândia [Triângulo Mineiro], enfim, onde acreditam que possam ter sucesso nos crimes”. Prisões: Na última sexta-feira (8/8), foi efetuada a prisão do investigado de 30 anos, no bairro Alto Vera Cruz, região Leste da capital. Ontem (13/8), os policiais civis prenderam outro alvo, de 26 anos, na cidade de Sabará, na RMBH. Já o terceiro, de 31, já está acautelado em presídio por roubo e teve o mandado formalizado pelo crime de furto no Belvedere. Agora, os três estão no sistema prisional, à disposição da Justiça.')">
-                        <img src="https://iili.io/FboO1OG.jpg" alt="" class="w-full h-36 object-cover rounded-t-lg">
-                        <div class="p-4">
-                            <h4 class="font-bold text-gray-200 text-sm">PCMG prende trio suspeito de furtos a residências em BH.</h4>
-                        </div>
+                <!-- Notícia 2 -->
+                <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('https://iili.io/FboO1OG.jpg', 'Em decorrência de investigações de crimes patrimoniais, especialmente furto a residências, a Polícia Civil de Minas Gerais (PCMG) cumpriu a prisão preventiva de três alvos, na sexta-feira (8/8) e ontem (13/8). Eles são suspeitos de atuar na capital e na Região Metropolitana de Belo Horizonte (RMBH) e estariam ampliando as atividades criminosas para o interior. O trio foi preso a partir de trabalho investigativo conduzido pelo Departamento Estadual de Investigação de Crimes Contra o Patrimônio (Depatri) para apurar um furto ocorrido em 24 de agosto de 2024 no bairro Belvedere, região Centro-Sul de Belo Horizonte, com participação de quatro suspeitos – a PCMG trabalha na identificação do último. Na ocasião, conforme as vítimas, foram levados joias e objetos pessoais estimados em R$ 200 mil. De acordo com o delegado Gustavo Barletta, titular da 2ª Delegacia Especializada em Investigação e Repressão ao Furto e Roubo, durante a ação policial realizada recentemente, ainda foram apreendidos um veículo roubado, objetos usados para arrombamento, além de um violão, uma caixa de som e uma televisão – subtraídos no sábado passado (9/8) na região do Barreiro – entre outros materiais variados. Atuação: Barletta explicou que nem sempre os suspeitos agem em conjunto. “Na verdade, eles conseguem as informações, ou decidem fazer os arrombamentos, e vêem praticamente quem está disponível naquele momento para praticar o crime. Nesse sentido, eles trocam veículos, alugam carros, flutuam entre uma quadrilha e outra”, observou. Segundo o delegado, as apurações indicam que os alvos teriam começado a atuar também em cidades do interior: Temos informações que eles já estão se aventurando em Divinópolis [Centro-Oeste], em Juiz de Fora [Zona da Mata], Montes Claros [Norte de Minas] e Uberlândia [Triângulo Mineiro], enfim, onde acreditam que possam ter sucesso nos crimes”. Prisões: Na última sexta-feira (8/8), foi efetuada a prisão do investigado de 30 anos, no bairro Alto Vera Cruz, região Leste da capital. Ontem (13/8), os policiais civis prenderam outro alvo, de 26 anos, na cidade de Sabará, na RMBH. Já o terceiro, de 31, já está acautelado em presídio por roubo e teve o mandado formalizado pelo crime de furto no Belvedere. Agora, os três estão no sistema prisional, à disposição da Justiça.', '13/08/2025 10:45', '8.910')">
+                    <img src="https://iili.io/FboO1OG.jpg" alt="" class="w-full h-36 object-cover rounded-t-lg">
+                    <div class="p-4">
+                        <h4 class="font-bold text-gray-200 text-sm">PCMG prende trio suspeito de furtos a residências em BH.</h4>
                     </div>
-                    <!-- Notícia 3 -->
-                    <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('https://iili.io/Fbo8Z3N.jpg', 'Nessa quarta-feira (13/8), a Polícia Civil de Minas Gerais (PCMG) prendeu em flagrante, no município de Itabira, na região Central do estado, um homem de 18 anos suspeito de armazenar e produzir material de abuso sexual infantil. Durante o cumprimento do mandado de busca e apreensão na residência do investigado, foram apreendidos um celular e um computador, que passarão por perícia para identificar outras vítimas. A ação policial foi coordenada pela 2ª Delegacia Especializada na Investigação de Crimes Cibernéticos, vinculada ao Departamento Estadual de Combate à Corrupção e a Fraudes (Deccof). Levantamentos iniciais: As investigações tiveram início no dia 9 de julho deste ano, após levantamentos indicarem que o suspeito possuía e compartilhava imagens e vídeos de abuso sexual contra crianças e adolescentes. Entre as vítimas, a PCMG acredita que pode haver familiares do suspeito. “Além do armazenamento das imagens, fotos e vídeos de abuso sexual infantil, também havia produção de material do próprio suspeito com uma criança que a gente acreditava, no início das investigações, ser uma criança da família do suspeito”, contou a delegada à frente das investigações Marcelle Bacellar. Responsabilização: O suspeito poderá responder por posse e armazenamento de material contendo cena de sexo explícito ou pornográfica envolvendo criança ou adolescente (artigo 241-B da Lei nº 8.069/90 – Estatuto da Criança e do Adolescente) e por estupro de vulnerável (artigo 217-A do Código Penal). A Polícia Civil apura ainda o possível envolvimento do investigado em outros crimes. “O nosso compromisso com as crianças e os adolescentes é reafirmado dia após dia com as nossas investigações. O combate a esses crimes, principalmente no ambiente virtual, mostra, mais uma vez, que a internet não é terra sem lei”, garantiu a chefe da Divisão Especializada de Investigação aos Crimes Cibernéticos e Defesa do Consumidor, delegada Cristiana Angelini.')">
-                        <img src="https://iili.io/Fbo8Z3N.jpg" alt="" class="w-full h-36 object-cover rounded-t-lg">
-                        <div class="p-4">
-                            <h4 class="font-bold text-gray-200 text-sm">PCMG prende homem por crimes de abuso sexual infantil em Itabira.</h4>
-                        </div>
+                </div>
+                <!-- Notícia 3 -->
+                <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('https://iili.io/Fbo8Z3N.jpg', 'Nessa quarta-feira (13/8), a Polícia Civil de Minas Gerais (PCMG) prendeu em flagrante, no município de Itabira, na região Central do estado, um homem de 18 anos suspeito de armazenar e produzir material de abuso sexual infantil. Durante o cumprimento do mandado de busca e apreensão na residência do investigado, foram apreendidos um celular e um computador, que passarão por perícia para identificar outras vítimas. A ação policial foi coordenada pela 2ª Delegacia Especializada na Investigação de Crimes Cibernéticos, vinculada ao Departamento Estadual de Combate à Corrupção e a Fraudes (Deccof). Levantamentos iniciais: As investigações tiveram início no dia 9 de julho deste ano, após levantamentos indicarem que o suspeito possuía e compartilhava imagens e vídeos de abuso sexual contra crianças e adolescentes. Entre as vítimas, a PCMG acredita que pode haver familiares do suspeito. “Além do armazenamento das imagens, fotos e vídeos de abuso sexual infantil, também havia produção de material do próprio suspeito com uma criança que a gente acreditava, no início das investigações, ser uma criança da família do suspeito”, contou a delegada à frente das investigações Marcelle Bacellar. Responsabilização: O suspeito poderá responder por posse e armazenamento de material contendo cena de sexo explícito ou pornográfica envolvendo criança ou adolescente (artigo 241-B da Lei nº 8.069/90 – Estatuto da Criança e do Adolescente) e por estupro de vulnerável (artigo 217-A do Código Penal). A Polícia Civil apura ainda o possível envolvimento do investigado em outros crimes. “O nosso compromisso com as crianças e os adolescentes é reafirmado dia após dia com as nossas investigações. O combate a esses crimes, principalmente no ambiente virtual, mostra, mais uma vez, que a internet não é terra sem lei”, garantiu a chefe da Divisão Especializada de Investigação aos Crimes Cibernéticos e Defesa do Consumidor, delegada Cristiana Angelini.', '12/08/2025 09:10', '15.120')">
+                    <img src="https://iili.io/Fbo8Z3N.jpg" alt="" class="w-full h-36 object-cover rounded-t-lg">
+                    <div class="p-4">
+                        <h4 class="font-bold text-gray-200 text-sm">PCMG prende homem por crimes de abuso sexual infantil.</h4>
                     </div>
-                    <!-- Notícia 4 -->
-                    <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('https://iili.io/FboScwg.jpg', 'Estão abertas, até a próxima terça-feira (19/8), as inscrições para a 2ª edição do curso Lei Maria da Penha e pacote antifeminicídio na investigação criminal, promovido pela Polícia Civil de Minas Gerais (PCMG), na modalidade de Educação a Distância (EaD). A capacitação é aberta a servidores da PCMG e público em geral. Realizado por meio da Academia de Polícia Civil (Acadepol), o curso será realizado entre os dias 25 de agosto a 3 de setembro, com carga horária de 20h/a. O objetivo é conhecer, discutir e analisar os conceitos de gênero e violência, bem como compreender os processos de encaminhamento de problemas relacionados às violências com base no gênero e as violências contra mulheres em situação de vulnerabilidade ou hipervulnerabilidade. Para se inscrever, acesse a plataforma EaD: clique AQUI.')">
-                        <img src="https://iili.io/FboScwg.jpg" alt="" class="w-full h-36 object-cover rounded-t-lg">
-                        <div class="p-4">
-                            <h4 class="font-bold text-gray-200 text-sm">Inscrições abertas para curso sobre Lei Maria da Penha.</h4>
-                        </div>
+                </div>
+                <!-- Notícia 4 -->
+                <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('https://iili.io/FboScwg.jpg', 'Estão abertas, até a próxima terça-feira (19/8), as inscrições para a 2ª edição do curso Lei Maria da Penha e pacote antifeminicídio na investigação criminal, promovido pela Polícia Civil de Minas Gerais (PCMG), na modalidade de Educação a Distância (EaD). A capacitação é aberta a servidores da PCMG e público em geral. Realizado por meio da Academia de Polícia Civil (Acadepol), o curso será realizado entre os dias 25 de agosto a 3 de setembro, com carga horária de 20h/a. O objetivo é conhecer, discutir e analisar os conceitos de gênero e violência, bem como compreender os processos de encaminhamento de problemas relacionados às violências com base no gênero e as violências contra mulheres em situação de vulnerabilidade ou hipervulnerabilidade. Para se inscrever, acesse a plataforma EaD: clique AQUI.', '08/08/2025 14:22', '7.450')">
+                    <img src="https://iili.io/FboScwg.jpg" alt="" class="w-full h-36 object-cover rounded-t-lg">
+                    <div class="p-4">
+                        <h4 class="font-bold text-gray-200 text-sm">Inscrições abertas para curso sobre Lei Maria da Penha.</h4>
                     </div>
-                    <!-- Notícia 5 -->
-                    <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('https://iili.io/FboUxRt.jpg', 'Em mais uma ação que marca o Agosto Lilás, mês de enfrentamento de violações contra a mulher, a Polícia Civil de Minas Gerais (PCMG) lançou, nessa quarta-feira (13/8), a cartilha informativa do programa Dialogar. “Pelo fim da violência doméstica: reflexão, responsabilização e transformação” é o título do conteúdo desenvolvido para apresentar o trabalho do grupo reflexivo voltado a homens autores de crimes dessa natureza. O documento reúne objetivos, público-alvo, metodologia, princípios e resultados do programa, implementado em 2010 na PCMG e reformulado em 2022 a partir das melhores práticas de grupos reflexivos responsabilizantes - clique AQUI e acesse o material. Atualmente, o Dialogar é realizado no Departamento Estadual de Investigação, Orientação e Proteção à Família (Defam), por meio de encontros semanais com autores de violência direcionados por determinação judicial como parte do cumprimento de medida protetiva ou no curso da ação penal. Idealizadora da cartilha, a delegada Pollyanna Aguiar, responsável pelo Dialogar, ressaltou o significado da ação durante a cerimônia realizada no Defam: “Nós só vamos conseguir efetivamente combater o crime contra a mulher se atingirmos a causa, se trabalharmos na educação, na reflexão e na responsabilização desses homens autores de violência”. Eixo: A fim de fortalecer as políticas de prevenção e repressão aos crimes no âmbito doméstico e familiar, a PCMG visa à expansão do programa para o interior de Minas. “Trata-se de um projeto que é eixo básico da instituição, muito importante no combate à violência doméstica”, pontuou o chefe de Gabinete, delegado-geral Frederico Abelha, que representou a chefia da Polícia Civil na solenidade. Para a chefe do Defam, delegada Danúbia Quadros, o Dialogar pode ser considerado pioneiro no formato que vem sendo desenvolvido. “Podemos dizer que a PCMG tem grupos reflexivos desde 2013, de forma também inovadora, porque há pouco tempo houve a alteração legislativa da Lei Maria da Penha, inserindo a possibilidade de encaminhamento para grupos reflexivos, e já tínhamos quase uma década que o projeto funcionava em Minas Gerais”, mencionou. O evento de lançamento da cartilha contou com uma apresentação de alunos da Marilu Dias Escola de Dança, que levou aos participantes uma reflexão, de forma artística, com trechos do espetáculo Fem., que trata do “universo feminino e suas camadas. Do aprisionamento velado pelas expectativas e amarras sociais, ao desejo de liberdade em ser aquilo que se é”.')">
-                        <img src="https://iili.io/FboUxRt.jpg" alt="" class="w-full h-36 object-cover rounded-t-lg">
-                        <div class="p-4">
-                            <h4 class="font-bold text-gray-200 text-sm">PCMG lança cartilha para combater violência doméstica no Agosto Lilás.</h4>
-                        </div>
+                </div>
+                <!-- Notícia 5 -->
+                <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('https://iili.io/FboUxRt.jpg', 'Em mais uma ação que marca o Agosto Lilás, mês de enfrentamento de violações contra a mulher, a Polícia Civil de Minas Gerais (PCMG) lançou, nessa quarta-feira (13/8), a cartilha informativa do programa Dialogar. “Pelo fim da violência doméstica: reflexão, responsabilização e transformação” é o título do conteúdo desenvolvido para apresentar o trabalho do grupo reflexivo voltado a homens autores de crimes dessa natureza. O documento reúne objetivos, público-alvo, metodologia, princípios e resultados do programa, implementado em 2010 na PCMG e reformulado em 2022 a partir das melhores práticas de grupos reflexivos responsabilizantes - clique AQUI e acesse o material. Atualmente, o Dialogar é realizado no Departamento Estadual de Investigação, Orientação e Proteção à Família (Defam), por meio de encontros semanais com autores de violência direcionados por determinação judicial como parte do cumprimento de medida protetiva ou no curso da ação penal. Idealizadora da cartilha, a delegada Pollyanna Aguiar, responsável pelo Dialogar, ressaltou o significado da ação durante a cerimônia realizada no Defam: “Nós só vamos conseguir efetivamente combater o crime contra a mulher se atingirmos a causa, se trabalharmos na educação, na reflexão e na responsabilização desses homens autores de violência”. Eixo: A fim de fortalecer as políticas de prevenção e repressão aos crimes no âmbito doméstico e familiar, a PCMG visa à expansão do programa para o interior de Minas. “Trata-se de um projeto que é eixo básico da instituição, muito importante no combate à violência doméstica”, pontuou o chefe de Gabinete, delegado-geral Frederico Abelha, que representou a chefia da Polícia Civil na solenidade. Para a chefe do Defam, delegada Danúbia Quadros, o Dialogar pode ser considerado pioneiro no formato que vem sendo desenvolvido. “Podemos dizer que a PCMG tem grupos reflexivos desde 2013, de forma também inovadora, porque há pouco tempo houve a alteração legislativa da Lei Maria da Penha, inserindo a possibilidade de encaminhamento para grupos reflexivos, e já tínhamos quase uma década que o projeto funcionava em Minas Gerais”, mencionou. O evento de lançamento da cartilha contou com uma apresentação de alunos da Marilu Dias Escola de Dança, que levou aos participantes uma reflexão, de forma artística, com trechos do espetáculo Fem., que trata do “universo feminino e suas camadas. Do aprisionamento velado pelas expectativas e amarras sociais, ao desejo de liberdade em ser aquilo que se é”.', '09/08/2025 11:55', '9.800')">
+                    <img src="https://iili.io/FboUxRt.jpg" alt="" class="w-full h-36 object-cover rounded-t-lg">
+                    <div class="p-4">
+                        <h4 class="font-bold text-gray-200 text-sm">PCMG lança cartilha para combater violência doméstica no Agosto Lilás.</h4>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Seção principal com as informações das abas e o formulário -->
-        <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-10">
-
-            <!-- Seção de Formulário de Inscrição -->
-            <div class="py-12 px-4 sm:px-6 lg:px-8">
-                <div class="max-w-xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800">
-                    <h3 class="text-3xl font-bold text-white mb-6 text-center">Pagamento e Inscrição</h3>
-                    <p class="text-gray-400 text-center mb-6">
-                        Para prosseguir com a inscrição, é necessário o pagamento da taxa de <span class="font-bold text-xl text-green-500">R$ 49,90</span>. Após a confirmação do pagamento, o formulário completo será disponibilizado online para que você possa enviar seus dados.
-                    </p>
-                    
-                    <!-- Botão de submissão do formulário - simulação de pagamento -->
-                    <div class="text-center mt-6">
-                        <button type="button" class="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
-                            Prosseguir para o Pagamento
-                        </button>
-                    </div>
-
-                    <!-- Aviso do Formulário -->
-                    <p class="text-center text-gray-500 mt-6 text-sm">
-                        Após a conclusão do pagamento, o formulário de inscrição será exibido aqui.
-                    </p>
-                </div>
+    <!-- Conteúdo principal com formulário de inscrição -->
+    <main class="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <!-- Seção de Formulário de Inscrição -->
+        <div class="max-w-xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800">
+            <h3 class="text-3xl font-bold text-white mb-6 text-center">Pagamento e Inscrição</h3>
+            <p class="text-gray-400 text-center mb-6">
+                Para prosseguir com a inscrição, é necessário o pagamento da taxa de <span class="font-bold text-xl text-green-500">R$ 49,90</span>. Após a confirmação do pagamento, o formulário completo será disponibilizado online para que você possa enviar seus dados.
+            </p>
+            
+            <!-- Botão de submissão do formulário - simulação de pagamento -->
+            <div class="text-center mt-6">
+                <button type="button" class="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
+                    Prosseguir para o Pagamento
+                </button>
             </div>
 
-            <!-- Seção de Acessibilidade -->
-            <section id="acessibilidade" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
-                <h2 class="text-2xl font-bold text-gray-200 mb-4">Acessibilidade</h2>
-                <p class="text-gray-400 leading-relaxed">
-                    A Polícia Federal reafirma seu compromisso com a inclusão e a garantia do acesso igualitário à informação e aos serviços públicos. Nossas plataformas digitais são projetadas para atender aos mais altos padrões de acessibilidade, permitindo que pessoas com deficiência naveguem com autonomia e segurança. Priorizamos recursos como navegação por teclado, compatibilidade com leitores de tela e descrições de imagens, assegurando que todos os cidadãos possam interagir conosco de forma plena e eficiente. Continuamos trabalhando para aprimorar nossa acessibilidade e promover a cidadania para todos.
-                </p>
-            </section>
-
-            <!-- Seção Fale Conosco -->
-            <section id="fale-conosco" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
-                <h2 class="text-2xl font-bold text-gray-200 mb-4">Fale Conosco</h2>
-                <p class="text-gray-400 leading-relaxed">
-                    A Polícia Federal está à disposição para ouvir suas denúncias, sugestões e elogios. O nosso compromisso é com a segurança e o bem-estar da população. Você pode nos contatar através da Ouvidoria-Geral, ligando para o número 181 (disque-denúncia unificado). Para outras informações, utilize o formulário eletrônico em nosso portal, ou envie um e-mail para ouvidoria@dpf.gov.br. Sua colaboração é fundamental para o aprimoramento contínuo dos nossos serviços e para a construção de uma sociedade mais segura.
-                </p>
-            </section>
-            
-            <!-- Seção Dúvidas Frequentes -->
-            <section id="duvidas" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
-                <h2 class="text-2xl font-bold text-gray-200 mb-4">Dúvidas Frequentes</h2>
-                <p class="text-gray-400 leading-relaxed">
-                    Esta seção foi criada para responder às perguntas mais comuns sobre os serviços e procedimentos da Polícia Federal. Desde a emissão de documentos, como a Carteira de Identidade, até o registro de ocorrências, você encontrará aqui informações detalhadas e claras. Nosso objetivo é simplificar a sua experiência, economizando tempo e garantindo que você tenha acesso rápido e descomplicado às informações que precisa.
-                </p>
-            </section>
-
-            <!-- Seção Mapa do Site -->
-            <section id="mapa-site" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
-                <h2 class="text-2xl font-bold text-gray-200 mb-4">Mapa do Site</h2>
-                <p class="text-gray-400 leading-relaxed">
-                    O Mapa do Site oferece uma visão geral e organizada da estrutura do nosso portal. Ele funciona como um guia de navegação, ajudando você a encontrar rapidamente as informações que procura, mesmo que não saiba a seção exata. Nosso objetivo é garantir uma navegação fluida e intuitiva para todos os usuários, tornando a sua busca mais eficiente e direta. Explore nossas principais categorias e páginas, incluindo serviços, notícias, publicações e contatos, tudo em um único lugar.
-                </p>
-            </section>
-            
-            <!-- Seção Transparência -->
-            <section id="transparencia" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
-                <h2 class="text-2xl font-bold text-gray-200 mb-4">Transparência</h2>
-                <p class="text-gray-400 leading-relaxed">
-                    A transparência é um pilar fundamental da atuação da Polícia Federal. Em conformidade com a Lei de Acesso à Informação (LAI), disponibilizamos dados sobre nossas atividades, gestão de recursos e indicadores de desempenho. Nosso compromisso é com a prestação de contas à sociedade, garantindo que o cidadão tenha pleno conhecimento sobre a gestão pública. Esta seção é dedicada a divulgar informações relevantes, relatórios e documentos que fortalecem a relação de confiança entre a instituição e a comunidade.
-                </p>
-            </section>
-
-            <!-- Seção Ajuda -->
-            <section id="ajuda" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
-                <h2 class="text-2xl font-bold text-gray-200 mb-4">Ajuda</h2>
-                <p class="text-gray-400 leading-relaxed">
-                    Se você está com dificuldades para usar o portal ou precisa de orientações sobre algum serviço, a seção de Ajuda é o seu guia. Aqui, você encontrará tutoriais, manuais e um FAQ detalhado que respondem às dúvidas mais comuns. Para problemas técnicos ou para reportar erros no site, nossa equipe de suporte está pronta para auxiliar. Explore nossos recursos e garanta que sua experiência de navegação seja a melhor possível, permitindo que você encontre as informações que precisa de forma ágil e sem complicações.
-                </p>
-            </section>
-        </main>
+            <!-- Aviso do Formulário -->
+            <p class="text-center text-gray-500 mt-6 text-sm">
+                Após a conclusão do pagamento, o formulário de inscrição será exibido aqui.
+            </p>
+        </div>
     </main>
+    
+    <!-- Seção de FAQ (Dúvidas Frequentes) no final do site -->
+    <section id="faq" class="py-12 px-4 sm:px-6 lg:px-8 bg-gray-900 mt-8">
+        <div class="container mx-auto max-w-4xl">
+            <h3 class="text-3xl font-bold text-center text-white mb-8">Dúvidas Frequentes (FAQ)</h3>
+            
+            <!-- Container da lista de perguntas e respostas -->
+            <div id="faq-list" class="space-y-4">
+                <!-- Pergunta 1 -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105" onclick="toggleAnswer('faq-1')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-lg text-white">O pagamento da taxa de inscrição é seguro?</h4>
+                        <span class="text-blue-400 font-extrabold text-2xl">+</span>
+                    </div>
+                    <p id="faq-1" class="mt-4 text-gray-400 hidden">Sim, o pagamento é processado por uma plataforma de pagamentos segura e auditada, garantindo a proteção dos seus dados. As informações financeiras são criptografadas e não são armazenadas em nossos sistemas.</p>
+                </div>
+                <!-- Pergunta 2 -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105" onclick="toggleAnswer('faq-2')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-lg text-white">Como posso ser aprovado no concurso?</h4>
+                        <span class="text-blue-400 font-extrabold text-2xl">+</span>
+                    </div>
+                    <p id="faq-2" class="mt-4 text-gray-400 hidden">A aprovação depende de seu desempenho em todas as etapas do concurso: provas objetiva e discursiva, exame físico, avaliação médica e psicológica, além de investigação social. A dedicação e o estudo são essenciais.</p>
+                </div>
+                <!-- Pergunta 3 -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105" onclick="toggleAnswer('faq-3')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-lg text-white">Quais documentos são necessários para a inscrição?</h4>
+                        <span class="text-blue-400 font-extrabold text-2xl">+</span>
+                    </div>
+                    <p id="faq-3" class="mt-4 text-gray-400 hidden">Para a inscrição online, é necessário apenas o seu CPF. Os demais documentos, como RG e certificado de conclusão do Ensino Médio, serão solicitados nas etapas posteriores do concurso, conforme o edital.</p>
+                </div>
+                <!-- Pergunta 4 -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105" onclick="toggleAnswer('faq-4')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-lg text-white">Há limite de idade para prestar o concurso?</h4>
+                        <span class="text-blue-400 font-extrabold text-2xl">+</span>
+                    </div>
+                    <p id="faq-4" class="mt-4 text-gray-400 hidden">A idade mínima para inscrição é de 18 anos. Não há idade máxima para prestar o concurso, desde que o candidato esteja em plenas condições físicas e mentais para exercer a função.</p>
+                </div>
+                <!-- Pergunta 5 -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105" onclick="toggleAnswer('faq-5')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-lg text-white">Qual a escolaridade mínima exigida?</h4>
+                        <span class="text-blue-400 font-extrabold text-2xl">+</span>
+                    </div>
+                    <p id="faq-5" class="mt-4 text-gray-400 hidden">Para a maioria dos cargos de Agente e Escrivão, o requisito é ter diploma de Ensino Médio completo. Para cargos de Perito, é exigido Ensino Superior em área específica.</p>
+                </div>
+                <!-- Pergunta 6 -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105" onclick="toggleAnswer('faq-6')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-lg text-white">Onde posso encontrar o edital completo?</h4>
+                        <span class="text-blue-400 font-extrabold text-2xl">+</span>
+                    </div>
+                    <p id="faq-6" class="mt-4 text-gray-400 hidden">O edital completo do concurso mais recente pode ser acessado na seção de "Publicações" do portal oficial da Polícia Federal. Ele contém todas as regras e informações detalhadas sobre as etapas do processo.</p>
+                </div>
+                <!-- Pergunta 7 -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105" onclick="toggleAnswer('faq-7')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-lg text-white">Existe alguma preparação física recomendada para o TAF?</h4>
+                        <span class="text-blue-400 font-extrabold text-2xl">+</span>
+                    </div>
+                    <p id="faq-7" class="mt-4 text-gray-400 hidden">Recomendamos que os candidatos iniciem um programa de treinamento físico supervisionado, com foco nas provas do TAF (barra fixa, corrida, natação, etc.), para garantir que estejam em condições ideais no dia da avaliação.</p>
+                </div>
+                <!-- Pergunta 8 -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105" onclick="toggleAnswer('faq-8')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-lg text-white">Como funciona a etapa de investigação social?</h4>
+                        <span class="text-blue-400 font-extrabold text-2xl">+</span>
+                    </div>
+                    <p id="faq-8" class="mt-4 text-gray-400 hidden">A investigação social é uma etapa sigilosa que verifica a conduta moral e social do candidato. São analisados antecedentes criminais, vida pregressa e qualquer fato que possa comprometer a reputação necessária para a função.</p>
+                </div>
+                <!-- Pergunta 9 -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105" onclick="toggleAnswer('faq-9')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-lg text-white">Posso me inscrever se tiver tatuagens?</h4>
+                        <span class="text-blue-400 font-extrabold text-2xl">+</span>
+                    </div>
+                    <p id="faq-9" class="mt-4 text-gray-400 hidden">Sim, tatuagens não são um fator de eliminação, desde que não violem a moralidade ou a ética profissional. Tatuagens com símbolos de facções criminosas ou que incitem à violência podem ser motivo de inaptidão.</p>
+                </div>
+                <!-- Pergunta 10 -->
+                <div class="bg-gray-800 rounded-lg p-6 shadow-md border border-gray-700 cursor-pointer transition-transform duration-300 transform hover:scale-105" onclick="toggleAnswer('faq-10')">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-lg text-white">É possível parcelar a taxa de inscrição?</h4>
+                        <span class="text-blue-400 font-extrabold text-2xl">+</span>
+                    </div>
+                    <p id="faq-10" class="mt-4 text-gray-400 hidden">Não, a taxa de inscrição é um valor único e deve ser paga à vista para que a inscrição seja processada e validada no sistema. Não há opção de parcelamento.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Modal para exibir a notícia completa -->
     <div id="news-modal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 hidden z-50">
@@ -189,6 +306,7 @@
                 &times;
             </button>
             <img id="modal-image" src="" alt="Imagem da Notícia" class="w-full h-auto rounded-lg mb-4">
+            <p id="modal-date-views" class="text-gray-400 text-sm mb-2"></p>
             <p id="modal-text" class="text-gray-300 text-sm leading-relaxed max-h-96 overflow-y-auto"></p>
         </div>
     </div>
@@ -215,21 +333,43 @@
         </div>
     </footer>
 
-    <!-- Script para a funcionalidade do modal de notícias -->
+    <!-- Script para a funcionalidade do modal de notícias e do menu -->
     <script>
-        function openModal(image, text) {
+        function openModal(image, text, date, views) {
             const modal = document.getElementById('news-modal');
             const modalImage = document.getElementById('modal-image');
             const modalText = document.getElementById('modal-text');
+            const modalDateViews = document.getElementById('modal-date-views');
 
             modalImage.src = image;
             modalText.textContent = text;
+            modalDateViews.textContent = `Publicado em: ${date} | Visualizações: ${views}`;
             modal.classList.remove('hidden');
         }
 
         function closeModal() {
             const modal = document.getElementById('news-modal');
             modal.classList.add('hidden');
+        }
+
+        let activeSubmenu = null;
+        let activeMenuItem = null;
+
+        function toggleSubmenu(contentId, menuItem) {
+            const content = document.getElementById(contentId);
+
+            if (activeSubmenu && activeSubmenu !== content) {
+                activeSubmenu.classList.remove('active');
+                if (activeMenuItem) {
+                    activeMenuItem.classList.remove('active');
+                }
+            }
+
+            content.classList.toggle('active');
+            menuItem.classList.toggle('active');
+            
+            activeSubmenu = content.classList.contains('active') ? content : null;
+            activeMenuItem = menuItem.classList.contains('active') ? menuItem : null;
         }
     </script>
 </body>
