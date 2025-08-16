@@ -10,14 +10,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <!-- Inclui o CDN do Tailwind CSS para estilização -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inclui a biblioteca qrcode.js para gerar o QR Code -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
-        /* Define a fonte padrão 'Inter' e um fundo escuro para a página.
-           O fundo escuro e a cor da fonte são combinados com classes Tailwind no body. */
+        /* Define a fonte padrão 'Inter' para todo o corpo do documento. */
         body {
             font-family: 'Inter', sans-serif;
         }
 
-        /* Estilo para a barra de rolagem da seção de notícias, não suportado pelo Tailwind */
+        /* Estilo para a barra de rolagem da seção de notícias, personalizado para melhor visualização. */
         .scrolling-container::-webkit-scrollbar {
             height: 8px;
         }
@@ -29,13 +30,12 @@
             background-color: #2d3748;
         }
 
-        /* Estilo do item do menu com a linha de sublinhado, usando pseudo-elementos */
+        /* Estilo para o item do menu com a linha de sublinhado animada, usando pseudo-elementos. */
         .menu-item {
             position: relative;
             cursor: pointer;
             transition: color 0.3s ease;
         }
-
         .menu-item::after {
             content: '';
             position: absolute;
@@ -47,35 +47,32 @@
             transition: all 0.3s ease;
             transform: translateX(-50%);
         }
-
         .menu-item.active::after {
             width: 100%;
         }
 
-        /* Estilo para a resposta do FAQ */
+        /* Estilo para a resposta do FAQ, com animação de expansão. */
         .faq-answer {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.5s ease-out;
             padding: 0 1rem;
         }
-
         .faq-answer.active {
-            max-height: 300px; /* Ajuste para o tamanho máximo da resposta */
+            max-height: 300px; /* Altura ajustável conforme a necessidade do conteúdo. */
             padding: 1rem 1rem;
             transition: max-height 0.5s ease-in;
         }
 
-        /* Estilo para o formulário de qualificação dinâmico */
+        /* Estilo para o formulário de qualificação dinâmico. */
         .form-step {
             display: none;
         }
-
         .form-step.active {
             display: block;
         }
 
-        /* Novo estilo para as opções de resposta */
+        /* Estilo para as opções de resposta no formulário, com efeito de seleção. */
         .form-choice-btn {
             @apply w-full px-6 py-3 rounded-lg border border-gray-700 text-gray-300 font-medium text-left cursor-pointer;
             @apply transition-colors duration-200 hover:bg-gray-700;
@@ -88,46 +85,63 @@
             width: 1rem;
             height: 1rem;
             border-radius: 50%;
-            border: 2px solid #6b7280; /* Cor da borda da bolinha */
+            border: 2px solid #6b7280;
             margin-right: 0.75rem;
             transition: border-color 0.2s ease, background-color 0.2s ease;
         }
-
         .form-choice-btn.selected {
             @apply bg-blue-600 text-white border-blue-600;
         }
         .form-choice-btn.selected::before {
-            border-color: #ffffff; /* Cor da borda da bolinha quando selecionada */
-            background-color: #ffffff; /* Cor de preenchimento da bolinha quando selecionada */
+            border-color: #ffffff;
+            background-color: #ffffff;
         }
     </style>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-950 text-gray-200">
 
-    <!-- Scripts do Firebase -->
+    <!-- Scripts do Firebase - A ordem de importação é crucial para o funcionamento. -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Variáveis globais do ambiente.
+        // Variáveis globais do ambiente, que são fornecidas pelo sistema.
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const firebaseConfig = {
-            apiKey: "AIzaSyBMaQNpSMHQBYTodATJz_qCGgVKrFajljI",
-            authDomain: "pfcon-a79aa.firebaseapp.com",
-            projectId: "pfcon-a79aa",
-            storageBucket: "pfcon-a79aa.firebasestorage.app",
-            messagingSenderId: "212117496413",
-            appId: "1:212117496413:web:6483c80b53de81a88da3b4",
-            measurementId: "G-Y0QXZQD02F"
-        };
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
 
         let db, auth, userId;
 
-        // Função para inicializar o Firebase e o usuário
+        /**
+         * @description Exibe uma caixa de mensagem personalizada para o usuário.
+         * @param {string} title - O título da mensagem.
+         * @param {string} message - O corpo da mensagem.
+         */
+        function showMessageBox(title, message) {
+            document.getElementById('message-title').textContent = title;
+            document.getElementById('message-body').textContent = message;
+            document.getElementById('message-modal').classList.remove('hidden');
+        }
+
+        /**
+         * @description Oculta a caixa de mensagem personalizada.
+         */
+        function hideMessageBox() {
+            document.getElementById('message-modal').classList.add('hidden');
+        }
+
+        /**
+         * @description Inicializa o Firebase e o processo de autenticação do usuário.
+         */
         async function initFirebase() {
             try {
+                // Certifica-se de que a configuração do Firebase está presente.
+                if (!firebaseConfig || Object.keys(firebaseConfig).length === 0) {
+                    showMessageBox('Erro', 'Configuração do Firebase não encontrada. Por favor, tente recarregar a página.');
+                    return;
+                }
+
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
@@ -142,7 +156,7 @@
                     if (user) {
                         userId = user.uid;
                         console.log("Usuário autenticado:", userId);
-                        // Inicia o listener para o status de pagamento
+                        // Inicia o listener para o status de pagamento após a autenticação.
                         setupPaymentListener();
                     } else {
                         console.log("Nenhum usuário logado.");
@@ -153,9 +167,12 @@
                 showMessageBox('Erro', 'Não foi possível conectar ao servidor. Tente novamente mais tarde.');
             }
         }
-
-        // Função para simular o pagamento e atualizar o status no Firestore
-        async function makePayment() {
+        
+        /**
+         * @description Confirma o pagamento e atualiza o status no Firestore.
+         * Esta função é chamada após o usuário simular o pagamento via Pix.
+         */
+        async function confirmPayment() {
             if (!userId) {
                 showMessageBox('Erro', 'Usuário não autenticado. Tente recarregar a página.');
                 return;
@@ -168,13 +185,18 @@
                 await setDoc(userDocRef, paymentStatus);
                 console.log("Status de pagamento atualizado com sucesso!");
                 showMessageBox('Sucesso!', 'Pagamento processado. Agora preencha o formulário para completar a sua inscrição.');
+                // A seção do formulário completo será exibida automaticamente pelo listener.
+                document.getElementById('pix-qr-section').classList.add('hidden');
             } catch (error) {
                 console.error("Erro ao atualizar o status de pagamento:", error);
                 showMessageBox('Erro', 'Não foi possível processar o pagamento. Tente novamente.');
             }
         }
 
-        // Listener para o status de pagamento do usuário
+        /**
+         * @description Configura um listener em tempo real para o status de pagamento do usuário.
+         * A visibilidade do formulário de inscrição é controlada por este status.
+         */
         function setupPaymentListener() {
             const userDocRef = doc(db, `artifacts/${appId}/users/${userId}/registration/status`);
             onSnapshot(userDocRef, (docSnap) => {
@@ -187,13 +209,15 @@
                     registrationSection.classList.remove('hidden');
                 } else {
                     console.log("Pagamento não detectado ou pendente.");
+                    // Mantém as seções ocultas se o pagamento não foi feito.
+                    // Isso evita que o formulário apareça antes do pagamento.
                     paymentSection.classList.remove('hidden');
                     registrationSection.classList.add('hidden');
                 }
             });
         }
         
-        // Chamada de inicialização
+        // Inicia a aplicação após o carregamento da janela.
         window.onload = initFirebase;
     </script>
 
@@ -374,17 +398,45 @@
                 </div>
             </section>
 
-            <!-- Seção de Pagamento (inicialmente oculta) -->
+            <!-- Seção de Pagamento (originalmente, agora exibe o botão antes do QR code) -->
             <section id="payment-section" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800 hidden">
                 <h3 class="text-3xl font-bold text-white mb-6 text-center">Pagamento e Inscrição</h3>
                 <p class="text-gray-400 text-center mb-6">
-                    Para prosseguir com a inscrição, é necessário o pagamento da taxa de <span class="font-bold text-xl text-green-500">R$ 49,90</span>. Após a confirmação do pagamento, o formulário completo será disponibilizado online para que você possa enviar seus dados.
+                    Para prosseguir com a inscrição, é necessário o pagamento da taxa de <span class="font-bold text-xl text-green-500">R$ 49,90</span>.
                 </p>
                 
                 <!-- Botão de submissão do formulário - simulação de pagamento -->
                 <div class="text-center mt-6">
-                    <button id="payment-btn" type="button" onclick="makePayment()" class="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
-                        Prosseguir para o Pagamento
+                    <!-- Agora este botão chama a função que exibe o QR Code -->
+                    <button id="payment-btn" type="button" onclick="showPixQrCode()" class="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
+                        Gerar QR Code Pix
+                    </button>
+                </div>
+            </section>
+            
+            <!-- NOVA Seção para exibir o QR Code do Pix -->
+            <section id="pix-qr-section" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800 hidden">
+                <h3 class="text-3xl font-bold text-white mb-6 text-center">Efetue o Pagamento via Pix</h3>
+                <p class="text-gray-400 text-center mb-6">
+                    Escaneie o QR Code abaixo com o aplicativo do seu banco ou use a chave Pix para copiar o código.
+                </p>
+                
+                <div id="qrcode-container" class="w-48 h-48 mx-auto mb-6 bg-white rounded-lg p-2">
+                    <!-- O QR Code será gerado aqui via JavaScript -->
+                </div>
+
+                <div class="space-y-4">
+                    <p class="text-center text-gray-400">Ou use o código Pix:</p>
+                    <div class="relative">
+                        <input type="text" id="pix-key" value="" readonly class="w-full px-4 py-2 mt-1 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-center">
+                        <button id="copy-btn" class="absolute right-0 top-0 mt-1 mr-1 p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" onclick="copyPixKey()">
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M16 1h-12c-1.1 0-2 .9-2 2v14h2v-14h10v-2zm3 4h-10c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-14c0-1.1-.9-2-2-2zm0 16h-10v-14h10v14z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <button type="button" id="confirm-payment-btn" onclick="confirmPayment()" class="w-full px-8 py-3 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-300 transform hover:scale-105">
+                        Já Paguei, Continuar Inscrição
                     </button>
                 </div>
             </section>
@@ -605,17 +657,7 @@
         const totalSteps = 7; // Atualizado para 7 perguntas
         let userAnswers = {};
 
-        // Função para mostrar uma caixa de mensagem personalizada
-        function showMessageBox(title, message) {
-            document.getElementById('message-title').textContent = title;
-            document.getElementById('message-body').textContent = message;
-            document.getElementById('message-modal').classList.remove('hidden');
-        }
-
-        // Função para esconder a caixa de mensagem
-        function hideMessageBox() {
-            document.getElementById('message-modal').classList.add('hidden');
-        }
+        // A função showMessageBox e hideMessageBox foram movidas para a seção de scripts do Firebase acima para serem acessíveis a ambos os scripts.
 
         // Função para simular busca no site
         function performSearch() {
@@ -627,7 +669,14 @@
             showMessageBox('Funcionalidade', `Buscando por: "${query}"... (Esta é uma funcionalidade de demonstração)` );
         }
 
-        // Função para abrir a nova página da notícia
+        /**
+         * @description Abre a página de notícia, preenchendo-a com o conteúdo da notícia clicada.
+         * @param {string} title - O título da notícia.
+         * @param {string} image - A URL da imagem da notícia.
+         * @param {string} text - O texto completo da notícia.
+         * @param {string} date - A data de publicação.
+         * @param {string} views - O número de visualizações.
+         */
         function openNewsPage(title, image, text, date, views) {
             const mainPage = document.getElementById('main-page');
             const newsPage = document.getElementById('news-page');
@@ -658,7 +707,11 @@
         let activeMenuItem = null;
         let activeContent = null;
 
-        // Função para expandir e recolher o submenu na navbar
+        /**
+         * @description Expande e recolhe o submenu na barra de navegação.
+         * @param {Event} event - O evento de clique.
+         * @param {string} contentId - O ID do conteúdo a ser exibido.
+         */
         function toggleSubmenu(event, contentId) {
             event.preventDefault(); // Evita que o link tente navegar
 
@@ -734,7 +787,10 @@
             }
         }
 
-        // Adiciona funcionalidade de expansão e recolhimento ao FAQ
+        /**
+         * @description Adiciona funcionalidade de expansão e recolhimento aos itens do FAQ.
+         * @param {string} answerId - O ID da resposta a ser expandida/recolhida.
+         */
         function toggleAnswer(answerId) {
             const answer = document.getElementById(answerId);
             const icon = document.getElementById('icon-' + answerId);
@@ -827,6 +883,52 @@
             paymentSection.classList.remove('hidden');
             showMessageBox('Qualificação Concluída', 'Obrigado por responder. Você está qualificado para prosseguir com a inscrição.');
         });
+        
+        /**
+         * @description Exibe a seção de pagamento com o QR Code Pix e o código.
+         */
+        function showPixQrCode() {
+            const pixQrSection = document.getElementById('pix-qr-section');
+            const paymentSection = document.getElementById('payment-section');
+            const qrcodeContainer = document.getElementById('qrcode-container');
+            const pixKeyInput = document.getElementById('pix-key');
+
+            // Esconde a seção de pagamento e mostra a seção do QR Code
+            paymentSection.classList.add('hidden');
+            pixQrSection.classList.remove('hidden');
+
+            // Chave Pix estática para demonstração (substitua por uma chave real em produção)
+            const pixKey = "00020126360014br.gov.bcb.pix0114987654321013444988755204000053039865802BR5915NOME DO RECEBEDOR6008BRASILIA62070503***6304FC7D";
+            pixKeyInput.value = pixKey;
+
+            // Limpa o container do QR Code caso já exista um
+            qrcodeContainer.innerHTML = '';
+
+            // Gera o QR Code
+            new QRCode(qrcodeContainer, {
+                text: pixKey,
+                width: 160,
+                height: 160,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        /**
+         * @description Copia o código da chave Pix para a área de transferência.
+         */
+        function copyPixKey() {
+            const pixKeyInput = document.getElementById('pix-key');
+            pixKeyInput.select();
+            pixKeyInput.setSelectionRange(0, 99999); // Para mobile
+            try {
+                document.execCommand('copy');
+                showMessageBox('Sucesso!', 'Código Pix copiado para a área de transferência.');
+            } catch (err) {
+                showMessageBox('Erro', 'Não foi possível copiar o código. Por favor, copie manualmente.');
+            }
+        }
 
         // Adiciona funcionalidade ao formulário de cadastro
         document.getElementById('registration-form').addEventListener('submit', (event) => {
