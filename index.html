@@ -10,8 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
     <!-- Inclui o CDN do Tailwind CSS para estilização -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Inclui a biblioteca qrcode.js para gerar o QR Code -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <style>
         /* Define a fonte padrão 'Inter' para todo o corpo do documento. */
         body {
@@ -95,6 +93,14 @@
         .form-choice-btn.selected::before {
             border-color: #ffffff;
             background-color: #ffffff;
+        }
+
+        /* Estilo para o iframe de pagamento, garantindo que ele seja responsivo e se encaixe bem. */
+        .payment-iframe {
+            width: 100%;
+            height: 600px; /* Altura fixa para evitar mudanças no layout ao carregar */
+            border: none;
+            border-radius: 0.75rem;
         }
     </style>
 </head>
@@ -275,45 +281,35 @@
                     </form>
                 </div>
             </section>
-
-            <!-- Seção de Pagamento (exibida após o formulário de qualificação) -->
+            
+            <!-- Seção de Pagamento (exibida após a qualificação, agora com um iframe) -->
             <section id="payment-section" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800 hidden">
                 <h3 class="text-3xl font-bold text-white mb-6 text-center">Pagamento e Inscrição</h3>
                 <p class="text-gray-400 text-center mb-6">
                     Para prosseguir com a inscrição, é necessário o pagamento da taxa de <span class="font-bold text-xl text-green-500">R$ 49,90</span>.
                 </p>
                 
-                <!-- Botão que gera o QR Code Pix -->
+                <!-- Botão que gera o iframe de pagamento -->
                 <div class="text-center mt-6">
-                    <button id="payment-btn" type="button" onclick="showPixQrCode()" class="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
-                        Gerar QR Code Pix
+                    <button id="payment-btn" type="button" onclick="showMercadoPago()" class="w-full px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-300 transform hover:scale-105">
+                        Prosseguir para Pagamento Seguro
                     </button>
                 </div>
             </section>
             
-            <!-- Seção para exibir o QR Code do Pix -->
-            <section id="pix-qr-section" class="max-w-xl mx-auto bg-gray-900 p-8 rounded-2xl shadow-xl border border-gray-800 hidden">
-                <h3 class="text-3xl font-bold text-white mb-6 text-center">Efetue o Pagamento via Pix</h3>
-                <p class="text-gray-400 text-center mb-6">
-                    Escaneie o QR Code abaixo com o aplicativo do seu banco ou use a chave Pix para copiar o código.
-                </p>
-                
-                <div id="qrcode-container" class="w-48 h-48 mx-auto mb-6 bg-white rounded-lg p-2">
-                    <!-- O QR Code será gerado aqui via JavaScript -->
+            <!-- NOVA Seção para exibir o iframe de pagamento do Mercado Pago -->
+            <section id="mercadopago-section" class="max-w-xl mx-auto bg-gray-900 p-4 sm:p-8 rounded-2xl shadow-xl border border-gray-800 hidden">
+                <div class="flex flex-col items-center justify-center">
+                    <h3 class="text-3xl font-bold text-white mb-4 text-center">Finalize o Pagamento com Mercado Pago</h3>
+                    <p class="text-gray-400 text-center mb-6">
+                        Você será redirecionado para a página segura de pagamento.
+                    </p>
+                    <!-- O iframe que carrega o link do Mercado Pago -->
+                    <iframe id="mercadopago-iframe" class="payment-iframe" src="https://mpago.li/212fFFk"></iframe>
                 </div>
-
-                <div class="space-y-4">
-                    <p class="text-center text-gray-400">Ou use o código Pix:</p>
-                    <div class="relative">
-                        <input type="text" id="pix-key" value="" readonly class="w-full px-4 py-2 mt-1 rounded-md bg-gray-800 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 text-center">
-                        <button id="copy-btn" class="absolute right-0 top-0 mt-1 mr-1 p-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" onclick="copyPixKey()">
-                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M16 1h-12c-1.1 0-2 .9-2 2v14h2v-14h10v-2zm3 4h-10c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2v-14c0-1.1-.9-2-2-2zm0 16h-10v-14h10v14z"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <!-- Este botão agora avança para o próximo formulário sem checar o Firebase -->
-                    <button type="button" id="confirm-payment-btn" onclick="continueRegistration()" class="w-full px-8 py-3 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-300 transform hover:scale-105">
+                
+                <div class="mt-8 text-center">
+                    <button type="button" id="continue-registration-btn" onclick="continueRegistration()" class="w-full px-8 py-3 bg-green-600 text-white font-bold rounded-lg shadow-md hover:bg-green-700 transition-colors duration-300 transform hover:scale-105">
                         Já Paguei, Continuar Inscrição
                     </button>
                 </div>
@@ -760,7 +756,7 @@
         });
 
         /**
-         * @description Adiciona funcionalidade ao formulário de qualificação.
+         * @description Mostra a seção de pagamento.
          */
         document.getElementById('qualification-form').addEventListener('submit', (event) => {
             event.preventDefault(); // Impede o envio do formulário padrão
@@ -773,65 +769,42 @@
             paymentSection.classList.remove('hidden');
             showMessageBox('Qualificação Concluída', 'Obrigado por responder. Você está qualificado para prosseguir com a inscrição.');
         });
-        
+
         /**
-         * @description Exibe a seção de pagamento com o QR Code Pix e o código.
+         * @description Exibe a seção de pagamento com o iframe do Mercado Pago.
          */
-        function showPixQrCode() {
-            const pixQrSection = document.getElementById('pix-qr-section');
+        function showMercadoPago() {
             const paymentSection = document.getElementById('payment-section');
-            const qrcodeContainer = document.getElementById('qrcode-container');
-            const pixKeyInput = document.getElementById('pix-key');
-
-            // Esconde a seção de pagamento e mostra a seção do QR Code
+            const mercadopagoSection = document.getElementById('mercadopago-section');
+            
             paymentSection.classList.add('hidden');
-            pixQrSection.classList.remove('hidden');
-
-            // Chave Pix estática para demonstração (substitua por uma chave real em produção)
-            const pixKey = "00020126360014br.gov.bcb.pix0114987654321013444988755204000053039865802BR5915NOME DO RECEBEDOR6008BRASILIA62070503***6304FC7D";
-            pixKeyInput.value = pixKey;
-
-            // Limpa o container do QR Code caso já exista um
-            qrcodeContainer.innerHTML = '';
-
-            // Gera o QR Code
-            new QRCode(qrcodeContainer, {
-                text: pixKey,
-                width: 160,
-                height: 160,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
+            mercadopagoSection.classList.remove('hidden');
         }
 
         /**
          * @description Continua para o formulário de registro, simulando o pagamento.
          */
         function continueRegistration() {
-            const pixQrSection = document.getElementById('pix-qr-section');
+            const mercadopagoSection = document.getElementById('mercadopago-section');
             const registrationSection = document.getElementById('registration-form-section');
 
-            // Esconde a seção do QR Code e mostra o formulário de inscrição
-            pixQrSection.classList.add('hidden');
+            // Esconde a seção do Mercado Pago e mostra o formulário de inscrição
+            mercadopagoSection.classList.add('hidden');
             registrationSection.classList.remove('hidden');
             
             showMessageBox('Pagamento Concluído', 'O pagamento foi confirmado. Agora você pode preencher o formulário para finalizar sua inscrição.');
         }
 
         /**
-         * @description Copia o código da chave Pix para a área de transferência.
+         * @description Simula a funcionalidade de busca, que não está implementada.
          */
-        function copyPixKey() {
-            const pixKeyInput = document.getElementById('pix-key');
-            pixKeyInput.select();
-            pixKeyInput.setSelectionRange(0, 99999); // Para mobile
-            try {
-                document.execCommand('copy');
-                showMessageBox('Sucesso!', 'Código Pix copiado para a área de transferência.');
-            } catch (err) {
-                showMessageBox('Erro', 'Não foi possível copiar o código. Por favor, copie manualmente.');
+        function performSearch() {
+            const query = document.getElementById('search-input').value;
+            if (query.trim() === '') {
+                showMessageBox('Aviso', 'Por favor, digite algo para buscar.');
+                return;
             }
+            showMessageBox('Funcionalidade', `Buscando por: "${query}"... (Esta é uma funcionalidade de demonstração)` );
         }
 
         // Adiciona funcionalidade ao formulário de cadastro
