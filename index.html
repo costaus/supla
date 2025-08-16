@@ -37,7 +37,7 @@
             outline-offset: 2px;
         }
 
-        /* Estilo para o sublinhado animado nas abas do menu */
+        /* Estilo do item do menu com a linha de sublinhado */
         .menu-item {
             position: relative;
             cursor: pointer;
@@ -56,8 +56,23 @@
             transform: translateX(-50%);
         }
 
-        .menu-item:hover::after, .menu-item.active::after {
+        .menu-item.active::after {
             width: 100%;
+        }
+
+        /* Estilo do conteúdo do submenu com animação de expansão */
+        .submenu-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+            padding: 0;
+            text-align: center;
+        }
+
+        .submenu-content.active {
+            max-height: 200px; /* Ajuste conforme o conteúdo */
+            padding: 1rem;
+            transition: max-height 0.5s ease-in;
         }
     </style>
 </head>
@@ -77,14 +92,33 @@
     <!-- Menu de navegação (navbar) -->
     <nav class="bg-gray-800 py-6 shadow-sm border-t border-b border-gray-700">
         <ul class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-8 text-gray-300 font-semibold text-lg">
-            <li><a href="#acessibilidade" class="menu-item" onclick="scrollToSection('acessibilidade', this)">Acessibilidade</a></li>
-            <li><a href="#fale-conosco" class="menu-item" onclick="scrollToSection('fale-conosco', this)">Fale Conosco</a></li>
-            <li><a href="#duvidas" class="menu-item" onclick="scrollToSection('faq', this)">Dúvidas Frequentes</a></li>
-            <li><a href="#mapa-site" class="menu-item" onclick="scrollToSection('mapa-site', this)">Mapa do Site</a></li>
-            <li><a href="#transparencia" class="menu-item" onclick="scrollToSection('transparencia', this)">Transparência</a></li>
-            <li><a href="#ajuda" class="menu-item" onclick="scrollToSection('ajuda', this)">Ajuda</a></li>
+            <li><a href="#" id="acessibilidade-btn" class="menu-item" onclick="toggleSubmenu(event, 'acessibilidade-content')">Acessibilidade</a></li>
+            <li><a href="#" id="fale-conosco-btn" class="menu-item" onclick="toggleSubmenu(event, 'fale-conosco-content')">Fale Conosco</a></li>
+            <li><a href="#" id="duvidas-btn" class="menu-item" onclick="scrollToFAQ()">Dúvidas Frequentes</a></li>
+            <li><a href="#" id="mapa-site-btn" class="menu-item" onclick="toggleSubmenu(event, 'mapa-site-content')">Mapa do Site</a></li>
+            <li><a href="#" id="transparencia-btn" class="menu-item" onclick="toggleSubmenu(event, 'transparencia-content')">Transparência</a></li>
+            <li><a href="#" id="ajuda-btn" class="menu-item" onclick="toggleSubmenu(event, 'ajuda-content')">Ajuda</a></li>
         </ul>
     </nav>
+
+    <!-- Seções de conteúdo que se expandem abaixo da navbar -->
+    <section id="submenu-container" class="bg-gray-900 mx-auto w-full">
+        <div id="acessibilidade-content" class="submenu-content">
+            <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A Polícia Federal reafirma seu compromisso com a inclusão e o acesso igualitário à informação. Nossas plataformas digitais são projetadas para atender aos mais altos padrões de acessibilidade, permitindo que pessoas com deficiência naveguem com autonomia e segurança.</p>
+        </div>
+        <div id="fale-conosco-content" class="submenu-content">
+            <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A Polícia Federal está à disposição para ouvir suas denúncias, sugestões e elogios. Você pode nos contatar através da Ouvidoria-Geral, ligando para 181 (disque-denúncia unificado). Para outras informações, envie um e-mail para ouvidoria@dpf.gov.br.</p>
+        </div>
+        <div id="mapa-site-content" class="submenu-content">
+            <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">O Mapa do Site oferece uma visão geral e organizada da estrutura do nosso portal. Ele funciona como um guia de navegação, ajudando você a encontrar rapidamente as informações que procura, tornando sua busca mais eficiente e direta. Explore nossas principais categorias.</p>
+        </div>
+        <div id="transparencia-content" class="submenu-content">
+            <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">A transparência é um pilar fundamental da atuação da Polícia Federal. Em conformidade com a Lei de Acesso à Informação (LAI), disponibilizamos dados sobre nossas atividades e gestão de recursos, garantindo a prestação de contas à sociedade.</p>
+        </div>
+        <div id="ajuda-content" class="submenu-content">
+            <p class="text-gray-300 leading-relaxed max-w-xl mx-auto">Se você está com dificuldades para usar o portal, a seção de Ajuda é o seu guia. Aqui, você encontrará tutoriais e um FAQ detalhado que respondem às dúvidas mais comuns. Nossa equipe de suporte está pronta para auxiliar e garantir a melhor experiência.</p>
+        </div>
+    </section>
     
     <!-- Seção de Rolagem de Notícias -->
     <section id="noticias" class="py-10 bg-gray-900 rounded-lg shadow-md mt-8 mx-4 sm:mx-auto max-w-7xl">
@@ -102,7 +136,7 @@
                 <div class="flex-none w-64 bg-gray-800 rounded-lg shadow-md overflow-hidden cursor-pointer transform transition-transform hover:scale-105" onclick="openModal('https://iili.io/FboO1OG.jpg', 'Em decorrência de investigações de crimes patrimoniais, especialmente furto a residências, a Polícia Civil de Minas Gerais (PCMG) cumpriu a prisão preventiva de três alvos, na sexta-feira (8/8) e ontem (13/8). Eles são suspeitos de atuar na capital e na Região Metropolitana de Belo Horizonte (RMBH) e estariam ampliando as atividades criminosas para o interior. O trio foi preso a partir de trabalho investigativo conduzido pelo Departamento Estadual de Investigação de Crimes Contra o Patrimônio (Depatri) para apurar um furto ocorrido em 24 de agosto de 2024 no bairro Belvedere, região Centro-Sul de Belo Horizonte, com participação de quatro suspeitos – a PCMG trabalha na identificação do último. Na ocasião, conforme as vítimas, foram levados joias e objetos pessoais estimados em R$ 200 mil. De acordo com o delegado Gustavo Barletta, titular da 2ª Delegacia Especializada em Investigação e Repressão ao Furto e Roubo, durante a ação policial realizada recentemente, ainda foram apreendidos um veículo roubado, objetos usados para arrombamento, além de um violão, uma caixa de som e uma televisão – subtraídos no sábado passado (9/8) na região do Barreiro – entre outros materiais variados. Atuação: Barletta explicou que nem sempre os suspeitos agem em conjunto. “Na verdade, eles conseguem as informações, ou decidem fazer os arrombamentos, e vêem praticamente quem está disponível naquele momento para praticar o crime. Nesse sentido, eles trocam veículos, alugam carros, flutuam entre uma quadrilha e outra”, observou. Segundo o delegado, as apurações indicam que os alvos teriam começado a atuar também em cidades do interior: Temos informações que eles já estão se aventurando em Divinópolis [Centro-Oeste], em Juiz de Fora [Zona da Mata], Montes Claros [Norte de Minas] e Uberlândia [Triângulo Mineiro], enfim, onde acreditam que possam ter sucesso nos crimes”. Prisões: Na última sexta-feira (8/8), foi efetuada a prisão do investigado de 30 anos, no bairro Alto Vera Cruz, região Leste da capital. Ontem (13/8), os policiais civis prenderam outro alvo, de 26 anos, na cidade de Sabará, na RMBH. Já o terceiro, de 31, já está acautelado em presídio por roubo e teve o mandado formalizado pelo crime de furto no Belvedere. Agora, os três estão no sistema prisional, à disposição da Justiça.', '13/08/2025 10:45', '8.910')">
                     <img src="https://iili.io/FboO1OG.jpg" alt="" class="w-full h-36 object-cover rounded-t-lg">
                     <div class="p-4">
-                        <h4 class="font-bold text-gray-200 text-sm">PCMG prende trio suspeito de furtos a residências em BH.</h4>
+                        <h4 class="font-bold text-gray-200 text-sm">PCMG prende trio suspeito de furtos a residências.</h4>
                     </div>
                 </div>
                 <!-- Notícia 3 -->
@@ -154,44 +188,6 @@
         </div>
     </main>
 
-    <!-- Seções de conteúdo das abas -->
-    <div id="sections-container" class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <section id="acessibilidade" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
-            <h2 class="text-2xl font-bold text-gray-200 mb-4">Acessibilidade</h2>
-            <p class="text-gray-400 leading-relaxed">
-                A Polícia Federal reafirma seu compromisso com a inclusão e o acesso igualitário à informação e aos serviços públicos. Nossas plataformas digitais são projetadas para atender aos mais altos padrões de acessibilidade, permitindo que pessoas com deficiência naveguem com autonomia e segurança. Priorizamos recursos como navegação por teclado, compatibilidade com leitores de tela e descrições de imagens, assegurando que todos os cidadãos possam interagir conosco de forma plena e eficiente. Continuamos trabalhando para aprimorar nossa acessibilidade e promover a cidadania para todos.
-            </p>
-        </section>
-
-        <section id="fale-conosco" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
-            <h2 class="text-2xl font-bold text-gray-200 mb-4">Fale Conosco</h2>
-            <p class="text-gray-400 leading-relaxed">
-                A Polícia Federal está à disposição para ouvir suas denúncias, sugestões e elogios. O nosso compromisso é com a segurança e o bem-estar da população. Você pode nos contatar através da Ouvidoria-Geral, ligando para 181 (disque-denúncia unificado). Para outras informações, utilize o formulário eletrônico em nosso portal, ou envie um e-mail para ouvidoria@dpf.gov.br. Sua colaboração é fundamental para o aprimoramento contínuo dos nossos serviços e para a construção de uma sociedade mais segura.
-            </p>
-        </section>
-        
-        <section id="mapa-site" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
-            <h2 class="text-2xl font-bold text-gray-200 mb-4">Mapa do Site</h2>
-            <p class="text-gray-400 leading-relaxed">
-                O Mapa do Site oferece uma visão geral e organizada da estrutura do nosso portal. Ele funciona como um guia de navegação, ajudando você a encontrar rapidamente as informações que procura, mesmo que não saiba a seção exata. Explore as principais categorias e páginas, como serviços, notícias, publicações e contatos, tudo em um único lugar para uma navegação fluida e intuitiva.
-            </p>
-        </section>
-
-        <section id="transparencia" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
-            <h2 class="text-2xl font-bold text-gray-200 mb-4">Transparência</h2>
-            <p class="text-gray-400 leading-relaxed">
-                A transparência é um pilar fundamental da atuação da Polícia Federal. Em conformidade com a Lei de Acesso à Informação (LAI), disponibilizamos dados sobre nossas atividades, gestão de recursos e indicadores de desempenho. Nosso compromisso é com a prestação de contas à sociedade, garantindo que o cidadão tenha pleno conhecimento sobre a gestão pública. Esta seção é dedicada a divulgar informações relevantes, relatórios e documentos que fortalecem a relação de confiança entre a instituição e a comunidade.
-            </p>
-        </section>
-
-        <section id="ajuda" class="bg-gray-800 p-8 rounded-lg shadow-md mb-8">
-            <h2 class="text-2xl font-bold text-gray-200 mb-4">Ajuda</h2>
-            <p class="text-gray-400 leading-relaxed">
-                Se você está com dificuldades para usar o portal ou precisa de orientações sobre algum serviço, a seção de Ajuda é o seu guia. Aqui, você encontrará tutoriais, manuais e um FAQ detalhado que respondem às dúvidas mais comuns. Para problemas técnicos ou para reportar erros no site, nossa equipe de suporte está pronta para auxiliar. Explore nossos recursos e garanta que sua experiência de navegação seja a melhor possível.
-            </p>
-        </section>
-    </div>
-    
     <!-- Seção de FAQ (Dúvidas Frequentes) no final do site -->
     <section id="faq" class="py-12 px-4 sm:px-6 lg:px-8 bg-gray-900 mt-8">
         <div class="container mx-auto max-w-4xl">
@@ -289,7 +285,7 @@
             <button class="absolute top-2 right-4 text-gray-400 hover:text-white text-3xl font-bold" onclick="closeModal()">
                 &times;
             </button>
-            <img id="modal-image" src="" alt="Imagem da Notícia" class="w-full h-auto rounded-lg mb-4">
+            <img id="modal-image" src="" alt="" class="w-full h-auto rounded-lg mb-4">
             <p id="modal-date-views" class="text-gray-400 text-sm mb-2"></p>
             <p id="modal-text" class="text-gray-300 text-sm leading-relaxed max-h-96 overflow-y-auto"></p>
         </div>
@@ -336,29 +332,52 @@
             modal.classList.add('hidden');
         }
         
-        // Função para rolagem suave e sublinhado no menu
-        function scrollToSection(id, element) {
-            const section = document.getElementById(id);
-            if (section) {
+        let activeSubmenu = null;
+        let activeMenuItem = null;
+
+        function toggleSubmenu(event, contentId) {
+            event.preventDefault(); // Evita que o link tente navegar
+
+            const content = document.getElementById(contentId);
+            const menuItem = event.currentTarget;
+            
+            // Se o submenu clicado já estiver ativo, apenas o fecha
+            if (activeSubmenu === content) {
+                content.classList.remove('active');
+                menuItem.classList.remove('active');
+                activeSubmenu = null;
+                activeMenuItem = null;
+                return;
+            }
+
+            // Fecha o submenu anterior, se houver
+            if (activeSubmenu) {
+                activeSubmenu.classList.remove('active');
+            }
+            if (activeMenuItem) {
+                activeMenuItem.classList.remove('active');
+            }
+
+            // Abre o novo submenu e ativa o sublinhado
+            content.classList.add('active');
+            menuItem.classList.add('active');
+            activeSubmenu = content;
+            activeMenuItem = menuItem;
+        }
+
+        function scrollToFAQ() {
+            const faqSection = document.getElementById('faq');
+            if (faqSection) {
                 // Remove a classe 'active' de todos os itens do menu
                 const menuItems = document.querySelectorAll('.menu-item');
                 menuItems.forEach(item => item.classList.remove('active'));
                 
-                // Adiciona a classe 'active' ao item clicado
-                element.classList.add('active');
+                // Adiciona a classe 'active' ao item de FAQ
+                document.getElementById('duvidas-btn').classList.add('active');
 
-                // Rola para a seção
-                window.scrollTo({
-                    top: section.offsetTop - 100, // Ajuste para deixar um espaço no topo
-                    behavior: 'smooth'
-                });
+                // Rola suavemente para a seção de FAQ
+                faqSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
-        }
-
-        // Script para expandir/ocultar respostas do FAQ
-        function toggleAnswer(id) {
-            const answer = document.getElementById(id);
-            answer.classList.toggle('hidden');
         }
     </script>
 </body>
